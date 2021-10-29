@@ -1,5 +1,6 @@
 import entity as E
 
+
 class LoginController:
     def checkLoginInput(self, email, password, usertype):
         # check if password is empty
@@ -23,6 +24,7 @@ class RetrieveUserInfoController:
         listOfUsers = retrieveUserEntity.retrieveUserInfo(user_no)
         return listOfUsers
 
+
 class RetrieveSpecificUserController:
     def retrieveSpecificUserInfo(self, user_no):
         # controller calling entity
@@ -30,6 +32,7 @@ class RetrieveSpecificUserController:
         retrieveSpecificUserEntity.set_id(user_no)
         listOfUserInfo = retrieveSpecificUserEntity.retrieveSpecificUser()
         return listOfUserInfo
+
 
 class RetrieveRecordsController:
     def retrieveUserPrescriptions(self, patient_no):
@@ -44,5 +47,12 @@ class Retrieve1RecordController:
     def retrieveRecord(self, StringCode):
         # controller calling entity
         retrieve1RecordEntity = E.Prescription()
-        listOfDetails , listOfMeds = retrieve1RecordEntity.retrieveRecord(StringCode)
+        listOfDetails , listOfMeds = retrieve1RecordEntity.retrieve_record(StringCode)
         return listOfDetails, listOfMeds
+
+
+class RetrieveAllRecords:
+    @staticmethod
+    def retrieve_records():
+        records = E.Prescription.get_all()
+        return records

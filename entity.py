@@ -32,7 +32,7 @@ class User:
         db_obj = db_helper.db_helper()  # call helper object
         result = db_obj.query_db(query)
         for prescription in result:
-            prescriptions.append(Prescription(prescription[2]))
+            prescriptions.append(Prescription().set_id(prescription[2]))
         print(prescriptions)
         return prescriptions
 
@@ -46,7 +46,7 @@ class Prescription:
     status = None
     prescription_details = ''
 
-    def __init__(self, prescription_id):
+    def set_id(self, prescription_id):
         query = f"SELECT * FROM PRESCRIPTION WHERE prescription_id = '{prescription_id}'"
         db_obj = db_helper.db_helper()  # call helper object
         result = db_obj.query_db(query)
@@ -57,14 +57,31 @@ class Prescription:
             self.prescription_id = result[0][2]
             self.patient_id = result[0][3]
             self.doctor_id = result[0][4]
-            self.status = 'Collected' if result[0][5] is 1 else 'Not collected'
+            self.get_status_string(result[0][5])
             self.prescription_details = result[0][6]
 
-    def retrieveRecord(self, Code):  # pass in String Code
-        # select lineEdit from database
-        listofdetails = [1, 2, 3, 4]
+    def retrieve_record(self):
+        return self.prescription_details
 
-        # select medicine from database
-        listofmeds = [["001", 10], ["002", 199], ["005", 90]]
+    def get_status_string(self, status):
+        self.status = 'Collected' if status == 1 else 'Not collected'
 
-        return listofdetails, listofmeds
+    @staticmethod
+    def get_all():
+        query = f"SELECT * FROM PRESCRIPTION"
+        db_obj = db_helper.db_helper()
+        result = db_obj.query_db(query)
+        items = []
+        for item in result:
+            p = Prescription()
+            p.date = item[0]
+            p.code = item[1]
+            p.prescription_id = item[2]
+            p.patient_id = item[3]
+            p.doctor_id = item[4]
+            p.get_status_string(item[5])
+            p.prescription_details = item[6]
+            items.append(p)
+        print(items)
+        return items
+

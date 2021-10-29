@@ -3,6 +3,8 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QMessageBox, QTableWidgetItem,QAbstractItemView
 from PyQt5.uic import loadUi
 import controller as C
+
+# Variables
 global UserNo
 global StringCode
 
@@ -31,15 +33,15 @@ class LoginView(QDialog):
             msgbox.setStandardButtons(QMessageBox.Ok)
             msgbox.exec_()
             if usertype == "Doctor":
-                doctorHome = DoctorHome()
+                doctorHome = DoctorHome('doctorMainWindow.ui')
                 widget.addWidget(doctorHome)
                 widget.setCurrentIndex(widget.currentIndex() + 1)
             elif usertype == "Patient":
-                patientHome = PatientHome()
+                patientHome = PatientHome('patientMainWindow.ui')
                 widget.addWidget(patientHome)
                 widget.setCurrentIndex(widget.currentIndex() + 1)
             elif usertype == "Pharmacist":
-                pharmacistHome = PharmacistHome()
+                pharmacistHome = PharmacistHome('pharmacistMainWindow.ui')
                 widget.addWidget(pharmacistHome)
                 widget.setCurrentIndex(widget.currentIndex() + 1)
             else:
@@ -59,60 +61,130 @@ class LoginView(QDialog):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
 
-class PatientHome(QMainWindow):
-    def __init__(self):
-        super(PatientHome, self).__init__()
-        loadUi("patientMainWindow.ui", self)
+class Home(QMainWindow):
+    def __init__(self, window, column_sizes=None):
+        super(Home, self).__init__()
+        if column_sizes is None:
+            column_sizes = [100, 290, 90, 70, 70, 180]
+        loadUi(window, self)
         widget.setFixedSize(930,750)
-        self.patientMainTable.setColumnWidth(0, 100)
-        self.patientMainTable.setColumnWidth(1, 290)
-        self.patientMainTable.setColumnWidth(2, 90)
-        self.patientMainTable.setColumnWidth(3, 70)
-        self.patientMainTable.setColumnWidth(4, 70)
-        self.patientMainTable.setColumnWidth(5, 180)
-        self.patientMainTable.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.patientMainTable.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-        self.patientMainTable.verticalHeader().setVisible(False)
-        self.patientMainTable.cellClicked.connect(self.viewPrescription)
-        self.logoutButton.clicked.connect(self.logoutApp)
+        for i in range(len(column_sizes)):
+            self.table.setColumnWidth(i, column_sizes[i])
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+        self.table.verticalHeader().setVisible(False)
+        self.table.cellClicked.connect(self.view_prescription)
+        self.logoutButton.clicked.connect(self.logout_app)
         # self.viewButton.clicked.connect(self.viewPrescription)
-        self.showRecords()
+        self.show_records()
 
-    def showRecords(self):      # to show list of prescriptions
+    def show_records(self):      # to show list of prescriptions
         retrieveRecordsController = C.RetrieveRecordsController()
         # boundary calling controller
         prescriptions = retrieveRecordsController.retrieveUserPrescriptions(UserNo)
-        # for rowNo, rowRecords in enumerate(listOfRecords):
-        #     self.patientMainTable.insertRow(rowNo)
-        #     for colNo, record in enumerate(rowRecords):
-        #         self.patientMainTable.setItem(rowNo, colNo, QTableWidgetItem(str(record)))
-        for count, item in enumerate(prescriptions):
-            self.patientMainTable.insertRow(count)
-            self.patientMainTable.setItem(count, 0, QTableWidgetItem(item.date))
-            self.patientMainTable.setItem(count, 1, QTableWidgetItem(item.code))
-            self.patientMainTable.setItem(count, 2, QTableWidgetItem(item.prescription_id))
-            self.patientMainTable.setItem(count, 3, QTableWidgetItem(item.patient_id))
-            self.patientMainTable.setItem(count, 4, QTableWidgetItem(item.doctor_id))
-            self.patientMainTable.setItem(count, 5, QTableWidgetItem(item.status))
+        self.display_records(prescriptions)
 
-    def viewPrescription(self):
-        row = self.patientMainTable.currentRow()
+    def display_records(self, records):
+        for count, item in enumerate(records):
+            self.table.insertRow(count)
+            self.table.setItem(count, 0, QTableWidgetItem(item.date))
+            self.table.setItem(count, 1, QTableWidgetItem(item.code))
+            self.table.setItem(count, 2, QTableWidgetItem(item.prescription_id))
+            self.table.setItem(count, 3, QTableWidgetItem(item.patient_id))
+            self.table.setItem(count, 4, QTableWidgetItem(item.doctor_id))
+            self.table.setItem(count, 5, QTableWidgetItem(item.status))
+
+    def view_prescription(self):
+        row = self.table.currentRow()
         global StringCode
-        StringCode = self.patientMainTable.item(row, 1).text()
-        toViewPrescription = PatientViewPrescription()
-        widget.addWidget(toViewPrescription)
+        StringCode = self.table.item(row, 1).text()
+
+    def logout_app(self):
+        # calling LoginView() of boundary class
+        ret_to_login = LoginView()
+        widget.addWidget(ret_to_login)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+
+class PatientHome(Home):
+    def view_prescription(self):
+        super(PatientHome, self).view_prescription()
+        prescription = PatientViewPrescription()
+        widget.addWidget(prescription)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
-    def logoutApp(self):
-        msgbox = QMessageBox()
-        msgbox.setWindowTitle("Logout")
-        msgbox.setText("Logging out")
-        msgbox.setStandardButtons(QMessageBox.Ok)
-        msgbox.exec_()
-        # calling LoginView() of boundary class
-        RetToLogin = LoginView()
-        widget.addWidget(RetToLogin)
-        widget.setCurrentIndex(widget.currentIndex()+1)
+
+class DoctorHome(Home):
+    def show_records(self):
+        # boundary calling controller
+        prescriptions = C.RetrieveAllRecords.retrieve_records()
+        self.display_records(prescriptions)
+
+    def view_prescription(self):
+        super(DoctorHome, self).view_prescription()
+        prescription = DoctorViewPrescription()
+        widget.addWidget(prescription)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
+class PharmacistHome(Home):
+    def view_prescription(self):
+        super(PharmacistHome, self).view_prescription()
+        prescription = PharmacistViewPrescription()
+        widget.addWidget(prescription)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
+# class PatientHome(QMainWindow):
+#     def __init__(self):
+#         super(PatientHome, self).__init__()
+#         loadUi("patientMainWindow.ui", self)
+#         widget.setFixedSize(930,750)
+#         self.patientMainTable.setColumnWidth(0, 100)
+#         self.patientMainTable.setColumnWidth(1, 290)
+#         self.patientMainTable.setColumnWidth(2, 90)
+#         self.patientMainTable.setColumnWidth(3, 70)
+#         self.patientMainTable.setColumnWidth(4, 70)
+#         self.patientMainTable.setColumnWidth(5, 180)
+#         self.patientMainTable.setSelectionBehavior(QAbstractItemView.SelectRows)
+#         self.patientMainTable.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+#         self.patientMainTable.verticalHeader().setVisible(False)
+#         self.patientMainTable.cellClicked.connect(self.viewPrescription)
+#         self.logoutButton.clicked.connect(self.logoutApp)
+#         # self.viewButton.clicked.connect(self.viewPrescription)
+#         self.showRecords()
+#
+#     def showRecords(self):      # to show list of prescriptions
+#         retrieveRecordsController = C.RetrieveRecordsController()
+#         # boundary calling controller
+#         prescriptions = retrieveRecordsController.retrieveUserPrescriptions(UserNo)
+#         for count, item in enumerate(prescriptions):
+#             self.patientMainTable.insertRow(count)
+#             self.patientMainTable.setItem(count, 0, QTableWidgetItem(item.date))
+#             self.patientMainTable.setItem(count, 1, QTableWidgetItem(item.code))
+#             self.patientMainTable.setItem(count, 2, QTableWidgetItem(item.prescription_id))
+#             self.patientMainTable.setItem(count, 3, QTableWidgetItem(item.patient_id))
+#             self.patientMainTable.setItem(count, 4, QTableWidgetItem(item.doctor_id))
+#             self.patientMainTable.setItem(count, 5, QTableWidgetItem(item.status))
+#
+#     def viewPrescription(self):
+#         row = self.patientMainTable.currentRow()
+#         global StringCode
+#         StringCode = self.patientMainTable.item(row, 1).text()
+#         toViewPrescription = PatientViewPrescription()
+#         widget.addWidget(toViewPrescription)
+#         widget.setCurrentIndex(widget.currentIndex() + 1)
+#
+#     def logoutApp(self):
+#         msgbox = QMessageBox()
+#         msgbox.setWindowTitle("Logout")
+#         msgbox.setText("Logging out")
+#         msgbox.setStandardButtons(QMessageBox.Ok)
+#         msgbox.exec_()
+#         # calling LoginView() of boundary class
+#         RetToLogin = LoginView()
+#         widget.addWidget(RetToLogin)
+#         widget.setCurrentIndex(widget.currentIndex()+1)
 
 
 class PatientViewPrescription(QDialog):
@@ -149,51 +221,52 @@ class PatientViewPrescription(QDialog):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
-class DoctorHome(QMainWindow):
-    def __init__(self):
-        super(DoctorHome, self).__init__()
-        loadUi("doctorMainWindow.ui", self)
-        widget.setFixedSize(930, 750)
-        self.doctorMainTable.setColumnWidth(0, 100)
-        self.doctorMainTable.setColumnWidth(1, 290)
-        self.doctorMainTable.setColumnWidth(2, 90)
-        self.doctorMainTable.setColumnWidth(3, 70)
-        self.doctorMainTable.setColumnWidth(4, 70)
-        self.doctorMainTable.setColumnWidth(5, 180)
-        self.doctorMainTable.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.doctorMainTable.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-        self.doctorMainTable.verticalHeader().setVisible(False)
-        self.doctorMainTable.cellClicked.connect(self.viewPrescription)
-        self.logoutButton.clicked.connect(self.logoutApp)
-        # self.viewButton.clicked.connect(self.viewPrescription)
-        self.showRecords()
-
-    def showRecords(self):
-        retrieveRecordsController = C.RetrieveRecordsController()
-        listOfRecords = retrieveRecordsController.retrieveUserPrescriptions(UserNo)
-        for rowNo, rowRecords in enumerate(listOfRecords):
-            self.doctorMainTable.insertRow(rowNo)
-            for colNo, record in enumerate(rowRecords):
-                self.doctorMainTable.setItem(rowNo, colNo, QTableWidgetItem(str(record)))
-
-    def viewPrescription(self):
-        row = self.doctorMainTable.currentRow()
-        global StringCode
-        StringCode = self.doctorMainTable.item(row, 1).text()
-        toViewPrescription = DoctorViewPrescription()
-        widget.addWidget(toViewPrescription)
-        widget.setCurrentIndex(widget.currentIndex() + 1)
-
-    def logoutApp(self):
-        msgbox = QMessageBox()
-        msgbox.setWindowTitle("Logout")
-        msgbox.setText("Logging out")
-        msgbox.setStandardButtons(QMessageBox.Ok)
-        msgbox.exec_()
-        # calling LoginView() of boundary class
-        RetToLogin = LoginView()
-        widget.addWidget(RetToLogin)
-        widget.setCurrentIndex(widget.currentIndex()+1)
+# class DoctorHome(QMainWindow):
+#     def __init__(self):
+#         super(DoctorHome, self).__init__()
+#         loadUi("doctorMainWindow.ui", self)
+#         widget.setFixedSize(930, 750)
+#         self.doctorMainTable.setColumnWidth(0, 100)
+#         self.doctorMainTable.setColumnWidth(1, 290)
+#         self.doctorMainTable.setColumnWidth(2, 90)
+#         self.doctorMainTable.setColumnWidth(3, 70)
+#         self.doctorMainTable.setColumnWidth(4, 70)
+#         self.doctorMainTable.setColumnWidth(5, 180)
+#         self.doctorMainTable.setSelectionBehavior(QAbstractItemView.SelectRows)
+#         self.doctorMainTable.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+#         self.doctorMainTable.verticalHeader().setVisible(False)
+#         self.doctorMainTable.cellClicked.connect(self.viewPrescription)
+#         self.logoutButton.clicked.connect(self.logoutApp)
+#         # self.viewButton.clicked.connect(self.viewPrescription)
+#         self.showRecords()
+#
+#     def showRecords(self):
+#         retrieveRecordsController = C.RetrieveRecordsController()
+#         prescriptions = retrieveRecordsController.retrieveUserPrescriptions(UserNo)
+#         # for rowNo, rowRecords in enumerate(listOfRecords):
+#         #     self.doctorMainTable.insertRow(rowNo)
+#         #     for colNo, record in enumerate(rowRecords):
+#         #         self.doctorMainTable.setItem(rowNo, colNo, QTableWidgetItem(str(record)))
+#
+#
+#     def viewPrescription(self):
+#         row = self.table.currentRow()
+#         global StringCode
+#         StringCode = self.table.item(row, 1).text()
+#         toViewPrescription = DoctorViewPrescription()
+#         widget.addWidget(toViewPrescription)
+#         widget.setCurrentIndex(widget.currentIndex() + 1)
+#
+#     def logoutApp(self):
+#         msgbox = QMessageBox()
+#         msgbox.setWindowTitle("Logout")
+#         msgbox.setText("Logging out")
+#         msgbox.setStandardButtons(QMessageBox.Ok)
+#         msgbox.exec_()
+#         # calling LoginView() of boundary class
+#         RetToLogin = LoginView()
+#         widget.addWidget(RetToLogin)
+#         widget.setCurrentIndex(widget.currentIndex()+1)
 
 
 class DoctorViewPrescription(QDialog):
@@ -230,49 +303,49 @@ class DoctorViewPrescription(QDialog):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
-class PharmacistHome(QMainWindow):
-    def __init__(self):
-        super(PharmacistHome, self).__init__()
-        loadUi("pharmacistMainWindow.ui", self)
-        widget.setFixedSize(930, 750)
-        self.pharmacistMainTable.setColumnWidth(0, 100)
-        self.pharmacistMainTable.setColumnWidth(1, 290)
-        self.pharmacistMainTable.setColumnWidth(2, 90)
-        self.pharmacistMainTable.setColumnWidth(3, 70)
-        self.pharmacistMainTable.setColumnWidth(4, 70)
-        self.pharmacistMainTable.setColumnWidth(5, 180)
-        self.pharmacistMainTable.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.pharmacistMainTable.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-        self.pharmacistMainTable.verticalHeader().setVisible(False)
-        self.pharmacistMainTable.cellClicked.connect(self.viewPrescription)
-        self.logoutButton.clicked.connect(self.logoutApp)
-        self.showRecords()
-
-    def showRecords(self):
-        retrieveRecordsController = C.RetrieveRecordsController()
-        listOfRecords = retrieveRecordsController.retrieveUserPrescriptions(UserNo)
-        for rowNo, rowRecords in enumerate(listOfRecords):
-            self.pharmacistMainTable.insertRow(rowNo)
-            for colNo, record in enumerate(rowRecords):
-                self.pharmacistMainTable.setItem(rowNo, colNo, QTableWidgetItem(str(record)))
-
-    def viewPrescription(self):
-        row = self.pharmacistMainTable.currentRow()
-        global StringCode
-        StringCode = self.pharmacistMainTable.item(row, 1).text()
-        toViewPrescription = PharmacistViewPrescription()
-        widget.addWidget(toViewPrescription)
-        widget.setCurrentIndex(widget.currentIndex() + 1)
-
-    def logoutApp(self):
-        msgbox = QMessageBox()
-        msgbox.setWindowTitle("Logout")
-        msgbox.setText("Logging out")
-        msgbox.setStandardButtons(QMessageBox.Ok)
-        msgbox.exec_()
-        RetToLogin = LoginView()
-        widget.addWidget(RetToLogin)
-        widget.setCurrentIndex(widget.currentIndex()+1)
+# class PharmacistHome(QMainWindow):
+#     def __init__(self):
+#         super(PharmacistHome, self).__init__()
+#         loadUi("pharmacistMainWindow.ui", self)
+#         widget.setFixedSize(930, 750)
+#         self.pharmacistMainTable.setColumnWidth(0, 100)
+#         self.pharmacistMainTable.setColumnWidth(1, 290)
+#         self.pharmacistMainTable.setColumnWidth(2, 90)
+#         self.pharmacistMainTable.setColumnWidth(3, 70)
+#         self.pharmacistMainTable.setColumnWidth(4, 70)
+#         self.pharmacistMainTable.setColumnWidth(5, 180)
+#         self.pharmacistMainTable.setSelectionBehavior(QAbstractItemView.SelectRows)
+#         self.pharmacistMainTable.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+#         self.pharmacistMainTable.verticalHeader().setVisible(False)
+#         self.pharmacistMainTable.cellClicked.connect(self.viewPrescription)
+#         self.logoutButton.clicked.connect(self.logoutApp)
+#         self.showRecords()
+#
+#     def showRecords(self):
+#         retrieveRecordsController = C.RetrieveRecordsController()
+#         listOfRecords = retrieveRecordsController.retrieveUserPrescriptions(UserNo)
+#         for rowNo, rowRecords in enumerate(listOfRecords):
+#             self.pharmacistMainTable.insertRow(rowNo)
+#             for colNo, record in enumerate(rowRecords):
+#                 self.pharmacistMainTable.setItem(rowNo, colNo, QTableWidgetItem(str(record)))
+#
+#     def viewPrescription(self):
+#         row = self.pharmacistMainTable.currentRow()
+#         global StringCode
+#         StringCode = self.pharmacistMainTable.item(row, 1).text()
+#         toViewPrescription = PharmacistViewPrescription()
+#         widget.addWidget(toViewPrescription)
+#         widget.setCurrentIndex(widget.currentIndex() + 1)
+#
+#     def logoutApp(self):
+#         msgbox = QMessageBox()
+#         msgbox.setWindowTitle("Logout")
+#         msgbox.setText("Logging out")
+#         msgbox.setStandardButtons(QMessageBox.Ok)
+#         msgbox.exec_()
+#         RetToLogin = LoginView()
+#         widget.addWidget(RetToLogin)
+#         widget.setCurrentIndex(widget.currentIndex()+1)
 
 
 class PharmacistViewPrescription(QDialog):
