@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>743</width>
-    <height>749</height>
+    <width>930</width>
+    <height>750</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,16 +17,16 @@
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>700</width>
+      <x>40</x>
+      <y>30</y>
+      <width>860</width>
       <height>650</height>
      </rect>
     </property>
     <widget class="QLabel" name="pageTitle">
      <property name="geometry">
       <rect>
-       <x>290</x>
+       <x>350</x>
        <y>20</y>
        <width>161</width>
        <height>40</height>
@@ -48,7 +48,7 @@
     <widget class="QPushButton" name="logoutButton">
      <property name="geometry">
       <rect>
-       <x>570</x>
+       <x>740</x>
        <y>70</y>
        <width>80</width>
        <height>20</height>
@@ -84,10 +84,10 @@ QPushButton#logoutButton:pressed{
     <widget class="QTableWidget" name="patientMainTable">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>30</x>
        <y>370</y>
-       <width>600</width>
-       <height>200</height>
+       <width>800</width>
+       <height>270</height>
       </rect>
      </property>
      <property name="rowCount">
@@ -133,7 +133,7 @@ QPushButton#logoutButton:pressed{
     <widget class="QLabel" name="userTypeIdLabel">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>30</x>
        <y>120</y>
        <width>81</width>
        <height>30</height>
@@ -152,7 +152,7 @@ opacity: 200;</string>
     <widget class="QLabel" name="nameLabel">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>30</x>
        <y>160</y>
        <width>81</width>
        <height>30</height>
@@ -171,7 +171,7 @@ opacity: 200;</string>
     <widget class="QLabel" name="telLabel">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>30</x>
        <y>280</y>
        <width>81</width>
        <height>30</height>
@@ -190,7 +190,7 @@ opacity: 200;</string>
     <widget class="QLabel" name="addressLabel">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>30</x>
        <y>240</y>
        <width>81</width>
        <height>30</height>
@@ -209,7 +209,7 @@ opacity: 200;</string>
     <widget class="QLabel" name="emailLabel">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>30</x>
        <y>200</y>
        <width>81</width>
        <height>30</height>
@@ -228,7 +228,7 @@ opacity: 200;</string>
     <widget class="QLineEdit" name="idLine">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>130</x>
        <y>120</y>
        <width>300</width>
        <height>30</height>
@@ -254,7 +254,7 @@ padding-bottom:1px;
     <widget class="QLineEdit" name="nameLine">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>130</x>
        <y>160</y>
        <width>300</width>
        <height>30</height>
@@ -283,7 +283,7 @@ padding-bottom:1px;
     <widget class="QLineEdit" name="telLine">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>130</x>
        <y>280</y>
        <width>300</width>
        <height>30</height>
@@ -312,7 +312,7 @@ padding-bottom:1px;
     <widget class="QLineEdit" name="addressLine">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>130</x>
        <y>240</y>
        <width>300</width>
        <height>30</height>
@@ -341,7 +341,7 @@ padding-bottom:1px;
     <widget class="QLineEdit" name="emailLine">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>130</x>
        <y>200</y>
        <width>300</width>
        <height>30</height>
@@ -370,9 +370,9 @@ padding-bottom:1px;
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>30</x>
        <y>330</y>
-       <width>601</width>
+       <width>801</width>
        <height>31</height>
       </rect>
      </property>
@@ -397,35 +397,48 @@ padding:5px;</string>
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-   </widget>
-   <widget class="QLabel" name="whiteBackground">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>30</y>
-      <width>660</width>
-      <height>620</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:rgba(255, 255, 255, 255);
+    <widget class="QLabel" name="whiteBackground">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>860</width>
+       <height>650</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgba(255, 255, 255, 255);
 border-top-left-radius: 50px;
 border-bottom-right-radius: 50px;</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <zorder>whiteBackground</zorder>
+    <zorder>pageTitle</zorder>
+    <zorder>logoutButton</zorder>
+    <zorder>patientMainTable</zorder>
+    <zorder>userTypeIdLabel</zorder>
+    <zorder>nameLabel</zorder>
+    <zorder>telLabel</zorder>
+    <zorder>addressLabel</zorder>
+    <zorder>emailLabel</zorder>
+    <zorder>idLine</zorder>
+    <zorder>nameLine</zorder>
+    <zorder>telLine</zorder>
+    <zorder>addressLine</zorder>
+    <zorder>emailLine</zorder>
+    <zorder>label_2</zorder>
    </widget>
-   <zorder>whiteBackground</zorder>
-   <zorder>widget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>743</width>
-     <height>22</height>
+     <width>930</width>
+     <height>24</height>
     </rect>
    </property>
   </widget>
