@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>731</width>
-    <height>651</height>
+    <width>733</width>
+    <height>732</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,16 +19,16 @@
      <x>20</x>
      <y>10</y>
      <width>691</width>
-     <height>541</height>
+     <height>691</height>
     </rect>
    </property>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="whiteBackground">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>20</y>
       <width>650</width>
-      <height>521</height>
+      <height>651</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -281,13 +281,13 @@ padding-bottom:1px;
      <string>Doctor ID</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidget_2">
+   <widget class="QTableWidget" name="docAddPresTable">
     <property name="geometry">
      <rect>
       <x>40</x>
       <y>290</y>
       <width>611</width>
-      <height>198</height>
+      <height>231</height>
      </rect>
     </property>
     <property name="rowCount">
@@ -315,7 +315,7 @@ padding-bottom:1px;
      </property>
     </column>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="presDetailTitle">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -349,7 +349,7 @@ padding:5px;</string>
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>500</y>
+      <y>620</y>
       <width>80</width>
       <height>31</height>
      </rect>
@@ -385,7 +385,7 @@ QPushButton#saveButton:pressed{
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>500</y>
+      <y>620</y>
       <width>80</width>
       <height>31</height>
      </rect>
@@ -414,14 +414,14 @@ QPushButton#addButton:pressed{
 }</string>
     </property>
     <property name="text">
-     <string>a d d</string>
+     <string>a d d  r o w</string>
     </property>
    </widget>
    <widget class="QPushButton" name="backButton">
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>500</y>
+      <y>620</y>
       <width>80</width>
       <height>31</height>
      </rect>
@@ -457,7 +457,7 @@ QPushButton#backButton:pressed{
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>500</y>
+      <y>620</y>
       <width>80</width>
       <height>31</height>
      </rect>
@@ -486,8 +486,312 @@ QPushButton#delButton:pressed{
 }</string>
     </property>
     <property name="text">
-     <string>d e l</string>
+     <string>d e l  r o w</string>
     </property>
+   </widget>
+   <widget class="QLineEdit" name="docInstructionLine">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>540</y>
+      <width>271</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgba(0, 0, 0, 0);
+border:none;
+border-bottom:2px solid rgba(46, 82, 101, 200);
+color:rgba(0, 0, 0, 240);
+padding-bottom:1px;
+</string>
+    </property>
+    <property name="placeholderText">
+     <string>Doctor's Instruction</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="medicineLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>540</y>
+      <width>81</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
+padding: 5px;
+border-radius: 3px;
+opacity: 200;</string>
+    </property>
+    <property name="text">
+     <string>Medicine</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="instructionLabel">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>540</y>
+      <width>81</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
+padding: 5px;
+border-radius: 3px;
+opacity: 200;</string>
+    </property>
+    <property name="text">
+     <string>Instruction</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="quantityLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>580</y>
+      <width>81</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
+padding: 5px;
+border-radius: 3px;
+opacity: 200;</string>
+    </property>
+    <property name="text">
+     <string>Quantity</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="medMenu">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>540</y>
+      <width>111</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgba(0, 0, 0, 0);
+border:none;
+color:rgba(0, 0, 0, 240);
+padding-bottom:1px;</string>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+    <property name="currentText">
+     <string>paracetamol</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>paracetamol</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>omeprazole</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>ibuprophen</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="qtMenu">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>580</y>
+      <width>111</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgba(0, 0, 0, 0);
+border:none;
+color:rgba(0, 0, 0, 240);
+padding-bottom:1px;</string>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+    <property name="currentText">
+     <string>1</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>3</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>4</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>6</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>7</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>8</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>9</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>10</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>11</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>12</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>13</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>14</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>15</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>16</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>17</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>18</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>19</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>20</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>21</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>22</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>23</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>24</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>25</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>26</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>27</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>28</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>29</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>30</string>
+     </property>
+    </item>
    </widget>
   </widget>
  </widget>
