@@ -52,6 +52,7 @@ border-bottom-right-radius: 50px;</string>
     <property name="font">
      <font>
       <pointsize>25</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -257,7 +258,7 @@ padding-bottom:1px;
      <string>Doctor ID</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="patientViewPresTable">
+   <widget class="QTableWidget" name="table">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -302,6 +303,7 @@ padding-bottom:1px;
     </property>
     <property name="font">
      <font>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -333,6 +335,7 @@ padding:5px;</string>
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>

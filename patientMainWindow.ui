@@ -228,6 +228,9 @@ opacity: 200;</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="idLine">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>130</x>
@@ -254,6 +257,9 @@ padding-bottom:1px;
      </property>
     </widget>
     <widget class="QLineEdit" name="nameLine">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>130</x>
@@ -283,6 +289,9 @@ padding-bottom:1px;
      </property>
     </widget>
     <widget class="QLineEdit" name="telLine">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>130</x>
@@ -312,6 +321,9 @@ padding-bottom:1px;
      </property>
     </widget>
     <widget class="QLineEdit" name="addressLine">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>130</x>
@@ -341,6 +353,9 @@ padding-bottom:1px;
      </property>
     </widget>
     <widget class="QLineEdit" name="emailLine">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>130</x>
