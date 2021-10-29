@@ -35,6 +35,7 @@
      <property name="font">
       <font>
        <pointsize>25</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -57,6 +58,7 @@
      <property name="font">
       <font>
        <pointsize>16</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -81,7 +83,7 @@ QPushButton#logoutButton:pressed{
       <string>L o g o u t</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="patientMainTable">
+    <widget class="QTableWidget" name="table">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -378,6 +380,7 @@ padding-bottom:1px;
      </property>
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -418,7 +421,7 @@ border-bottom-right-radius: 50px;</string>
     <zorder>whiteBackground</zorder>
     <zorder>pageTitle</zorder>
     <zorder>logoutButton</zorder>
-    <zorder>patientMainTable</zorder>
+    <zorder>table</zorder>
     <zorder>userTypeIdLabel</zorder>
     <zorder>nameLabel</zorder>
     <zorder>telLabel</zorder>

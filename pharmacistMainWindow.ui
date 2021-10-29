@@ -35,6 +35,7 @@
      <property name="font">
       <font>
        <pointsize>25</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -57,6 +58,7 @@
      <property name="font">
       <font>
        <pointsize>16</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -93,6 +95,7 @@ QPushButton#logoutButton:pressed{
      <property name="font">
       <font>
        <pointsize>16</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -143,7 +146,7 @@ padding-bottom:7px;
       <string>Search String Code</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="pharmacistMainTable">
+    <widget class="QTableWidget" name="table">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -203,6 +206,7 @@ padding-bottom:7px;
      </property>
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -226,7 +230,7 @@ padding:5px;</string>
     <zorder>lineEdit</zorder>
     <zorder>logoutButton</zorder>
     <zorder>searchButton</zorder>
-    <zorder>pharmacistMainTable</zorder>
+    <zorder>table</zorder>
     <zorder>presListTitle</zorder>
    </widget>
    <widget class="QLabel" name="whiteBackground">

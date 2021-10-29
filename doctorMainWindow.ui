@@ -35,6 +35,7 @@
      <property name="font">
       <font>
        <pointsize>25</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -57,6 +58,7 @@
      <property name="font">
       <font>
        <pointsize>16</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -93,6 +95,7 @@ QPushButton#logoutButton:pressed{
      <property name="font">
       <font>
        <pointsize>16</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -155,6 +158,7 @@ padding-bottom:7px;
      <property name="font">
       <font>
        <pointsize>16</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -179,7 +183,7 @@ QPushButton#addPrescriptionButton:pressed{
       <string>add prescription</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="doctorMainTable">
+    <widget class="QTableWidget" name="table">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -239,6 +243,7 @@ QPushButton#addPrescriptionButton:pressed{
      </property>
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -263,7 +268,7 @@ padding:5px;</string>
     <zorder>logoutButton</zorder>
     <zorder>searchButton</zorder>
     <zorder>addPrescriptionButton</zorder>
-    <zorder>doctorMainTable</zorder>
+    <zorder>table</zorder>
     <zorder>presListTitle</zorder>
    </widget>
    <widget class="QLabel" name="whiteBackground">
