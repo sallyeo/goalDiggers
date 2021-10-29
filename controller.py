@@ -8,7 +8,7 @@ class LoginController:
         else:
             loginEntity = E.User()
             # controller calling entity
-            validation, userNo = loginEntity.validateLogin(email, password, usertype)
+            validation, userNo = loginEntity.validate_login(email, password, usertype)
             if validation:
                 return True, userNo
             else:
@@ -16,24 +16,27 @@ class LoginController:
 
 
 class RetrieveUserInfoController:
-    def retrieveUserInfo(self, userNo):  # need to pass in user email not the ptID?
+    def retrieveUserInfo(self, user_no):  # need to pass in user email not the ptID?
         # controller calling entity
         retrieveUserEntity = E.User()
-        listOfUsers = retrieveUserEntity.retrieveUserInfo(userNo)
+        retrieveUserEntity.set_id(user_no)
+        listOfUsers = retrieveUserEntity.retrieveUserInfo(user_no)
         return listOfUsers
 
 class RetrieveSpecificUserController:
-    def retrieveSpecificUserInfo(self, userNo):
+    def retrieveSpecificUserInfo(self, user_no):
         # controller calling entity
         retrieveSpecificUserEntity = E.User()
-        listOfUserInfo = retrieveSpecificUserEntity.retrieveSpecificUser(userNo)
+        retrieveSpecificUserEntity.set_id(user_no)
+        listOfUserInfo = retrieveSpecificUserEntity.retrieveSpecificUser()
         return listOfUserInfo
 
 class RetrieveRecordsController:
-    def retrieveUserPrescriptions(self, patientNo):
+    def retrieveUserPrescriptions(self, patient_no):
         # controller calling entity
-        RetrieveRecordsEntity = E.Prescription()
-        listOfPrescriptions = RetrieveRecordsEntity.retrieveUserPrescriptions(patientNo)
+        retrieve_records_entity = E.User()
+        retrieve_records_entity.set_id(patient_no)
+        listOfPrescriptions = retrieve_records_entity.retrieve_user_prescriptions()
         return listOfPrescriptions
 
 

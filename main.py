@@ -81,11 +81,19 @@ class PatientHome(QMainWindow):
     def showRecords(self):      # to show list of prescriptions
         retrieveRecordsController = C.RetrieveRecordsController()
         # boundary calling controller
-        listOfRecords = retrieveRecordsController.retrieveUserPrescriptions(UserNo)
-        for rowNo, rowRecords in enumerate(listOfRecords):
-            self.patientMainTable.insertRow(rowNo)
-            for colNo, record in enumerate(rowRecords):
-                self.patientMainTable.setItem(rowNo, colNo, QTableWidgetItem(str(record)))
+        prescriptions = retrieveRecordsController.retrieveUserPrescriptions(UserNo)
+        # for rowNo, rowRecords in enumerate(listOfRecords):
+        #     self.patientMainTable.insertRow(rowNo)
+        #     for colNo, record in enumerate(rowRecords):
+        #         self.patientMainTable.setItem(rowNo, colNo, QTableWidgetItem(str(record)))
+        for count, item in enumerate(prescriptions):
+            self.patientMainTable.insertRow(count)
+            self.patientMainTable.setItem(count, 0, QTableWidgetItem(item.date))
+            self.patientMainTable.setItem(count, 1, QTableWidgetItem(item.code))
+            self.patientMainTable.setItem(count, 2, QTableWidgetItem(item.prescription_id))
+            self.patientMainTable.setItem(count, 3, QTableWidgetItem(item.patient_id))
+            self.patientMainTable.setItem(count, 4, QTableWidgetItem(item.doctor_id))
+            self.patientMainTable.setItem(count, 5, QTableWidgetItem(item.status))
 
     def viewPrescription(self):
         row = self.patientMainTable.currentRow()
