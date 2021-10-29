@@ -21,7 +21,7 @@ class LoginView(QDialog):
 
         # boundary calling controller
         loginControl = C.LoginController()
-        Valid, userNo = loginControl.checkLoginInput(email, password)
+        Valid, userNo = loginControl.checkLoginInput(email, password, usertype)
         if Valid:   # if input valid
             global UserNo
             UserNo = userNo

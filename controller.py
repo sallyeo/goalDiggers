@@ -1,14 +1,14 @@
 import entity as E
 
 class LoginController:
-    def checkLoginInput(self, email, password):
+    def checkLoginInput(self, email, password, usertype):
         # check if password is empty
         if email == "" or password == "":
             return False, ""
         else:
             loginEntity = E.User()
             # controller calling entity
-            validation, userNo = loginEntity.validateLogin(email, password)
+            validation, userNo = loginEntity.validateLogin(email, password, usertype)
             if validation:
                 return True, userNo
             else:
