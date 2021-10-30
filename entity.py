@@ -156,4 +156,4 @@ class MedicineEntity(ObjectEntity):
         return medicines
 
     # def retrieve_by_fk(self, fk):
-        query = f"-- SELECT * FROM MEDICINE WHERE prescription_id"
+    #     query = f"-- SELECT * FROM MEDICINE WHERE prescription_id"
