@@ -34,6 +34,7 @@
     <property name="font">
      <font>
       <pointsize>25</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -140,6 +141,9 @@ opacity: 200;</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="idLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -293,6 +297,7 @@ padding-bottom:1px;
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -329,6 +334,7 @@ QPushButton#saveButton:pressed{
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>

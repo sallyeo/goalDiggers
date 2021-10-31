@@ -159,11 +159,16 @@ padding-bottom:7px;
       <number>0</number>
      </property>
      <property name="columnCount">
-      <number>6</number>
+      <number>5</number>
      </property>
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>100</number>
      </attribute>
+     <column>
+      <property name="text">
+       <string>ID</string>
+      </property>
+     </column>
      <column>
       <property name="text">
        <string>Date</string>
@@ -171,22 +176,12 @@ padding-bottom:7px;
      </column>
      <column>
       <property name="text">
-       <string>String Code</string>
+       <string>Doctor</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Precription ID</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Patient ID</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Doctor ID</string>
+       <string>Patient</string>
       </property>
      </column>
      <column>

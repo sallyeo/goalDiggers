@@ -3,7 +3,7 @@ from sqlite3 import Error
 
 
 class db_helper:
-    db_file = "prescription_app_sqlite.db"
+    db_file = "goaldiggers_prescription.db"
     conn = None
 
     def __init__(self):

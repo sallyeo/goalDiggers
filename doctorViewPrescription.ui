@@ -303,17 +303,17 @@ padding-bottom:1px;
     </attribute>
     <column>
      <property name="text">
-      <string>Prescribed Item</string>
+      <string>ID</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Medicine</string>
      </property>
     </column>
     <column>
      <property name="text">
       <string>Quantity</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Doctor Instruction</string>
      </property>
     </column>
    </widget>

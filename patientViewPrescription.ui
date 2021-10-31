@@ -278,17 +278,17 @@ padding-bottom:1px;
     </attribute>
     <column>
      <property name="text">
-      <string>Prescribed Item</string>
+      <string>ID</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Medicine</string>
      </property>
     </column>
     <column>
      <property name="text">
       <string>Quantity</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Instruction</string>
      </property>
     </column>
    </widget>
@@ -380,6 +380,9 @@ opacity: 200;</string>
     </property>
    </widget>
    <widget class="QComboBox" name="statusMenu">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>540</x>
