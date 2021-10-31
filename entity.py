@@ -16,7 +16,7 @@ class UserType:
 
 # id | email | name | phone_number | address | role | password #
 class User:
-    def __init__(self, object_id, email, name, address, phone_number, role, password):
+    def __init__(self, object_id, email, name, phone_number, address, role, password):
         self.object_id = object_id
         self.email = email
         self.name = name
@@ -109,7 +109,8 @@ class MedicineQuantity:
 class ObjectEntity:
     DATABASE = db_helper.db_helper()
 
-    def retrieve_by_conditions(self, table, **kwargs):
+    @staticmethod
+    def retrieve_by_conditions(table, **kwargs):
         joined = ''
         # Join conditions
         if len(kwargs) > 0:
@@ -141,6 +142,7 @@ class UserTypeEntity(ObjectEntity):
 
     def retrieve_all(self):
         return self.get_many_or_none(super(UserTypeEntity, self).retrieve_by_conditions('UserType'))
+
     def get_one_or_none(self, result):
         if len(result) > 0:
             r = result[0]
