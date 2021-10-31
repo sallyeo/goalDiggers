@@ -16,14 +16,13 @@ class UserType:
 
 # id | email | name | phone_number | address | role | password #
 class User:
-    def __init__(self, object_id, email, name, phone_number, address, role, password):
+    def __init__(self, object_id, email, name, phone_number, address, role):
         self.object_id = object_id
         self.email = email
         self.name = name
         self.phone_number = phone_number
         self.address = address
         self.role = role
-        self.password = password
 
     def __str__(self):
         return f'User: {{\n' \
@@ -33,7 +32,6 @@ class User:
                f'\t\'phone_number\': \'{self.phone_number}\',\n' \
                f'\t\'address\': \'{self.address}\',\n' \
                f'\t\'role\': \'{self.role}\',\n' \
-               f'\t\'password\': \'{self.password}\',\n' \
                f'}},'
 
 
@@ -117,13 +115,13 @@ class ObjectEntity:
             conditions = []
             for key, value in kwargs.items():
                 conditions.append(f"{key} = '{value}'")
-            print(f'{conditions = }')
+            # print(f'{conditions = }')
             joined = ' WHERE ' + ' AND '.join(conditions)
 
         query = f"SELECT * FROM {table}{joined}"
-        print(f'{query = }')
+        # print(f'{query = }')
         result = ObjectEntity.DATABASE.query_db(query)
-        print(f'{result = }')
+        # print(f'{result = }')
         return result
 
     def retrieve_by_id(self, value):
@@ -134,6 +132,19 @@ class ObjectEntity:
 
     def get_many_or_none(self, result):
         pass
+
+    def save(self, table, object_id, **kwargs):
+        joined = ''
+        columns = []
+        for key, value in kwargs.items():
+            if key != 'table':
+                columns.append(f"{key} = '{value}'")
+        joined = ', '.join(columns)
+        query = f"UPDATE {table} SET {joined} WHERE id = {object_id}"
+        print(f'{query =}')
+        result = ObjectEntity.DATABASE.query_db(query)
+        print(f'{result = }')
+        return result
 
 
 class UserTypeEntity(ObjectEntity):
@@ -161,11 +172,11 @@ class UserEntity(ObjectEntity):
     def retrieve_by_id(self, object_id):
         return self.get_one_or_none(super(UserEntity, self).retrieve_by_conditions('User', id=object_id))
 
-    def retrieve_by_email(self, email):
-        return self.get_one_or_none(super(UserEntity, self).retrieve_by_conditions('User', email=email))
+    def retrieve_all_by_email(self, email):
+        return self.get_many_or_none(super(UserEntity, self).retrieve_by_conditions('User', email=email))
 
-    def retrieve_by_phone_number(self, phone_number):
-        return self.get_one_or_none(super(UserEntity, self).retrieve_by_conditions('User', phone_number=phone_number))
+    def retrieve_all_by_phone_number(self, phone_number):
+        return self.get_many_or_none(super(UserEntity, self).retrieve_by_conditions('User', phone_number=phone_number))
 
     def retrieve_all(self):
         return self.get_many_or_none(super(UserEntity, self).retrieve_by_conditions('User'))
@@ -173,13 +184,13 @@ class UserEntity(ObjectEntity):
     def get_one_or_none(self, result):
         if len(result) > 0:
             r = result[0]
-            return User(r[0], r[1], r[2], r[3], r[4], r[5], r[6])
+            return User(r[0], r[1], r[2], r[3], r[4], r[5])
         return None
 
     def get_many_or_none(self, result):
         users = []
         for r in result:
-            user = User(r[0], r[1], r[2], r[3], r[4], r[5], r[6])
+            user = User(r[0], r[1], r[2], r[3], r[4], r[5])
             users.append(user)
         return users
 
@@ -187,11 +198,14 @@ class UserEntity(ObjectEntity):
         result = super(UserEntity, self).retrieve_by_conditions('User', email=email, password=password)
         if len(result) > 0:
             r = result[0]
-            return User(r[0], r[1], r[2], r[3], r[4], r[5], r[6])
+            return User(r[0], r[1], r[2], r[3], r[4], r[5])
         return result
 
-    def save(self, user):
-        print(f'saving {user = }')
+    # def save(self, **kwargs):
+    #     print(f'old {user = }')
+    #     query = 'UPDATE User '
+    #     print(f'new {user = }')
+
 
 
 class PrescriptionEntity(ObjectEntity):

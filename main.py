@@ -1,4 +1,6 @@
 import sys, res, controller
+from sqlite3 import IntegrityError
+
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QMessageBox, QTableWidgetItem,QAbstractItemView
 from PyQt5.uic import loadUi
@@ -38,7 +40,7 @@ class LoginView(QDialog):
             msgbox.setText("WELCOME TO GD PRESCRIPTION")
             msgbox.setStandardButtons(QMessageBox.Ok)
             msgbox.exec_()
-            print(f'logged in {user.object_id = }')
+            print(f'logged in {user}')
             if user.role == "Doctor":
                 doctor_home = DoctorHome()
                 widget.addWidget(doctor_home)
@@ -317,8 +319,10 @@ class AdminViewUser(ViewUser):
         print(f'{email = }')
         print(f'{address = }')
         print(f'{phone_number = }')
-        # user = self.user_controller.retrieve_user(user_id)
-        # print(f'saving {user}')
+        try:
+            self.user_controller.save_user(user_id, email, name, phone_number, address, role)
+        except IntegrityError as err:
+            print(f'{err}')         # ERROR MESSAGE SHOW ON SCREEN
 
 
 class Register(QDialog):

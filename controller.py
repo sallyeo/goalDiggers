@@ -1,3 +1,5 @@
+from sqlite3 import IntegrityError
+
 import entity as E
 
 
@@ -39,8 +41,27 @@ class UserController:
         return E.UserEntity().validate_login(email, password)
 
     @staticmethod
-    def save_user(id, email, name, phone_number, address, role):
-        E.UserEntity().retrieve_by_id(email)
+    def save_user(user_id, email, name, phone_number, address, role):
+        user_id = int(user_id)
+        email_check = E.UserEntity().retrieve_all_by_email(email)
+        print(f'{user_id = }')
+        if email_check:
+            if len(email_check) > 1 or email_check[0].object_id != user_id:
+                raise IntegrityError(f'Email must be unique.')
+        phone_number_check = E.UserEntity().retrieve_all_by_phone_number(phone_number)
+        if phone_number_check:
+            if len(phone_number_check) > 1 or phone_number_check[0].object_id != user_id:
+                raise IntegrityError(f'Phone number must be unique')
+        E.UserEntity().save(
+            'User',
+            user_id,
+            email=email,
+            name=name,
+            phone_number=phone_number,
+            address=address,
+            role=role
+        )
+
 
 
 class PrescriptionController:
