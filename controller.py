@@ -43,15 +43,19 @@ class UserController:
     @staticmethod
     def save_user(user_id, email, name, phone_number, address, role):
         user_id = int(user_id)
-        email_check = E.UserEntity().retrieve_all_by_email(email)
+        # email_check = E.UserEntity().retrieve_all_by_email(email)
         print(f'{user_id = }')
-        if email_check:
-            if len(email_check) > 1 or email_check[0].object_id != user_id:
-                raise IntegrityError(f'Email must be unique.')
-        phone_number_check = E.UserEntity().retrieve_all_by_phone_number(phone_number)
-        if phone_number_check:
-            if len(phone_number_check) > 1 or phone_number_check[0].object_id != user_id:
-                raise IntegrityError(f'Phone number must be unique')
+        # if email_check:
+        #     if len(email_check) > 1 or email_check[0].object_id != user_id:
+        #         raise IntegrityError(f'Email must be unique.')
+        # phone_number_check = E.UserEntity().retrieve_all_by_phone_number(phone_number)
+        # if phone_number_check:
+        #     if len(phone_number_check) > 1 or phone_number_check[0].object_id != user_id:
+        #         raise IntegrityError(f'Phone number must be unique')
+        if UserController.check_email_match(email, user_id):
+            raise IntegrityError(f'Email must be unique.')
+        if UserController.check_phone_number_match(phone_number, user_id):
+            raise IntegrityError(f'Phone number must be unique')
         E.UserEntity().save(
             'User',
             user_id,
@@ -62,7 +66,31 @@ class UserController:
             role=role
         )
 
+    @staticmethod
+    def create_user(email, name, phone_number, address, role, password):
+        if UserController.check_email_match(email):
+            raise IntegrityError(f'Email must be unique.')
+        if UserController.check_phone_number_match(phone_number):
+            raise IntegrityError(f'Phone number must be unique')
+        E.UserEntity().create('User', email=email, name=name, phone_number=phone_number, address=address, role=role, password=password)
 
+    @staticmethod
+    def check_email_match(email, user_id=None):
+        email_check = E.UserEntity().retrieve_all_by_email(email)
+        # If email_check list has elements and user_id is valid
+        if email_check and user_id:
+            if len(email_check) > 1 or email_check[0].object_id != user_id:
+                return True
+        return False
+
+    @staticmethod
+    def check_phone_number_match(phone_number, user_id=None):
+        phone_number_check = E.UserEntity().retrieve_all_by_email(phone_number)
+        # If phone_number_check list has elements and user_id is valid
+        if phone_number_check and user_id:
+            if len(phone_number_check) > 1 or phone_number_check[0].object_id != user_id:
+                return True
+        return False
 
 class PrescriptionController:
     e = E.PrescriptionEntity()

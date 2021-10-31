@@ -35,11 +35,11 @@ class LoginView(QDialog):
         user = C.UserController.login(email, password)
         if user:   # if input valid
             C.Session.set_user(user)
-            msgbox = QMessageBox()
-            msgbox.setWindowTitle("Login success")
-            msgbox.setText("WELCOME TO GD PRESCRIPTION")
-            msgbox.setStandardButtons(QMessageBox.Ok)
-            msgbox.exec_()
+            # msgbox = QMessageBox()
+            # msgbox.setWindowTitle("Login success")
+            # msgbox.setText("WELCOME TO GD PRESCRIPTION")
+            # msgbox.setStandardButtons(QMessageBox.Ok)
+            # msgbox.exec_()
             print(f'logged in {user}')
             if user.role == "Doctor":
                 doctor_home = DoctorHome()
@@ -191,6 +191,7 @@ class AdminHome(Home):
     def __init__(self):
         super(AdminHome, self).__init__('adminMainWindow.ui', [50, 100, 100, 150, 100, 100])
         self.table.cellClicked.connect(self.view_user)
+        self.addUserButton.clicked.connect(self.create_user)
         
     def get_records(self):
         users = self.user_controller.retrieve_all_users()
@@ -200,6 +201,11 @@ class AdminHome(Home):
         super(AdminHome, self).view_user()
         view_user_info = AdminViewUser()
         widget.addWidget(view_user_info)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def create_user(self):
+        create_user_info = AdminCreateUser()
+        widget.addWidget(create_user_info)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
@@ -243,12 +249,15 @@ class ViewPrescription(QDialog):
                 self.table.setItem(count, 1, QTableWidgetItem(str(medicine_name)))
                 self.table.setItem(count, 2, QTableWidgetItem(str(item.quantity)))
 
+    def go_home(self):
+        pass
+
 
 class PatientViewPrescription(ViewPrescription):
     def __init__(self):
         super(PatientViewPrescription, self).__init__('patientViewPrescription.ui')
 
-    def to_home(self):
+    def go_home(self):
         home = PatientHome()
         widget.addWidget(home)
         widget.setCurrentIndex(widget.currentIndex() + 1)
@@ -258,7 +267,7 @@ class DoctorViewPrescription(ViewPrescription):
     def __init__(self):
         super(DoctorViewPrescription, self).__init__('doctorViewPrescription.ui')
 
-    def to_home(self):
+    def go_home(self):
         home = DoctorHome()
         widget.addWidget(home)
         widget.setCurrentIndex(widget.currentIndex() + 1)
@@ -268,7 +277,7 @@ class PharmacistViewPrescription(ViewPrescription):
     def __init__(self):
         super(PharmacistViewPrescription, self).__init__('pharmacistViewPrescription.ui')
 
-    def to_home(self):
+    def go_home(self):
         home = PharmacistHome()
         widget.addWidget(home)
         widget.setCurrentIndex(widget.currentIndex() + 1)
@@ -281,7 +290,7 @@ class ViewUser(QDialog):
         super(ViewUser, self).__init__()
         loadUi(window, self)
         widget.setFixedSize(730, 650)
-        self.backButton.clicked.connect(self.to_home)
+        self.backButton.clicked.connect(self.go_home)
         self.display_details()
 
     def display_details(self):
@@ -294,13 +303,16 @@ class ViewUser(QDialog):
         self.addressLine.setText(context_user.address)
         self.telLine.setText(context_user.phone_number)
 
+    def go_home(self):
+        pass
+
 
 class AdminViewUser(ViewUser):
     def __init__(self):
         super(AdminViewUser, self).__init__('adminEditUser.ui')
         self.saveButton.clicked.connect(self.save_user)
 
-    def to_home(self):
+    def go_home(self):
         home = AdminHome()
         widget.addWidget(home)
         widget.setCurrentIndex(widget.currentIndex() + 1)
@@ -313,16 +325,57 @@ class AdminViewUser(ViewUser):
         email = self.emailLine.text()
         address = self.addressLine.text()
         phone_number = self.telLine.text()
-        print(f'{user_id = }')
-        print(f'{role = }')
-        print(f'{name = }')
-        print(f'{email = }')
-        print(f'{address = }')
-        print(f'{phone_number = }')
+        # print(f'{user_id = }')
+        # print(f'{role = }')
+        # print(f'{name = }')
+        # print(f'{email = }')
+        # print(f'{address = }')
+        # print(f'{phone_number = }')
         try:
             self.user_controller.save_user(user_id, email, name, phone_number, address, role)
         except IntegrityError as err:
             print(f'{err}')         # ERROR MESSAGE SHOW ON SCREEN
+            msgbox = QMessageBox()
+            msgbox.setWindowTitle("Login fail")
+            msgbox.setText(err)
+            msgbox.setStandardButtons(QMessageBox.Ok)
+            msgbox.exec_()
+
+
+class AdminCreateUser(QDialog):
+    user_controller = C.UserController
+
+    def __init__(self):
+        super(AdminCreateUser, self).__init__()
+        loadUi('adminCreateUser.ui', self)
+        self.createButton.clicked.connect(self.create_user)
+        self.backButton.clicked.connect(self.go_home)
+
+    def go_home(self):
+        home = AdminHome()
+        widget.addWidget(home)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def create_user(self):
+        role = self.userMenu.currentText()
+        name = self.nameLine.text()
+        email = self.emailLine.text()
+        address = self.addressLine.text()
+        phone_number = self.telLine.text()
+        password1 = self.password1Line.text()
+        password2 = self.password2Line.text()
+        if password1 != password2:
+            self.errorLabel.setText('Passwords do not match.')
+            return
+        self.user_controller.create_user(email, name, phone_number, address, role, password1)
+
+    def success(self):
+        msg_box = QMessageBox()
+        msg_box.setWindowTitle('Success !')
+        msg_box.setText('User created')
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec_()
+        self.go_home()
 
 
 class Register(QDialog):
@@ -330,19 +383,19 @@ class Register(QDialog):
         super(Register, self).__init__()
         loadUi("registerDialog.ui", self)
         self.registerButton.clicked.connect(self.register)
-        self.loginButton.clicked.connect(self.go_to_login)
+        self.loginButton.clicked.connect(self.go_login)
 
     def register(self):
         email = self.email.text()
         if self.password.text() == self.confirmPass.text():
             password = self.password.text()
         print("Successfully registering in with email: ", email, "and password: ", password)
-        self.go_to_login()
+        self.go_login()
 
-    def go_to_login(self):
+    def go_login(self):
         login = LoginView()
         widget.addWidget(login)
-        widget.setCurrentIndex(widget.currentIndex()+1)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 if __name__ == '__main__':

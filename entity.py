@@ -133,18 +133,31 @@ class ObjectEntity:
     def get_many_or_none(self, result):
         pass
 
-    def save(self, table, object_id, **kwargs):
-        joined = ''
+    @staticmethod
+    def save(table, object_id, **kwargs):
         columns = []
         for key, value in kwargs.items():
-            if key != 'table':
-                columns.append(f"{key} = '{value}'")
+            columns.append(f"{key} = '{value}'")
         joined = ', '.join(columns)
         query = f"UPDATE {table} SET {joined} WHERE id = {object_id}"
         print(f'{query =}')
         result = ObjectEntity.DATABASE.query_db(query)
         print(f'{result = }')
         return result
+
+    @staticmethod
+    def create(table, **kwargs):
+        # columns = []
+        # data = []
+        # for key, value in kwargs.items():
+        #     columns.append(key)
+        #     data.append(value)
+        columns = ','.join(kwargs.keys())
+        data = ','.join(kwargs.values())
+        print(f'{columns = }')
+        print(f'{data = }')
+        query = f'INSERT INTO User ({columns}) VALUES ({data})'
+        print(f'{query = }')
 
 
 class UserTypeEntity(ObjectEntity):
@@ -200,12 +213,6 @@ class UserEntity(ObjectEntity):
             r = result[0]
             return User(r[0], r[1], r[2], r[3], r[4], r[5])
         return result
-
-    # def save(self, **kwargs):
-    #     print(f'old {user = }')
-    #     query = 'UPDATE User '
-    #     print(f'new {user = }')
-
 
 
 class PrescriptionEntity(ObjectEntity):
