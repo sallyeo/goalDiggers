@@ -52,7 +52,6 @@ border-bottom-right-radius: 50px;</string>
     <property name="font">
      <font>
       <pointsize>25</pointsize>
-      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -61,43 +60,6 @@ border-bottom-right-radius: 50px;</string>
     </property>
     <property name="text">
      <string>Prescription Info</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="logoutButton">
-    <property name="geometry">
-     <rect>
-      <x>570</x>
-      <y>80</y>
-      <width>80</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton#logoutButton{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
-	color:rgba(255, 255, 255, 210);
-	border-radius:5px;
-}
-
-QPushButton#logoutButton:hover{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));
-}
-
-QPushButton#logoutButton:pressed{
-	padding-left:5px;
-	padding-top:5px;
-	background-color:rgba(150, 123, 111, 255);
-}</string>
-    </property>
-    <property name="text">
-     <string>L o g o u t</string>
     </property>
    </widget>
    <widget class="QLabel" name="prescriptionIdLabel">
@@ -328,7 +290,6 @@ padding-bottom:1px;
     </property>
     <property name="font">
      <font>
-      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -360,7 +321,6 @@ padding:5px;</string>
     <property name="font">
      <font>
       <pointsize>16</pointsize>
-      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -397,7 +357,6 @@ QPushButton#saveButton:pressed{
     <property name="font">
      <font>
       <pointsize>16</pointsize>
-      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -434,7 +393,6 @@ QPushButton#editButton:pressed{
     <property name="font">
      <font>
       <pointsize>16</pointsize>
-      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
