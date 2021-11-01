@@ -28,7 +28,7 @@
       <x>20</x>
       <y>20</y>
       <width>650</width>
-      <height>651</height>
+      <height>551</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -52,6 +52,7 @@ border-bottom-right-radius: 50px;</string>
     <property name="font">
      <font>
       <pointsize>25</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -62,47 +63,11 @@ border-bottom-right-radius: 50px;</string>
      <string>Add Prescription</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="logoutButton">
+   <widget class="QLabel" name="patientNameLabel">
     <property name="geometry">
      <rect>
-      <x>570</x>
+      <x>40</x>
       <y>80</y>
-      <width>80</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton#logoutButton{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
-	color:rgba(255, 255, 255, 210);
-	border-radius:5px;
-}
-
-QPushButton#logoutButton:hover{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));
-}
-
-QPushButton#logoutButton:pressed{
-	padding-left:5px;
-	padding-top:5px;
-	background-color:rgba(150, 123, 111, 255);
-}</string>
-    </property>
-    <property name="text">
-     <string>L o g o u t</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="prescriptionIdLabel">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>120</y>
       <width>111</width>
       <height>30</height>
      </rect>
@@ -114,15 +79,18 @@ border-radius: 3px;
 opacity: 200;</string>
     </property>
     <property name="text">
-     <string>Prescription ID</string>
+     <string>Patient</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="PrescriptionIdLine">
+   <widget class="QLineEdit" name="patientNameLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>120</y>
-      <width>111</width>
+      <y>80</y>
+      <width>300</width>
       <height>30</height>
      </rect>
     </property>
@@ -140,152 +108,14 @@ padding-bottom:1px;
 </string>
     </property>
     <property name="placeholderText">
-     <string>Prescription ID</string>
+     <string>Patient Name</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="prescriptionDateLine">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>120</y>
-      <width>101</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:rgba(0, 0, 0, 0);
-border:none;
-border-bottom:2px solid rgba(46, 82, 101, 200);
-color:rgba(0, 0, 0, 240);
-padding-bottom:1px;
-</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="placeholderText">
-     <string>Date</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="prescriptionDateLabel">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>120</y>
-      <width>51</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 2px solid qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
-padding: 5px;
-border-radius: 3px;
-opacity: 200;</string>
-    </property>
-    <property name="text">
-     <string>Date</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="patientIdLabel">
+   <widget class="QTableWidget" name="table">
     <property name="geometry">
      <rect>
       <x>40</x>
       <y>160</y>
-      <width>111</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 2px solid qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
-padding: 5px;
-border-radius: 3px;
-opacity: 200;</string>
-    </property>
-    <property name="text">
-     <string>Patient ID</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="patientIdLine">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>160</y>
-      <width>111</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:rgba(0, 0, 0, 0);
-border:none;
-border-bottom:2px solid rgba(46, 82, 101, 200);
-color:rgba(0, 0, 0, 240);
-padding-bottom:1px;
-</string>
-    </property>
-    <property name="placeholderText">
-     <string>Patient ID</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="doctorIdLabel">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>200</y>
-      <width>111</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 2px solid qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
-padding: 5px;
-border-radius: 3px;
-opacity: 200;</string>
-    </property>
-    <property name="text">
-     <string>Doctor ID</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="doctorIdLine">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>200</y>
-      <width>111</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:rgba(0, 0, 0, 0);
-border:none;
-border-bottom:2px solid rgba(46, 82, 101, 200);
-color:rgba(0, 0, 0, 240);
-padding-bottom:1px;
-</string>
-    </property>
-    <property name="placeholderText">
-     <string>Doctor ID</string>
-    </property>
-   </widget>
-   <widget class="QTableWidget" name="docAddPresTable">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>290</y>
       <width>611</width>
       <height>231</height>
      </rect>
@@ -301,7 +131,12 @@ padding-bottom:1px;
     </attribute>
     <column>
      <property name="text">
-      <string>Prescribed Item</string>
+      <string>ID</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Medicine</string>
      </property>
     </column>
     <column>
@@ -309,23 +144,19 @@ padding-bottom:1px;
       <string>Quantity</string>
      </property>
     </column>
-    <column>
-     <property name="text">
-      <string>Doctor Instruction</string>
-     </property>
-    </column>
    </widget>
    <widget class="QLabel" name="presDetailTitle">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>250</y>
+      <y>120</y>
       <width>611</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -345,18 +176,19 @@ padding:5px;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="saveButton">
+   <widget class="QPushButton" name="prescribeButton">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>620</y>
-      <width>80</width>
+      <x>160</x>
+      <y>400</y>
+      <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -378,21 +210,22 @@ QPushButton#saveButton:pressed{
 }</string>
     </property>
     <property name="text">
-     <string>s a v e</string>
+     <string>Prescribe</string>
     </property>
    </widget>
    <widget class="QPushButton" name="addButton">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>620</y>
-      <width>80</width>
+      <y>520</y>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -414,14 +247,14 @@ QPushButton#addButton:pressed{
 }</string>
     </property>
     <property name="text">
-     <string>a d d  r o w</string>
+     <string>Add medicine</string>
     </property>
    </widget>
    <widget class="QPushButton" name="backButton">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>620</y>
+      <x>270</x>
+      <y>400</y>
       <width>80</width>
       <height>31</height>
      </rect>
@@ -429,6 +262,7 @@ QPushButton#addButton:pressed{
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -450,21 +284,22 @@ QPushButton#backButton:pressed{
 }</string>
     </property>
     <property name="text">
-     <string>b a c k</string>
+     <string>Back</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="delButton">
+   <widget class="QPushButton" name="deleteButton">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>620</y>
-      <width>80</width>
+      <x>40</x>
+      <y>400</y>
+      <width>111</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -486,40 +321,14 @@ QPushButton#delButton:pressed{
 }</string>
     </property>
     <property name="text">
-     <string>d e l  r o w</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="docInstructionLine">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>540</y>
-      <width>271</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:rgba(0, 0, 0, 0);
-border:none;
-border-bottom:2px solid rgba(46, 82, 101, 200);
-color:rgba(0, 0, 0, 240);
-padding-bottom:1px;
-</string>
-    </property>
-    <property name="placeholderText">
-     <string>Doctor's Instruction</string>
+     <string>Delete row</string>
     </property>
    </widget>
    <widget class="QLabel" name="medicineLabel">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>540</y>
+      <y>440</y>
       <width>81</width>
       <height>30</height>
      </rect>
@@ -534,30 +343,11 @@ opacity: 200;</string>
      <string>Medicine</string>
     </property>
    </widget>
-   <widget class="QLabel" name="instructionLabel">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>540</y>
-      <width>81</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 2px solid qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
-padding: 5px;
-border-radius: 3px;
-opacity: 200;</string>
-    </property>
-    <property name="text">
-     <string>Instruction</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="quantityLabel">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>580</y>
+      <y>480</y>
       <width>81</width>
       <height>30</height>
      </rect>
@@ -576,17 +366,16 @@ opacity: 200;</string>
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>540</y>
-      <width>111</width>
+      <y>440</y>
+      <width>221</width>
       <height>30</height>
      </rect>
     </property>
     <property name="autoFillBackground">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:rgba(0, 0, 0, 0);
-border:none;
+     <string notr="true">border:none;
 color:rgba(0, 0, 0, 240);
 padding-bottom:1px;</string>
     </property>
@@ -597,29 +386,14 @@ padding-bottom:1px;</string>
      <bool>true</bool>
     </property>
     <property name="currentText">
-     <string>paracetamol</string>
+     <string/>
     </property>
-    <item>
-     <property name="text">
-      <string>paracetamol</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>omeprazole</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>ibuprophen</string>
-     </property>
-    </item>
    </widget>
-   <widget class="QComboBox" name="qtMenu">
+   <widget class="QComboBox" name="quantityMenu">
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>580</y>
+      <y>480</y>
       <width>111</width>
       <height>30</height>
      </rect>
@@ -628,8 +402,7 @@ padding-bottom:1px;</string>
      <bool>false</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:rgba(0, 0, 0, 0);
-border:none;
+     <string notr="true">border:none;
 color:rgba(0, 0, 0, 240);
 padding-bottom:1px;</string>
     </property>

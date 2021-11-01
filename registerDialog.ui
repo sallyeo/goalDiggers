@@ -85,6 +85,7 @@ border-bottom-right-radius: 50px;</string>
     <property name="font">
      <font>
       <pointsize>25</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -178,6 +179,7 @@ padding-bottom:7px;
     <property name="font">
      <font>
       <pointsize>22</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -200,6 +202,7 @@ padding-bottom:7px;
     <property name="font">
      <font>
       <pointsize>22</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -222,6 +225,7 @@ padding-bottom:7px;
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -308,6 +312,7 @@ padding-bottom:7px;
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -345,7 +350,7 @@ QPushButton#loginButton:pressed{
      <bool>false</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">color:rgba(0, 0, 0, 200);</string>
+     <string notr="true"/>
     </property>
     <property name="inputMethodHints">
      <set>Qt::ImhNone</set>

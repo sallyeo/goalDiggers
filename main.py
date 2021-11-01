@@ -169,7 +169,6 @@ class DoctorHome(Home):
         super(DoctorHome, self).__init__('doctorMainWindow.ui')
         # self.table.cellClicked.connect(self.view_prescription)
         self.table.cellClicked.connect(self.view_user)
-        self.addPrescriptionButton.clicked.connect(self.add_prescription)
     
     def get_records(self):
         # boundary calling controller
@@ -187,9 +186,6 @@ class DoctorHome(Home):
     def view_user(self):
         super(DoctorHome, self).view_user()
         self.load_page(DoctorViewPatient())
-
-    def add_prescription(self):
-        self.load_page(DoctorAddPrescription())
 
 
 class PharmacistHome(Home):
@@ -269,7 +265,7 @@ class ViewPrescription(QDialog):
         if records:
             self.table.setRowCount(len(records))
             for count, item in enumerate(records):
-                medicine_name = C.MedicineController.retrieve_medicine(item.object_id).name
+                medicine_name = C.MedicineController.retrieve_by_id(item.object_id).name
                 self.table.setItem(count, 0, QTableWidgetItem(str(item.object_id)))
                 self.table.setItem(count, 1, QTableWidgetItem(str(medicine_name)))
                 self.table.setItem(count, 2, QTableWidgetItem(str(item.quantity)))
@@ -280,6 +276,7 @@ class ViewPrescription(QDialog):
     def load_page(self, page):
         widget.addWidget(page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
 
 class PatientViewPrescription(ViewPrescription):
     def __init__(self):
@@ -392,6 +389,7 @@ class DoctorViewPatient(ViewUser):
         for i in range(len(column_sizes)):
             self.table.setColumnWidth(i, column_sizes[i])
         self.backButton.clicked.connect(self.go_back)
+        self.addButton.clicked.connect(self.add_prescription)
         self.table.cellClicked.connect(self.view_prescription)
         self.get_records()
 
@@ -412,6 +410,10 @@ class DoctorViewPatient(ViewUser):
     def view_prescription(self):
         super(DoctorViewPatient, self).view_prescription()
         self.load_page(DoctorViewPrescription())
+
+    def add_prescription(self):
+        # C.Session.set_context('cart', C.CartController.retrieve_cart_by_patient(C.Session.get_context('user').object_id))
+        self.load_page(DoctorAddPrescription())
 
 
 class PharmacistViewPatient(ViewUser):
@@ -490,7 +492,96 @@ class AdminCreateUser(QDialog):
 
 
 class DoctorAddPrescription(QDialog):
-    pass
+    user_controller = C.UserController
+    prescription_controller = C.PrescriptionController
+    medicine_controller = C.MedicineController
+    medicine_quantity_controller = C.MedicineQuantityController
+
+    def __init__(self):
+        super(DoctorAddPrescription, self).__init__()
+        loadUi('doctorAddPrescription.ui', self)
+        widget.setFixedSize(730, 650)
+        self.backButton.clicked.connect(self.go_back)
+        self.prescribeButton.clicked.connect(self.prescribe)
+        self.deleteButton.clicked.connect(self.delete_row)
+        self.addButton.clicked.connect(self.add_medicine)
+        self.patientNameLine.setText(str(C.Session.get_context('user').name))
+        self.table.cellClicked.connect(self.edit_medicine)
+        medicines = self.medicine_controller.retrieve_all_medicines()
+        for medicine in medicines:
+            self.medMenu.addItem(medicine.name)
+        self.get_and_display_records()
+
+    def get_and_display_records(self):
+        cart = C.CartController.retrieve_cart_by_patient(C.Session.get_context('user').object_id)
+        print(f'{cart = }')
+        medicine_quantities = C.MedicineQuantityController.retrieve_cart_medicines(cart.object_id)
+        if medicine_quantities:
+            self.table.setRowCount(len(medicine_quantities))
+            for count, item in enumerate(medicine_quantities):
+                medicine_name = C.MedicineController.retrieve_by_id(item.medicine_id).name
+                self.table.setItem(count, 0, QTableWidgetItem(str(item.object_id)))
+                self.table.setItem(count, 1, QTableWidgetItem(str(medicine_name)))
+                self.table.setItem(count, 2, QTableWidgetItem(str(item.quantity)))
+
+    def go_back(self):
+        widget.addWidget(DoctorViewPatient())
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def prescribe(self):
+        pass
+
+    def delete_row(self):
+        pass
+
+    def add_medicine(self):
+        try:
+            selected_medicine = str(self.medMenu.currentText())
+            selected_quantity = int(self.quantityMenu.currentText())
+            print(f'Add {selected_quantity} {selected_medicine}')
+            self.medicine_quantity_controller.add_new(selected_quantity, selected_medicine, C.Session.get_context('user').object_id)
+            self.refresh_table()
+        except ValueError as err:
+            print('Quantity must be a integer !')
+
+    def refresh_table(self):
+        self.table.setRowCount(0)
+        self.get_and_display_records()
+
+    def edit_medicine(self):
+        row = self.table.currentRow()
+        print(self.table.item(row, 0).text())
+        medicine_quantity = C.MedicineQuantityController.retrieve_by_id(self.table.item(row, 0).text())
+        print(f'{medicine_quantity = }')
+        C.Session.set_context('medicine_quantity', medicine_quantity)
+        self.load_page(DoctorEditMedicine())
+
+    @staticmethod
+    def load_page(page):
+        widget.addWidget(page)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
+class DoctorEditMedicine(QDialog):
+    def __init__(self):
+        super(DoctorEditMedicine, self).__init__()
+        loadUi('doctorEditMedicine.ui', self)
+        widget.setFixedSize(930, 750)
+        self.saveButton.clicked.connect(self.save_medicine)
+        self.backButton.clicked.connect(self.go_back)
+        self.display_details()
+
+    def display_details(self):
+        medicine_quantity = C.Session.get_context('medicine_quantity')
+        medicine_name = C.MedicineController.retrieve_by_id(medicine_quantity.medicine_id).name
+        self.medicineNameLine.setText(str(medicine_name))
+        self.quantityLine.setText(str(medicine_quantity.quantity))
+
+    def save_medicine(self):
+        pass
+
+    def go_back(self):
+        pass
 
 
 class Register(QDialog):

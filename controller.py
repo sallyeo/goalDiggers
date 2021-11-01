@@ -33,6 +33,7 @@ class UserTypeController:
     def retrieve_role(role):
         return E.UserTypeEntity().retrieve_by_id(role)
 
+
 # REMINDER FOR DESMOND: PASS IN QUERYING USER OBJECT TO CHECK VALIDITY
 class UserController:
     @staticmethod
@@ -59,15 +60,6 @@ class UserController:
     @staticmethod
     def save_user(user_id, email, name, phone_number, address, role):
         user_id = int(user_id)
-        # email_check = E.UserEntity().retrieve_all_by_email(email)
-        print(f'{user_id = }')
-        # if email_check:
-        #     if len(email_check) > 1 or email_check[0].object_id != user_id:
-        #         raise IntegrityError(f'Email must be unique.')
-        # phone_number_check = E.UserEntity().retrieve_all_by_phone_number(phone_number)
-        # if phone_number_check:
-        #     if len(phone_number_check) > 1 or phone_number_check[0].object_id != user_id:
-        #         raise IntegrityError(f'Phone number must be unique')
         if UserController.check_email_match(email, user_id):
             raise IntegrityError(f'Email must be unique.')
         if UserController.check_phone_number_match(phone_number, user_id):
@@ -131,8 +123,12 @@ class MedicineController:
     e = E.MedicineEntity()
 
     @staticmethod
-    def retrieve_medicine(medicine_id):
+    def retrieve_by_id(medicine_id):
         return MedicineController.e.retrieve_by_id(medicine_id)
+
+    @staticmethod
+    def retrieve_by_name(medicine_name):
+        return MedicineController.e.retrieve_by_name(medicine_name)
 
     @staticmethod
     def retrieve_all_medicines():
@@ -143,9 +139,55 @@ class MedicineQuantityController:
     e = E.MedicineQuantityEntity()
 
     @staticmethod
+    def retrieve_by_id(object_id):
+        return MedicineQuantityController.e.retrieve_by_id(object_id)
+
+    @staticmethod
     def retrieve_prescription_medicines(prescription_id):
         return MedicineQuantityController.e.retrieve_by_prescription(prescription_id)
 
     @staticmethod
     def retrieve_cart_medicines(cart_id):
         return MedicineQuantityController.e.retrieve_by_cart(cart_id)
+
+    @staticmethod
+    def add_new(quantity, medicine_name, patient_id):
+        try:
+            quantity = int(quantity)
+        except ValueError as err:
+            print('Quantity must be an integer !')
+        medicine_id = MedicineController.retrieve_by_name(medicine_name).object_id
+        cart_id = CartController.retrieve_cart_by_patient(patient_id).object_id
+        cart_medicines = MedicineQuantityController.e.retrieve_by_cart(cart_id)
+        matched = False
+        for medicine_quantity in cart_medicines:
+            if medicine_quantity.medicine_id == medicine_id:
+                medicine_quantity.quantity += quantity
+                matched = True
+                MedicineQuantityController.e.save_object(medicine_quantity)
+        if not matched:
+            MedicineQuantityController.e.create('MedicineQuantity', cart_id=cart_id, medicine_id=medicine_id, quantity=quantity)
+
+
+class CartController:
+    e = E.CartEntity()
+    
+    @staticmethod
+    def retrieve_cart_by_id(object_id):
+        return CartController.e.retrieve_by_id(object_id)
+
+    @staticmethod
+    def retrieve_cart_by_patient(object_id):
+        user = UserController.retrieve_user(object_id)
+        if user.role != 'Patient':
+            raise ValueError('User is not a patient.')
+        cart = CartController.e.retrieve_by_patient(object_id)
+        if not cart:
+            CartController.e.create('Cart', patient_id=object_id)
+            cart = CartController.e.retrieve_by_patient(object_id)
+        return cart
+    
+    @staticmethod
+    def create_patient_cart(patient_id):
+        return CartController.e.create('Cart', patient_id=patient_id)
+    

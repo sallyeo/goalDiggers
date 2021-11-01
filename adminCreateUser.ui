@@ -343,8 +343,7 @@ opacity: 200;</string>
      <bool>false</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:rgba(0, 0, 0, 0);
-border:none;
+     <string notr="true">border:none;
 color:rgba(0, 0, 0, 240);
 padding-bottom:1px;</string>
     </property>

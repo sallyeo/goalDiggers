@@ -131,6 +131,9 @@ class ObjectEntity:
     def save(table, object_id, **kwargs):
         columns = []
         for key, value in kwargs.items():
+            print(f'{value = }')
+            if value == 'None':
+                value = 'NULL'
             columns.append(f"{key} = '{value}'")
         joined = ', '.join(columns)
         query = f"UPDATE {table} SET {joined} WHERE id = {object_id}"
@@ -209,6 +212,30 @@ class UserEntity(ObjectEntity):
         return result
 
 
+class CartEntity(ObjectEntity):
+    def retrieve_by_id(self, object_id):
+        return self.get_one(super(CartEntity, self).retrieve_by_conditions('Cart', id=object_id))
+
+    def retrieve_by_patient(self, patient_id):
+        return self.get_one(super(CartEntity, self).retrieve_by_conditions('Cart', patient_id=patient_id))
+
+    def retrieve_all(self):
+        return self.get_many(super(CartEntity, self).retrieve_by_conditions('Cart'))
+
+    def get_one(self, result):
+        if len(result) > 0:
+            r = result[0]
+            return Cart(r[0], r[1])
+        return None
+
+    def get_many(self, result):
+        users = []
+        for r in result:
+            user = Cart(r[0], r[1])
+            users.append(user)
+        return users
+
+
 class PrescriptionEntity(ObjectEntity):
     def retrieve_by_id(self, object_id):
         return self.get_one(super(PrescriptionEntity, self).retrieve_by_conditions('Prescription', id=object_id))
@@ -237,6 +264,9 @@ class MedicineEntity(ObjectEntity):
     def retrieve_by_id(self, object_id):
         return self.get_one(super(MedicineEntity, self).retrieve_by_conditions('Medicine', id=object_id))
 
+    def retrieve_by_name(self, name):
+        return self.get_one(super(MedicineEntity, self).retrieve_by_conditions('Medicine', name=name))
+
     def retrieve_all(self):
         return self.get_many(super(MedicineEntity, self).retrieve_by_conditions('Medicine'))
 
@@ -255,17 +285,19 @@ class MedicineEntity(ObjectEntity):
 
 
 class MedicineQuantityEntity(ObjectEntity):
+    table_name = 'MedicineQuantity'
+
     def retrieve_by_id(self, object_id):
-        return self.get_one(super(MedicineQuantityEntity, self).retrieve_by_conditions('MedicineQuantity', id=object_id))
+        return self.get_one(super(MedicineQuantityEntity, self).retrieve_by_conditions(self.table_name, id=object_id))
 
     def retrieve_all(self):
-        return self.get_many(super(MedicineQuantityEntity, self).retrieve_by_conditions('MedicineQuantity'))
+        return self.get_many(super(MedicineQuantityEntity, self).retrieve_by_conditions(self.table_name))
 
     def retrieve_by_prescription(self, prescription_id):
-        return self.get_many(super(MedicineQuantityEntity, self).retrieve_by_conditions('MedicineQuantity', prescription_id=prescription_id))
+        return self.get_many(super(MedicineQuantityEntity, self).retrieve_by_conditions(self.table_name, prescription_id=prescription_id))
 
     def retrieve_by_cart(self, cart_id):
-        return self.get_many(super(MedicineQuantityEntity, self).retrieve_by_conditions('MedicineQuantity', cart_id=cart_id))
+        return self.get_many(super(MedicineQuantityEntity, self).retrieve_by_conditions(self.table_name, cart_id=cart_id))
 
     def get_one(self, result):
         if not result:
@@ -282,3 +314,13 @@ class MedicineQuantityEntity(ObjectEntity):
             medicine_quantity = MedicineQuantity(r[0], r[1], r[2], r[3], r[4])
             medicine_quantities.append(medicine_quantity)
             return medicine_quantities
+
+    def save_object(self, medicine_quantity):
+        self.save(
+            self.table_name,
+            medicine_quantity.object_id,
+            prescription_id=medicine_quantity.prescription_id,
+            cart_id=medicine_quantity.cart_id,
+            quantity=medicine_quantity.quantity,
+            medicine_id=medicine_quantity.medicine_id,
+        )
