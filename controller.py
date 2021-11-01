@@ -68,10 +68,12 @@ class UserController:
 
     @staticmethod
     def create_user(email, name, phone_number, address, role, password):
+        if not email or not name or not phone_number or not address or not role or not password:
+            raise ValueError('Please fill in all fields')
         if UserController.check_email_match(email):
-            raise IntegrityError(f'Email must be unique.')
+            raise IntegrityError('Email must be unique.')
         if UserController.check_phone_number_match(phone_number):
-            raise IntegrityError(f'Phone number must be unique')
+            raise IntegrityError('Phone number must be unique')
         E.UserEntity().create('User', email=email, name=name, phone_number=phone_number, address=address, role=role, password=password)
 
     @staticmethod

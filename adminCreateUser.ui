@@ -509,6 +509,17 @@ padding-bottom:1px;
    <zorder>errorLabel</zorder>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>userMenu</tabstop>
+  <tabstop>nameLine</tabstop>
+  <tabstop>emailLine</tabstop>
+  <tabstop>addressLine</tabstop>
+  <tabstop>telLine</tabstop>
+  <tabstop>password1Line</tabstop>
+  <tabstop>password2Line</tabstop>
+  <tabstop>createButton</tabstop>
+  <tabstop>backButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

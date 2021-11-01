@@ -367,12 +367,16 @@ class AdminCreateUser(QDialog):
         if password1 != password2:
             self.errorLabel.setText('Passwords do not match.')
             return
-        self.user_controller.create_user(email, name, phone_number, address, role, password1)
+        try:
+            self.user_controller.create_user(email, name, phone_number, address, role, password1)
+            self.success('User created')
+        except ValueError as err:
+            print(err)
 
-    def success(self):
+    def success(self, message):
         msg_box = QMessageBox()
         msg_box.setWindowTitle('Success !')
-        msg_box.setText('User created')
+        msg_box.setText(message)
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec_()
         self.go_home()
