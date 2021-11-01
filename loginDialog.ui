@@ -85,6 +85,7 @@ border-bottom-right-radius: 50px;</string>
     <property name="font">
      <font>
       <pointsize>25</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -162,6 +163,7 @@ padding-bottom:7px;
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -235,6 +237,7 @@ QPushButton#loginButton:pressed{
     <property name="font">
      <font>
       <pointsize>22</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -257,6 +260,7 @@ QPushButton#loginButton:pressed{
     <property name="font">
      <font>
       <pointsize>22</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -279,6 +283,7 @@ QPushButton#loginButton:pressed{
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -328,28 +333,8 @@ padding-bottom:1px;</string>
      <bool>true</bool>
     </property>
     <property name="currentText">
-     <string>Patient</string>
+     <string/>
     </property>
-    <item>
-     <property name="text">
-      <string>Patient</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Admin</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Doctor</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Pharmacist</string>
-     </property>
-    </item>
    </widget>
   </widget>
  </widget>

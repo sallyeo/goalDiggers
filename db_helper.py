@@ -18,6 +18,7 @@ class db_helper:
         return self.conn
 
     def query_db(self, query):
+        print(f'{query = }')
         cur = self.conn.cursor()
         cur.execute(query)
         rows = cur.fetchall()

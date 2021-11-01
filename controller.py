@@ -5,7 +5,7 @@ import entity as E
 
 class Session:
     user = None
-    context = None
+    context = {}
 
     @staticmethod
     def set_user(user):
@@ -16,13 +16,22 @@ class Session:
         return Session.user
 
     @staticmethod
-    def set_context(context):
-        Session.context = context
+    def set_context(key, value):
+        Session.context[key] = value
 
     @staticmethod
-    def get_context():
-        return Session.context
+    def get_context(key):
+        return Session.context[key]
 
+
+class UserTypeController:
+    @staticmethod
+    def retrieve_all_roles():
+        return E.UserTypeEntity().retrieve_all()
+    
+    @staticmethod
+    def retrieve_role(role):
+        return E.UserTypeEntity().retrieve_by_id(role)
 
 # REMINDER FOR DESMOND: PASS IN QUERYING USER OBJECT TO CHECK VALIDITY
 class UserController:
@@ -33,6 +42,13 @@ class UserController:
     @staticmethod
     def retrieve_user(user_id):
         return E.UserEntity().retrieve_by_id(user_id)
+
+    @staticmethod
+    def retrieve_users_by_role(role):
+        role_obj = UserTypeController.retrieve_role(role)
+        if not role:
+            raise ValueError('No such role')
+        return E.UserEntity().retrieve_all_by_role(role_obj.role)
 
     @staticmethod
     def login(email, password):
@@ -93,6 +109,7 @@ class UserController:
             if len(phone_number_check) > 1 or phone_number_check[0].object_id != user_id:
                 return True
         return False
+
 
 class PrescriptionController:
     e = E.PrescriptionEntity()

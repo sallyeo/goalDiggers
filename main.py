@@ -25,6 +25,10 @@ class LoginView(QDialog):
         loadUi("loginDialog.ui", self)                          # load the ui file
         self.loginButton.clicked.connect(self.login)            # loginButton
         self.registerButton.clicked.connect(self.go_to_create)  # registerButton
+        # Call to controller
+        roles = C.UserTypeController().retrieve_all_roles()
+        for role in roles:
+            self.userMenu.addItem(role.role)
 
     def login(self):
         email = self.email.text()           # get email from user input
@@ -77,7 +81,7 @@ class Home(QMainWindow):
     def __init__(self, window, column_sizes=None):
         super(Home, self).__init__()
         if column_sizes is None:
-            column_sizes = [100, 100, 200, 200, 180]
+            column_sizes = [50, 100, 100, 150, 100, 100]
         loadUi(window, self)
         widget.setFixedSize(930,750)
         for i in range(len(column_sizes)):
@@ -88,7 +92,13 @@ class Home(QMainWindow):
         self.logoutButton.clicked.connect(self.logout_app)
         self.get_records()
 
-    def display_records(self, records):
+    def get_records(self):
+        pass
+
+    def display_details(self):
+        pass
+
+    def display_prescriptions(self, records):
         if records:
             self.table.setRowCount(len(records))
             for count, item in enumerate(records):
@@ -113,15 +123,11 @@ class Home(QMainWindow):
 
     def view_prescription(self):
         row = self.table.currentRow()
-        print('view_prescription called')
-        C.Session.set_context(C.PrescriptionController.retrieve_prescription(self.table.item(row, 0).text()))
+        C.Session.set_context('prescription', C.PrescriptionController.retrieve_prescription(self.table.item(row, 0).text()))
 
     def view_user(self):
         row = self.table.currentRow()
-        print('view_user called')
-        print(self.table.item(row, 0).text())
-        C.Session.set_context(C.UserController.retrieve_user(self.table.item(row, 0).text()))
-        print(C.Session.get_context())
+        C.Session.set_context('user', C.UserController.retrieve_user(self.table.item(row, 0).text()))
 
     def logout_app(self):
         # calling LoginView() of boundary class
@@ -133,18 +139,22 @@ class Home(QMainWindow):
 
 class PatientHome(Home):
     def __init__(self):
-        super(PatientHome, self).__init__('patientMainWindow.ui')
+        super(PatientHome, self).__init__('patientMainWindow.ui', [100, 100, 200, 200, 180])
         self.table.cellClicked.connect(self.view_prescription)
         
     def get_records(self):
         print(f'Session user: {C.Session.get_user()}')
+        session_user = C.Session.get_user()
+        self.display_details()
+        self.display_prescriptions(self.prescription_controller.retrieve_patient_prescriptions(session_user.object_id))
+
+    def display_details(self):
         session_user = C.Session.get_user()
         self.idLine.setText(str(session_user.object_id))
         self.nameLine.setText(session_user.name)
         self.emailLine.setText(session_user.email)
         self.addressLine.setText(session_user.address)
         self.telLine.setText(session_user.phone_number)
-        self.display_records(self.prescription_controller.retrieve_patient_prescriptions(session_user.object_id))
 
     def view_prescription(self):
         super(PatientHome, self).view_prescription()
@@ -156,40 +166,64 @@ class PatientHome(Home):
 class DoctorHome(Home):
     def __init__(self):
         super(DoctorHome, self).__init__('doctorMainWindow.ui')
-        self.table.cellClicked.connect(self.view_prescription)
+        # self.table.cellClicked.connect(self.view_prescription)
+        self.table.cellClicked.connect(self.view_user)
+        self.addPrescriptionButton.clicked.connect(self.add_prescription)
     
     def get_records(self):
         # boundary calling controller
-        prescriptions = C.PrescriptionController.retrieve_all_prescriptions()
-        self.display_records(prescriptions)
+        users = C.UserController.retrieve_users_by_role('Patient')
+        self.display_users(users)
+        # prescriptions = C.PrescriptionController.retrieve_all_prescriptions()
+        # self.display_records(prescriptions)
 
-    def view_prescription(self):
-        super(DoctorHome, self).view_prescription()
-        prescription = DoctorViewPrescription()
-        widget.addWidget(prescription)
+    # def view_prescription(self):
+    #     super(DoctorHome, self).view_prescription()
+    #     prescription = DoctorViewPrescription()
+    #     widget.addWidget(prescription)
+    #     widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def view_user(self):
+        super(DoctorHome, self).view_user()
+        user = DoctorViewPatient()
+        widget.addWidget(user)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def add_prescription(self):
+        add_prescription = DoctorAddPrescription()
+        widget.addWidget(add_prescription)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 class PharmacistHome(Home):
     def __init__(self):
         super(PharmacistHome, self).__init__('pharmacistMainWindow.ui')
-        self.table.cellClicked.connect(self.view_prescription)
-    
+        # self.table.cellClicked.connect(self.view_prescription)
+        self.table.cellClicked.connect(self.view_user)
+
     def get_records(self):
         # boundary calling controller
-        prescriptions = C.PrescriptionController.retrieve_all_prescriptions()
-        self.display_records(prescriptions)
+        users = C.UserController.retrieve_users_by_role('Patient')
+        self.display_users(users)
+        # prescriptions = C.PrescriptionController.retrieve_all_prescriptions()
+        # self.display_records(prescriptions)
 
-    def view_prescription(self):
-        super(PharmacistHome, self).view_prescription()
-        prescription = PharmacistViewPrescription()
-        widget.addWidget(prescription)
+    def view_user(self):
+        super(PharmacistHome, self).view_user()
+        user = PharmacistViewPatient()
+        widget.addWidget(user)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    # def view_prescription(self):
+    #     super(PharmacistHome, self).view_prescription()
+    #     prescription = PharmacistViewPrescription()
+    #     widget.addWidget(prescription)
+    #     widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 class AdminHome(Home):
     def __init__(self):
-        super(AdminHome, self).__init__('adminMainWindow.ui', [50, 100, 100, 150, 100, 100])
+        super(AdminHome, self).__init__('adminMainWindow.ui')
         self.table.cellClicked.connect(self.view_user)
         self.addUserButton.clicked.connect(self.create_user)
         
@@ -222,14 +256,14 @@ class ViewPrescription(QDialog):
         widget.setFixedSize(widget_size[0], widget_size[1])
         for i in range(len(column_sizes)):
             self.table.setColumnWidth(i, column_sizes[i])
-        self.backButton.clicked.connect(self.to_home)
+        self.backButton.clicked.connect(self.go_back)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
         self.table.verticalHeader().setVisible(False)
         self.get_records()
 
     def get_records(self):
-        prescription = C.Session.get_context()
+        prescription = C.Session.get_context('prescription')
         print(prescription)
         doctor_name = self.user_controller.retrieve_user(prescription.doctor_id).name
         patient_name = self.user_controller.retrieve_user(prescription.patient_id).name
@@ -257,7 +291,7 @@ class PatientViewPrescription(ViewPrescription):
     def __init__(self):
         super(PatientViewPrescription, self).__init__('patientViewPrescription.ui')
 
-    def go_home(self):
+    def go_back(self):
         home = PatientHome()
         widget.addWidget(home)
         widget.setCurrentIndex(widget.currentIndex() + 1)
@@ -267,8 +301,8 @@ class DoctorViewPrescription(ViewPrescription):
     def __init__(self):
         super(DoctorViewPrescription, self).__init__('doctorViewPrescription.ui')
 
-    def go_home(self):
-        home = DoctorHome()
+    def go_back(self):
+        home = DoctorViewPatient()
         widget.addWidget(home)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
@@ -277,40 +311,57 @@ class PharmacistViewPrescription(ViewPrescription):
     def __init__(self):
         super(PharmacistViewPrescription, self).__init__('pharmacistViewPrescription.ui')
 
-    def go_home(self):
-        home = PharmacistHome()
+    def go_back(self):
+        home = PharmacistViewPatient()
         widget.addWidget(home)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 class ViewUser(QDialog):
     user_controller = C.UserController
+    prescription_controller = C.PrescriptionController
 
     def __init__(self, window):
         super(ViewUser, self).__init__()
         loadUi(window, self)
         widget.setFixedSize(730, 650)
         self.backButton.clicked.connect(self.go_home)
-        self.display_details()
+
+    def get_records(self):
+        pass
 
     def display_details(self):
-        context_user = C.Session.get_context()
-        print(f'{context_user = }')
-        self.userMenu.setCurrentIndex(role_dict[context_user.role])
-        self.idLine.setText(str(context_user.object_id))
-        self.nameLine.setText(context_user.name)
-        self.emailLine.setText(context_user.email)
-        self.addressLine.setText(context_user.address)
-        self.telLine.setText(context_user.phone_number)
+        pass
 
     def go_home(self):
         pass
+
+    def display_prescriptions(self, records):
+        print(f'{records = }')
+        if records:
+            self.table.setRowCount(len(records))
+            for count, item in enumerate(records):
+                doctor_name = self.user_controller.retrieve_user(item.doctor_id).name
+                pharmacist_name = self.user_controller.retrieve_user(item.pharmacist_id).name
+                self.table.setItem(count, 0, QTableWidgetItem(str(item.object_id)))
+                self.table.setItem(count, 1, QTableWidgetItem(str(item.date_created)))
+                self.table.setItem(count, 3, QTableWidgetItem(str(doctor_name)))
+                self.table.setItem(count, 2, QTableWidgetItem(str(pharmacist_name)))
+                self.table.setItem(count, 4, QTableWidgetItem(str(item.get_status_string())))
+
+    def view_prescription(self):
+        row = self.table.currentRow()
+        C.Session.set_context('prescription', C.PrescriptionController.retrieve_prescription(self.table.item(row, 0).text()))
 
 
 class AdminViewUser(ViewUser):
     def __init__(self):
         super(AdminViewUser, self).__init__('adminEditUser.ui')
         self.saveButton.clicked.connect(self.save_user)
+        roles = C.UserTypeController().retrieve_all_roles()
+        for role in roles:
+            self.userMenu.addItem(role.role)
+        self.display_details()
 
     def go_home(self):
         home = AdminHome()
@@ -341,6 +392,65 @@ class AdminViewUser(ViewUser):
             msgbox.setStandardButtons(QMessageBox.Ok)
             msgbox.exec_()
 
+    def display_details(self):
+        context_user = C.Session.get_context('user')
+        print(f'{context_user = }')
+        self.userMenu.setCurrentIndex(role_dict[context_user.role])
+        self.idLine.setText(str(context_user.object_id))
+        self.nameLine.setText(context_user.name)
+        self.emailLine.setText(context_user.email)
+        self.addressLine.setText(context_user.address)
+        self.telLine.setText(context_user.phone_number)
+
+
+class DoctorViewPatient(ViewUser):
+    def __init__(self, column_sizes=None):
+        super(DoctorViewPatient, self).__init__('doctorViewPatient.ui')
+        if column_sizes is None:
+            column_sizes = [100, 100, 100, 100, 100]
+        print(f'{column_sizes = }')
+        for i in range(len(column_sizes)):
+            self.table.setColumnWidth(i, column_sizes[i])
+        self.backButton.clicked.connect(self.go_back)
+        self.table.cellClicked.connect(self.view_prescription)
+        self.get_records()
+
+    def go_back(self):
+        home = DoctorHome()
+        widget.addWidget(home)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def get_records(self):
+        # Get context, or back
+        context_user = C.Session.get_context('user')
+        self.display_details()
+        self.display_prescriptions(self.prescription_controller.retrieve_patient_prescriptions(context_user.object_id))
+
+    def display_details(self):
+        context_user = C.Session.get_context('user')
+        print(f'{context_user = }')
+        self.nameLine.setText(context_user.name)
+        self.emailLine.setText(context_user.email)
+        self.phoneNumberLine.setText(context_user.phone_number)
+
+    def view_prescription(self):
+        super(DoctorViewPatient, self).view_prescription()
+        prescription = DoctorViewPrescription()
+        widget.addWidget(prescription)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
+class PharmacistViewPatient(ViewUser):
+    def __init__(self, back=False):
+        super(PharmacistViewPatient, self).__init__('adminViewPatient.ui')
+
+    def display_details(self):
+        context_user = C.Session.get_context('user')
+        print(f'{context_user = }')
+        self.nameLine.setText(context_user.name)
+        self.emailLine.setText(context_user.email)
+        self.phoneNumberLine.setText(context_user.phone_number)
+
 
 class AdminCreateUser(QDialog):
     user_controller = C.UserController
@@ -350,6 +460,9 @@ class AdminCreateUser(QDialog):
         loadUi('adminCreateUser.ui', self)
         self.createButton.clicked.connect(self.create_user)
         self.backButton.clicked.connect(self.go_home)
+        roles = C.UserTypeController().retrieve_all_roles()
+        for role in roles:
+            self.userMenu.addItem(role.role)
 
     def go_home(self):
         home = AdminHome()
@@ -380,6 +493,10 @@ class AdminCreateUser(QDialog):
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec_()
         self.go_home()
+
+
+class DoctorAddPrescription(QDialog):
+    pass
 
 
 class Register(QDialog):

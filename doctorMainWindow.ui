@@ -208,22 +208,22 @@ QPushButton#addPrescriptionButton:pressed{
      </column>
      <column>
       <property name="text">
-       <string>Date</string>
+       <string>Name</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Doctor</string>
+       <string>Email</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Patient</string>
+       <string>Address</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Status</string>
+       <string>Phone Number</string>
       </property>
      </column>
     </widget>

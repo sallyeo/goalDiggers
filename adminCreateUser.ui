@@ -355,28 +355,8 @@ padding-bottom:1px;</string>
      <bool>true</bool>
     </property>
     <property name="currentText">
-     <string>Admin</string>
+     <string/>
     </property>
-    <item>
-     <property name="text">
-      <string>Admin</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Patient</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Doctor</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Pharmacist</string>
-     </property>
-    </item>
    </widget>
    <widget class="QLabel" name="whiteBackground">
     <property name="geometry">

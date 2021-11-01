@@ -4,13 +4,11 @@ DATABASE = db_helper.db_helper()
 
 # id | role #
 class UserType:
-    def __init__(self, object_id, role):
-        self.object_id = object_id
+    def __init__(self, role):
         self.role = role
 
     def __str__(self):
         return f'UserType: {{\n' \
-               f'\t\'id\': {self.object_id},\n' \
                f'\t\'role\': \'{self.role}\',\n' \
                f'}},'
 
@@ -163,13 +161,13 @@ class UserTypeEntity(ObjectEntity):
     def get_one(self, result):
         if len(result) > 0:
             r = result[0]
-            return UserType(r[0], r[1])
+            return UserType(r[0])
         return None
 
     def get_many(self, result):
         user_types = []
         for r in result:
-            user_type = UserType(r[0], r[1])
+            user_type = UserType(r[0])
             user_types.append(user_type)
         return user_types
 
@@ -183,6 +181,9 @@ class UserEntity(ObjectEntity):
 
     def retrieve_all_by_phone_number(self, phone_number):
         return self.get_many(super(UserEntity, self).retrieve_by_conditions('User', phone_number=phone_number))
+
+    def retrieve_all_by_role(self, role):
+        return self.get_many(super(UserEntity, self).retrieve_by_conditions('User', role=role))
 
     def retrieve_all(self):
         return self.get_many(super(UserEntity, self).retrieve_by_conditions('User'))
