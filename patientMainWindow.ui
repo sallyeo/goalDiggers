@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>930</width>
-    <height>750</height>
+    <width>931</width>
+    <height>878</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>40</x>
       <y>30</y>
       <width>860</width>
-      <height>650</height>
+      <height>751</height>
      </rect>
     </property>
     <widget class="QLabel" name="pageTitle">
@@ -35,7 +35,6 @@
      <property name="font">
       <font>
        <pointsize>25</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -58,7 +57,6 @@
      <property name="font">
       <font>
        <pointsize>16</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -87,7 +85,7 @@ QPushButton#logoutButton:pressed{
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>370</y>
+       <y>440</y>
        <width>800</width>
        <height>270</height>
       </rect>
@@ -383,14 +381,13 @@ padding-bottom:1px;
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>330</y>
+       <y>400</y>
        <width>801</width>
        <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -416,7 +413,7 @@ padding:5px;</string>
        <x>0</x>
        <y>0</y>
        <width>860</width>
-       <height>650</height>
+       <height>751</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -426,6 +423,68 @@ border-bottom-right-radius: 50px;</string>
      </property>
      <property name="text">
       <string/>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>340</y>
+       <width>401</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgba(0, 0, 0, 0);
+border:none;
+border-bottom:2px solid rgba(46, 82, 101, 200);
+color:rgba(0, 0, 0, 240);
+padding-bottom:7px;
+</string>
+     </property>
+     <property name="placeholderText">
+      <string>Search String Code</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="searchButton">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>340</y>
+       <width>80</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton#searchButton{
+	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
+	color:rgba(255, 255, 255, 210);
+	border-radius:5px;
+}
+
+QPushButton#searchButton:hover{
+	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));
+}
+
+QPushButton#searchButton:pressed{
+	padding-left:5px;
+	padding-top:5px;
+	background-color:rgba(150, 123, 111, 255);
+}</string>
+     </property>
+     <property name="text">
+      <string>Search</string>
      </property>
     </widget>
     <zorder>whiteBackground</zorder>
@@ -443,6 +502,8 @@ border-bottom-right-radius: 50px;</string>
     <zorder>addressLine</zorder>
     <zorder>emailLine</zorder>
     <zorder>label_2</zorder>
+    <zorder>lineEdit</zorder>
+    <zorder>searchButton</zorder>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -450,7 +511,7 @@ border-bottom-right-radius: 50px;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>930</width>
+     <width>931</width>
      <height>24</height>
     </rect>
    </property>
