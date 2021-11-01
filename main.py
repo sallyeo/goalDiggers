@@ -384,8 +384,10 @@ class AdminViewUser(ViewUser):
 class DoctorViewPatient(ViewUser):
     def __init__(self, column_sizes=None):
         super(DoctorViewPatient, self).__init__('doctorViewPatient.ui')
+        widget.setFixedSize(730, 650)
+        self.table.verticalHeader().setVisible(False)   # remove most left column
         if column_sizes is None:
-            column_sizes = [100, 100, 100, 100, 100]
+            column_sizes = [50, 100, 100, 100, 100]
         for i in range(len(column_sizes)):
             self.table.setColumnWidth(i, column_sizes[i])
         self.backButton.clicked.connect(self.go_back)
