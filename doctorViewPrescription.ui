@@ -52,6 +52,7 @@ border-bottom-right-radius: 50px;</string>
     <property name="font">
      <font>
       <pointsize>25</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -290,6 +291,7 @@ padding-bottom:1px;
     </property>
     <property name="font">
      <font>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -321,6 +323,7 @@ padding:5px;</string>
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -357,6 +360,7 @@ QPushButton#saveButton:pressed{
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -393,6 +397,7 @@ QPushButton#editButton:pressed{
     <property name="font">
      <font>
       <pointsize>16</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -438,7 +443,7 @@ padding-bottom:1px;</string>
      <set>Qt::ImhNone</set>
     </property>
     <property name="editable">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="currentText">
      <string>Not Collected</string>
