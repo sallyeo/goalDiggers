@@ -2,10 +2,19 @@ import db_helper
 
 DATABASE = db_helper.db_helper()
 
+
 # id | role #
 class UserType:
     def __init__(self, role):
-        self.role = role
+        self._role = role
+
+    @property
+    def role(self):
+        return self._role
+
+    @role.setter
+    def role(self, role):
+        self._role = role
 
     def __str__(self):
         return f'UserType: {{\n' \
@@ -16,21 +25,72 @@ class UserType:
 # id | email | name | phone_number | address | role | password #
 class User:
     def __init__(self, object_id, email, name, phone_number, address, role):
-        self.object_id = object_id
-        self.email = email
-        self.name = name
-        self.phone_number = phone_number
-        self.address = address
-        self.role = role
+        self._object_id = object_id
+        self._email = email
+        self._name = name
+        self._phone_number = phone_number
+        self._address = address
+        self._role = role
+
+    @property
+    def object_id(self):
+        return self._object_id
+
+    @object_id.setter
+    def object_id(self, object_id):
+        try:
+            self._object_id = int(object_id)
+        except ValueError:
+            print('object_id must be an int')
+
+    @property
+    def email(self):
+        return self._email
+
+    @email.setter
+    def email(self, email):
+        self._email = email
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        self._email = name
+
+    @property
+    def phone_number(self):
+        return self._phone_number
+
+    @phone_number.setter
+    def phone_number(self, phone_number):
+        self._phone_number = phone_number
+
+    @property
+    def address(self):
+        return self._address
+
+    @address.setter
+    def address(self, address):
+        self._address = address
+
+    @property
+    def role(self):
+        return self._role
+
+    @role.setter
+    def role(self, role):
+        self._role = role
 
     def __str__(self):
         return f'User: {{\n' \
-               f'\t\'id\': {self.object_id},\n' \
-               f'\t\'email\': \'{self.email}\',\n' \
-               f'\t\'name\': \'{self.name}\',\n' \
-               f'\t\'phone_number\': \'{self.phone_number}\',\n' \
-               f'\t\'address\': \'{self.address}\',\n' \
-               f'\t\'role\': \'{self.role}\',\n' \
+               f'\t\'id\': {self._object_id},\n' \
+               f'\t\'email\': \'{self._email}\',\n' \
+               f'\t\'name\': \'{self._name}\',\n' \
+               f'\t\'phone_number\': \'{self._phone_number}\',\n' \
+               f'\t\'address\': \'{self._address}\',\n' \
+               f'\t\'role\': \'{self._role}\',\n' \
                f'}},'
 
 
@@ -321,6 +381,6 @@ class MedicineQuantityEntity(ObjectEntity):
             medicine_quantity.object_id,
             prescription_id=medicine_quantity.prescription_id,
             cart_id=medicine_quantity.cart_id,
-            quantity=medicine_quantity.quantity,
             medicine_id=medicine_quantity.medicine_id,
+            quantity=medicine_quantity.quantity,
         )

@@ -78,9 +78,9 @@ class UserController:
     def create_user(email, name, phone_number, address, role, password):
         if not email or not name or not phone_number or not address or not role or not password:
             raise ValueError('Please fill in all fields')
-        if UserController.check_email_match(email):
+        if not UserController.check_email_match(email):
             raise IntegrityError('Email must be unique.')
-        if UserController.check_phone_number_match(phone_number):
+        if not UserController.check_phone_number_match(phone_number):
             raise IntegrityError('Phone number must be unique')
         E.UserEntity().create('User', email=email, name=name, phone_number=phone_number, address=address, role=role, password=password)
 
@@ -90,8 +90,8 @@ class UserController:
         # If email_check list has elements and user_id is valid
         if email_check and user_id:
             if len(email_check) > 1 or email_check[0].object_id != user_id:
-                return True
-        return False
+                return False
+        return True
 
     @staticmethod
     def check_phone_number_match(phone_number, user_id=None):
@@ -99,8 +99,8 @@ class UserController:
         # If phone_number_check list has elements and user_id is valid
         if phone_number_check and user_id:
             if len(phone_number_check) > 1 or phone_number_check[0].object_id != user_id:
-                return True
-        return False
+                return False
+        return True
 
 
 class PrescriptionController:
@@ -167,6 +167,23 @@ class MedicineQuantityController:
                 MedicineQuantityController.e.save_object(medicine_quantity)
         if not matched:
             MedicineQuantityController.e.create('MedicineQuantity', cart_id=cart_id, medicine_id=medicine_id, quantity=quantity)
+
+    @staticmethod
+    def save_medicine_quantity(object_id, prescription_id, cart_id, medicine_id, quantity):
+        object_id = int(object_id)
+        # if not MedicineQuantityController.check_cart_and_id(cart_id, object_id):
+        #     raise ValueError('Cart object_id does not match')
+        medicine_quantity = MedicineQuantityController.e.retrieve_by_id(object_id)
+        medicine_quantity.prescription_id = prescription_id
+        medicine_quantity.cart_id = cart_id
+        medicine_quantity.medicine_id = medicine_id
+        medicine_quantity.quantity = quantity
+        MedicineQuantityController.e.save_object(medicine_quantity)
+
+    # @staticmethod
+    # def check_cart_and_id(cart_id, object_id):
+    #     cart_check = E.MedicineQuantityEntity().retrieve_by_cart(cart_id)
+    #     return cart_check.object_id == object_id
 
 
 class CartController:
