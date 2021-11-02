@@ -34,6 +34,13 @@ class UserTypeController:
     def retrieve_role(role):
         return E.UserTypeEntity().retrieve_by_id(role)
 
+    @staticmethod
+    def add_role(role):
+        role = role.strip()
+        if role == '':
+            raise ValueError('Role can not be blank.')
+        return E.UserTypeEntity().create('UserType', role=role)
+
 
 # REMINDER FOR DESMOND: PASS IN QUERYING USER OBJECT TO CHECK VALIDITY
 class UserController:

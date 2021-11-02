@@ -217,6 +217,7 @@ class AdminHome(Home):
         super(AdminHome, self).__init__('adminMainWindow.ui')
         self.table.cellClicked.connect(self.view_user)
         self.addUserButton.clicked.connect(self.create_user)
+        self.addRoleButton.clicked.connect(self.add_role)
         
     def get_records(self):
         users = self.user_controller.retrieve_all_users()
@@ -228,6 +229,9 @@ class AdminHome(Home):
 
     def create_user(self):
         self.load_page(AdminCreateUser())
+
+    def add_role(self):
+        self.load_page(AdminAddRole())
 
 
 class ViewPrescription(QDialog):
@@ -634,6 +638,35 @@ class DoctorEditMedicine(QDialog):
     def go_back(self):
         # self.load_page(DoctorAddPrescription())
         self.load_page(self.back_page)
+
+    @staticmethod
+    def load_page(page):
+        widget.addWidget(page)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
+class AdminAddRole(QDialog):
+    def __init__(self):
+        super(AdminAddRole, self).__init__()
+        loadUi('adminAddRole.ui', self)
+        roles = C.UserTypeController.retrieve_all_roles()
+        for role in roles:
+            self.currentRolesMenu.addItem(role.role)
+        self.addButton.clicked.connect(self.add_role)
+        self.backButton.clicked.connect(self.go_back)
+
+    def add_role(self):
+        new_role = self.newRoleLine.text()
+        print(f'{new_role = }')
+        try:
+            C.UserTypeController.add_role(new_role)
+            self.go_back()
+        except ValueError as err:
+            print(err)
+            self.errorLabel.setText(str(err))
+
+    def go_back(self):
+        self.load_page(AdminHome())
 
     @staticmethod
     def load_page(page):
