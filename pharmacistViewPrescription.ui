@@ -120,6 +120,9 @@ opacity: 200;</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="PrescriptionIdLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -146,6 +149,9 @@ padding-bottom:1px;
     </property>
    </widget>
    <widget class="QLineEdit" name="prescriptionDateLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -213,6 +219,9 @@ opacity: 200;</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="patientIdLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -258,6 +267,9 @@ opacity: 200;</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="doctorIdLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>160</x>

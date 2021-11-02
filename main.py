@@ -304,9 +304,26 @@ class DoctorViewPrescription(ViewPrescription):
 class PharmacistViewPrescription(ViewPrescription):
     def __init__(self):
         super(PharmacistViewPrescription, self).__init__('pharmacistViewPrescription.ui')
+        self.saveButton.clicked.connect(self.save_prescription)
 
     def go_back(self):
         self.load_page(PharmacistViewPatient())
+
+    def save_prescription(self):
+        prescription = C.Session.get_context('prescription')
+        if prescription:
+            prescription.collected = self.statusMenu.currentIndex()
+            prescription.pharmacist_id = C.Session.get_user().object_id
+            print(f'{prescription.collected = }')
+            C.PrescriptionController.save_prescription(
+                prescription.object_id,
+                prescription.date_created,
+                prescription.doctor_id,
+                prescription.patient_id,
+                prescription.pharmacist_id,
+                prescription.collected,
+            )
+        self.go_back()
 
 
 class ViewUser(QDialog):

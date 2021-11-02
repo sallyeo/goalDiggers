@@ -137,6 +137,18 @@ class PrescriptionController:
         )
         return PrescriptionController.e.retrieve_by_id(prescription_id)
 
+    @staticmethod
+    def save_prescription(object_id, date_created, doctor_id, patient_id, pharmacist_id, collected):
+        PrescriptionController.e.save(
+            'Prescription',
+            object_id,
+            date_created=date_created,
+            doctor_id=doctor_id,
+            patient_id=patient_id,
+            pharmacist_id=pharmacist_id,
+            collected=collected,
+        )
+
 
 class MedicineController:
     e = E.MedicineEntity()
