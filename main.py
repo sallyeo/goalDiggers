@@ -1,8 +1,8 @@
-import sys, res, controller
+import sys
 from sqlite3 import IntegrityError
 
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QMessageBox, QTableWidgetItem,QAbstractItemView
+from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QMessageBox, QTableWidgetItem, QAbstractItemView
 from PyQt5.uic import loadUi
 import controller as C
 
@@ -33,17 +33,17 @@ class LoginView(QDialog):
     def login(self):
         email = self.email.text()           # get email from user input
         password = self.password.text()     # get password from user input
-        usertype = self.userMenu.currentText()
+        # usertype = self.userMenu.currentText()
 
         # boundary calling controller
         user = C.UserController.login(email, password)
         if user:   # if input valid
             C.Session.set_user(user)
-            # msgbox = QMessageBox()
-            # msgbox.setWindowTitle("Login success")
-            # msgbox.setText("WELCOME TO GD PRESCRIPTION")
-            # msgbox.setStandardButtons(QMessageBox.Ok)
-            # msgbox.exec_()
+            # msg_box = QMessageBox()
+            # msg_box.setWindowTitle("Login success")
+            # msg_box.setText("WELCOME TO GD PRESCRIPTION")
+            # msg_box.setStandardButtons(QMessageBox.Ok)
+            # msg_box.exec_()
             print(f'logged in {user}')
             if user.role == "Doctor":
                 doctor_home = DoctorHome()
@@ -62,11 +62,11 @@ class LoginView(QDialog):
                 widget.addWidget(admin_home)
                 widget.setCurrentIndex(widget.currentIndex() + 1)
         else:   # if input invalid
-            msgbox = QMessageBox()
-            msgbox.setWindowTitle("Login fail")
-            msgbox.setText("INVALID CREDENTIALS INPUT!")
-            msgbox.setStandardButtons(QMessageBox.Ok)
-            msgbox.exec_()
+            msg_box = QMessageBox()
+            msg_box.setWindowTitle("Login fail")
+            msg_box.setText("INVALID CREDENTIALS INPUT!")
+            msg_box.setStandardButtons(QMessageBox.Ok)
+            msg_box.exec_()
 
     def go_to_create(self):
         registerAcc = Register()
@@ -83,7 +83,7 @@ class Home(QMainWindow):
         if column_sizes is None:
             column_sizes = [50, 100, 100, 150, 100, 100]
         loadUi(window, self)
-        widget.setFixedSize(930,750)
+        widget.setFixedSize(930, 750)
         for i in range(len(column_sizes)):
             self.table.setColumnWidth(i, column_sizes[i])
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -393,11 +393,11 @@ class AdminViewUser(ViewUser):
             self.user_controller.save_user(user_id, email, name, phone_number, address, role)
         except IntegrityError as err:
             print(f'{err}')         # ERROR MESSAGE SHOW ON SCREEN
-            msgbox = QMessageBox()
-            msgbox.setWindowTitle("Login fail")
-            msgbox.setText(err)
-            msgbox.setStandardButtons(QMessageBox.Ok)
-            msgbox.exec_()
+            msg_box = QMessageBox()
+            msg_box.setWindowTitle("Login fail")
+            msg_box.setText(err)
+            msg_box.setStandardButtons(QMessageBox.Ok)
+            msg_box.exec_()
 
     def display_details(self):
         context_user = C.Session.get_context('user')
@@ -512,6 +512,7 @@ class AdminCreateUser(QDialog):
             self.success('User created')
         except ValueError as err:
             print(err)
+            self.errorLabel.setText(str(err))
 
     def success(self, message):
         msg_box = QMessageBox()
@@ -677,28 +678,38 @@ class AdminAddRole(QDialog):
 class Register(QDialog):
     def __init__(self):
         super(Register, self).__init__()
-        loadUi("registerDialog.ui", self)
+        loadUi("register.ui", self)
         self.registerButton.clicked.connect(self.register)
-        self.loginButton.clicked.connect(self.go_login)
+        self.backButton.clicked.connect(self.go_back)
 
     def register(self):
-        email = self.email.text()
-        if self.password.text() == self.confirmPass.text():
-            password = self.password.text()
-        print("Successfully registering in with email: ", email, "and password: ", password)
-        self.go_login()
+        name = self.nameLine.text()
+        email = self.emailLine.text()
+        address = self.addressLine.text()
+        phone_number = self.telLine.text()
+        password1 = self.password1Line.text()
+        password2 = self.password2Line.text()
+        role = 'Patient'
+        if password1 != password2:
+            self.errorLabel.setText('Passwords do not match')
+            return
+        try:
+            C.UserController.create_user(email, name, phone_number, address, role, password1)
+            self.go_back()
+        except ValueError as err:
+            print(err)
+            self.errorLabel.setText(str(err))
 
-    def go_login(self):
-        login = LoginView()
-        widget.addWidget(login)
+    def go_back(self):
+        widget.addWidget(LoginView())
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    mainwindow = LoginView()
+    main_window = LoginView()
     widget = QtWidgets.QStackedWidget()
-    widget.addWidget(mainwindow)
+    widget.addWidget(main_window)
     widget.setFixedWidth(600)
     widget.setFixedHeight(530)
     widget.show()
