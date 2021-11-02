@@ -88,6 +88,7 @@ class Home(QMainWindow):
             self.table.setColumnWidth(i, column_sizes[i])
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+        self.searchButton.clicked.connect(self.search)
         # self.table.verticalHeader().setVisible(False)
         self.logoutButton.clicked.connect(self.logout_app)
         self.get_records()
@@ -96,6 +97,9 @@ class Home(QMainWindow):
         pass
 
     def display_details(self):
+        pass
+
+    def search(self):
         pass
 
     def display_prescriptions(self, records):
@@ -163,6 +167,10 @@ class PatientHome(Home):
         super(PatientHome, self).view_prescription()
         self.load_page(PatientViewPrescription())
 
+    def search(self):
+        # search_query = self.searchBarLine.text()
+        pass
+
 
 class DoctorHome(Home):
     def __init__(self):
@@ -174,14 +182,6 @@ class DoctorHome(Home):
         # boundary calling controller
         users = C.UserController.retrieve_users_by_role('Patient')
         self.display_users(users)
-        # prescriptions = C.PrescriptionController.retrieve_all_prescriptions()
-        # self.display_records(prescriptions)
-
-    # def view_prescription(self):
-    #     super(DoctorHome, self).view_prescription()
-    #     prescription = DoctorViewPrescription()
-    #     widget.addWidget(prescription)
-    #     widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def view_user(self):
         super(DoctorHome, self).view_user()
@@ -191,25 +191,16 @@ class DoctorHome(Home):
 class PharmacistHome(Home):
     def __init__(self):
         super(PharmacistHome, self).__init__('pharmacistMainWindow.ui')
-        # self.table.cellClicked.connect(self.view_prescription)
         self.table.cellClicked.connect(self.view_user)
 
     def get_records(self):
         # boundary calling controller
         users = C.UserController.retrieve_users_by_role('Patient')
         self.display_users(users)
-        # prescriptions = C.PrescriptionController.retrieve_all_prescriptions()
-        # self.display_records(prescriptions)
 
     def view_user(self):
         super(PharmacistHome, self).view_user()
         self.load_page(PharmacistViewPatient())
-
-    # def view_prescription(self):
-    #     super(PharmacistHome, self).view_prescription()
-    #     prescription = PharmacistViewPrescription()
-    #     widget.addWidget(prescription)
-    #     widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 class AdminHome(Home):
@@ -561,9 +552,22 @@ class DoctorAddPrescription(QDialog):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def prescribe(self):
-        cart = C.CartController.retrieve_cart_by_patient(C.Session.get_context('user').object_id)
-        C.CartController.prescribe_medicines(cart.object_id)
-        self.refresh_table()
+        user = C.Session.get_context('user')
+        cart = C.CartController.retrieve_cart_by_patient(user.object_id)
+        prescription_id = C.CartController.prescribe_medicines(cart.object_id)
+        medicine_quantities = C.MedicineQuantityController.retrieve_prescription_medicines(prescription_id)
+        print(f'{medicine_quantities = }')
+        med_dict = {}
+        for medicine_quantity in medicine_quantities:
+            medicine_name = C.MedicineController.retrieve_by_id(medicine_quantity.medicine_id).name
+            med_dict[medicine_name] = medicine_quantity.quantity
+        qr_image = C.QRGenerator.generate(prescription_id)
+        print(f'{qr_image = }')
+        print(f"simulating email to... {user.email}")
+        send_email = self.sendEmailCheckbox.isChecked()
+        email = C.SendEmailController(user.email, qr_image, user.name, med_dict, send_email)
+        email.send_email()
+        self.go_back()
 
     def add_medicine(self):
         try:

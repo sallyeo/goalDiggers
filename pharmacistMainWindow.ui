@@ -120,7 +120,7 @@ QPushButton#searchButton:pressed{
       <string>Search</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="searchBarLine">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -225,7 +225,7 @@ padding:5px;</string>
      </property>
     </widget>
     <zorder>pageTitle</zorder>
-    <zorder>lineEdit</zorder>
+    <zorder>searchBarLine</zorder>
     <zorder>logoutButton</zorder>
     <zorder>searchButton</zorder>
     <zorder>table</zorder>

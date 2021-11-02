@@ -224,6 +224,17 @@ class ObjectEntity:
         result = DATABASE.query_db(query)
         return result
 
+    @staticmethod
+    def search(table, **kwargs):
+        conditions = []
+        for key, value in kwargs.items():
+            condition = [key, f"'%{value}%'"]
+            joined = ' LIKE '.join(condition)
+            conditions.append(joined)
+        final = ' OR '.join[conditions]
+        query = f'SELECT * FROM {table} WHERE {final}'
+        print(f'{query}')
+
 
 class UserTypeEntity(ObjectEntity):
     def retrieve_by_id(self, role):

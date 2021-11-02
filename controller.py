@@ -1,6 +1,12 @@
+import secret
 import datetime
 from sqlite3 import IntegrityError
-
+import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.message import EmailMessage
+import qrcode
+import imghdr
 import entity as E
 
 
@@ -42,7 +48,6 @@ class UserTypeController:
         return E.UserTypeEntity().create('UserType', role=role)
 
 
-# REMINDER FOR DESMOND: PASS IN QUERYING USER OBJECT TO CHECK VALIDITY
 class UserController:
     @staticmethod
     def retrieve_all_users():
@@ -132,8 +137,6 @@ class PrescriptionController:
         date = datetime.date.today().strftime('%-d-%b-%Y')
         doctor_id = Session.get_user().object_id
         patient_id = Session.get_context('user').object_id
-        # PrescriptionController.e.create('Prescription', )
-        # return PrescriptionController.retrieve_prescription()
         prescription_id = PrescriptionController.e.create(
             'Prescription',
             date_created=date,
@@ -210,19 +213,12 @@ class MedicineQuantityController:
     @staticmethod
     def save_medicine_quantity(object_id, prescription_id, cart_id, medicine_id, quantity):
         object_id = int(object_id)
-        # if not MedicineQuantityController.check_cart_and_id(cart_id, object_id):
-        #     raise ValueError('Cart object_id does not match')
         medicine_quantity = MedicineQuantityController.e.retrieve_by_id(object_id)
         medicine_quantity.prescription_id = prescription_id
         medicine_quantity.cart_id = cart_id
         medicine_quantity.medicine_id = medicine_id
         medicine_quantity.quantity = quantity
         MedicineQuantityController.e.save_object(medicine_quantity)
-
-    # @staticmethod
-    # def check_cart_and_id(cart_id, object_id):
-    #     cart_check = E.MedicineQuantityEntity().retrieve_by_cart(cart_id)
-    #     return cart_check.object_id == object_id
 
     @staticmethod
     def delete(object_id):
@@ -267,4 +263,59 @@ class CartController:
                 medicine_quantity.medicine_id,
                 medicine_quantity.quantity,
             )
-        return True
+        return prescription_id
+
+
+# class StringCode:
+#     @staticmethod
+#     def generate(prescription):
+#
+#
+#     @staticmethod
+#     def read(string_code):
+
+
+class QRGenerator:
+    @staticmethod
+    def generate(string_code):
+        img = qrcode.make(str(string_code))
+        file_name = f'qrcodes/{string_code}.png'
+        img.save(file_name)
+        return file_name
+
+
+class SendEmailController:
+    def __init__(self, recipient, image, recipient_name, medicine_quantites, send=True):
+        self.recipient = recipient
+        self.image = image
+        self.recipient_name = recipient_name
+        self.send = send
+        medicine_amounts = []
+        for key, value in medicine_quantites.items():
+            medicine_amounts.append(f'{value} {key}')
+        self.breakdown = '\n - '.join(medicine_amounts)
+        print(f'{self.breakdown = }')
+
+    def send_email(self):
+        message = EmailMessage()
+        message['Subject'] = 'GoalDiggers Email Test'
+        message['From'] = secret.email
+        message['To'] = self.recipient
+        body = f'Good day {self.recipient_name},\n\n' \
+               f'This is the breakdown of your prescription today:\n' \
+               f'{self.breakdown}\n\n' \
+               f'Please show the QR Code attached to the pharmacist for your prescription to be dispensed.\n\n' \
+               f'Thank you'
+        message.set_content(body)
+
+        with open(self.image, 'rb') as f:
+            file_data = f.read()
+            file_type = imghdr.what(f.name)
+            file_name = f.name
+
+        message.add_attachment(file_data, maintype='image', subtype=file_type, filename=file_name)
+
+        if self.send:
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+                smtp.login(secret.email, secret.password)
+                smtp.send_message(message)

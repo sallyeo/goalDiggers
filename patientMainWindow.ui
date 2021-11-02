@@ -431,7 +431,7 @@ border-bottom-right-radius: 50px;</string>
       <string/>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="searchBarLine">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -509,7 +509,7 @@ QPushButton#searchButton:pressed{
     <zorder>addressLine</zorder>
     <zorder>emailLine</zorder>
     <zorder>label_2</zorder>
-    <zorder>lineEdit</zorder>
+    <zorder>searchBarLine</zorder>
     <zorder>searchButton</zorder>
    </widget>
   </widget>

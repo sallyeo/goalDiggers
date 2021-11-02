@@ -120,7 +120,7 @@ QPushButton#searchButton:pressed{
       <string>Search</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="searchBarLine">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -143,10 +143,10 @@ padding-bottom:7px;
 </string>
      </property>
      <property name="text">
-      <string>Search User ID</string>
+      <string/>
      </property>
      <property name="placeholderText">
-      <string>Search Patient ID/Type</string>
+      <string>Search users</string>
      </property>
     </widget>
     <widget class="QPushButton" name="addUserButton">
@@ -273,7 +273,7 @@ QPushButton#addUserType:pressed{
      </property>
     </widget>
     <zorder>label_4</zorder>
-    <zorder>lineEdit</zorder>
+    <zorder>searchBarLine</zorder>
     <zorder>logoutButton</zorder>
     <zorder>searchButton</zorder>
     <zorder>addUserButton</zorder>
