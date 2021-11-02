@@ -160,11 +160,12 @@ class MedicineQuantityController:
         cart_id = CartController.retrieve_cart_by_patient(patient_id).object_id
         cart_medicines = MedicineQuantityController.e.retrieve_by_cart(cart_id)
         matched = False
-        for medicine_quantity in cart_medicines:
-            if medicine_quantity.medicine_id == medicine_id:
-                medicine_quantity.quantity += quantity
-                matched = True
-                MedicineQuantityController.e.save_object(medicine_quantity)
+        if cart_medicines:
+            for medicine_quantity in cart_medicines:
+                if medicine_quantity.medicine_id == medicine_id:
+                    medicine_quantity.quantity += quantity
+                    matched = True
+                    MedicineQuantityController.e.save_object(medicine_quantity)
         if not matched:
             MedicineQuantityController.e.create('MedicineQuantity', cart_id=cart_id, medicine_id=medicine_id, quantity=quantity)
 
@@ -184,6 +185,10 @@ class MedicineQuantityController:
     # def check_cart_and_id(cart_id, object_id):
     #     cart_check = E.MedicineQuantityEntity().retrieve_by_cart(cart_id)
     #     return cart_check.object_id == object_id
+
+    @staticmethod
+    def delete(object_id):
+        MedicineQuantityController.e.delete('MedicineQuantity', id=object_id)
 
 
 class CartController:

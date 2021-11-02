@@ -518,6 +518,7 @@ class DoctorAddPrescription(QDialog):
         cart = C.CartController.retrieve_cart_by_patient(C.Session.get_context('user').object_id)
         print(f'{cart = }')
         medicine_quantities = C.MedicineQuantityController.retrieve_cart_medicines(cart.object_id)
+        print(f'Doctor add prescription page: {medicine_quantities = }')
         if medicine_quantities:
             self.table.setRowCount(len(medicine_quantities))
             for count, item in enumerate(medicine_quantities):
@@ -603,7 +604,8 @@ class DoctorEditMedicine(QDialog):
         self.go_back()
 
     def delete(self):
-        pass
+        C.MedicineQuantityController.delete(C.Session.get_context('medicine_quantity').object_id)
+        self.go_back()
 
     def go_back(self):
         self.load_page(DoctorAddPrescription())

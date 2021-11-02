@@ -213,6 +213,19 @@ class ObjectEntity:
         result = DATABASE.query_db(query)
         return result
 
+    @staticmethod
+    def delete(table, **kwargs):
+        conditions = []
+        for key, value in kwargs.items():
+            condition = [key, f"'{value}'"]
+            joined = '='.join(condition)
+            conditions.append(joined)
+        final = ' AND '.join(conditions)
+        query = f'DELETE FROM {table} WHERE {final}'
+        print(f'{query = }')
+        result = DATABASE.query_db(query)
+        return result
+
 
 class UserTypeEntity(ObjectEntity):
     def retrieve_by_id(self, role):
@@ -357,7 +370,9 @@ class MedicineQuantityEntity(ObjectEntity):
         return self.get_many(super(MedicineQuantityEntity, self).retrieve_by_conditions(self.table_name, prescription_id=prescription_id))
 
     def retrieve_by_cart(self, cart_id):
-        return self.get_many(super(MedicineQuantityEntity, self).retrieve_by_conditions(self.table_name, cart_id=cart_id))
+        medicines = self.get_many(super(MedicineQuantityEntity, self).retrieve_by_conditions(self.table_name, cart_id=cart_id))
+        print(f'{medicines = }')
+        return medicines
 
     def get_one(self, result):
         if not result:
@@ -373,7 +388,7 @@ class MedicineQuantityEntity(ObjectEntity):
         for r in result:
             medicine_quantity = MedicineQuantity(r[0], r[1], r[2], r[3], r[4])
             medicine_quantities.append(medicine_quantity)
-            return medicine_quantities
+        return medicine_quantities
 
     def save_object(self, medicine_quantity):
         self.save(
