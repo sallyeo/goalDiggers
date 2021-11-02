@@ -7,6 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.message import EmailMessage
 import qrcode
 import imghdr
+import cv2
 import entity as E
 
 
@@ -266,22 +267,29 @@ class CartController:
         return prescription_id
 
 
-# class StringCode:
-#     @staticmethod
-#     def generate(prescription):
-#
-#
-#     @staticmethod
-#     def read(string_code):
-
-
-class QRGenerator:
+class QRController:
     @staticmethod
     def generate(string_code):
         img = qrcode.make(str(string_code))
         file_name = f'qrcodes/{string_code}.png'
         img.save(file_name)
         return file_name
+
+    @staticmethod
+    def read():
+        cap = cv2.VideoCapture(0)
+        detector = cv2.QRCodeDetector()
+        while True:
+            _, img = cap.read()
+            data, one, _ = detector.detectAndDecode(img)
+            if data:
+                code = data
+                break
+            cv2.imshow('sqcodescanner app', img)
+            if cv2.waitKey(1) == ord('q'):
+                break
+        cv2.destroyAllWindows()
+        return code
 
 
 class SendEmailController:

@@ -127,11 +127,13 @@ class Home(QMainWindow):
 
     def view_prescription(self):
         row = self.table.currentRow()
-        C.Session.set_context('prescription', C.PrescriptionController.retrieve_prescription(self.table.item(row, 0).text()))
+        prescription = C.PrescriptionController.retrieve_prescription(self.table.item(row, 0).text())
+        C.Session.set_context('prescription', prescription)
 
     def view_user(self):
         row = self.table.currentRow()
-        C.Session.set_context('user', C.UserController.retrieve_user(self.table.item(row, 0).text()))
+        user = C.UserController.retrieve_user(self.table.item(row, 0).text())
+        C.Session.set_context('user', user)
 
     @staticmethod
     def load_page(page):
@@ -192,6 +194,7 @@ class PharmacistHome(Home):
     def __init__(self):
         super(PharmacistHome, self).__init__('pharmacistMainWindow.ui')
         self.table.cellClicked.connect(self.view_user)
+        self.scanButton.clicked.connect(self.scan_code)
 
     def get_records(self):
         # boundary calling controller
@@ -201,6 +204,15 @@ class PharmacistHome(Home):
     def view_user(self):
         super(PharmacistHome, self).view_user()
         self.load_page(PharmacistViewPatient())
+
+    def scan_code(self):
+        code = C.QRController.read()
+        print(f'{code}')
+        prescription = C.PrescriptionController.retrieve_prescription(code)
+        user = C.UserController.retrieve_user(prescription.patient_id)
+        C.Session.set_context('prescription', prescription)
+        C.Session.set_context('user', user)
+        self.load_page(PharmacistViewPrescription())
 
 
 class AdminHome(Home):
@@ -561,7 +573,7 @@ class DoctorAddPrescription(QDialog):
         for medicine_quantity in medicine_quantities:
             medicine_name = C.MedicineController.retrieve_by_id(medicine_quantity.medicine_id).name
             med_dict[medicine_name] = medicine_quantity.quantity
-        qr_image = C.QRGenerator.generate(prescription_id)
+        qr_image = C.QRController.generate(prescription_id)
         print(f'{qr_image = }')
         print(f"simulating email to... {user.email}")
         send_email = self.sendEmailCheckbox.isChecked()
