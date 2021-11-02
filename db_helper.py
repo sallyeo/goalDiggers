@@ -24,3 +24,9 @@ class db_helper:
         rows = cur.fetchall()
         self.conn.commit()
         return rows
+
+    def create(self, query):
+        print(f'{query = }')
+        cur = self.conn.cursor()
+        cur.execute(query)
+        return cur.lastrowid

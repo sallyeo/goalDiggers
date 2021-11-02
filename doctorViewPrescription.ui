@@ -83,6 +83,9 @@ opacity: 200;</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="PrescriptionIdLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -109,6 +112,9 @@ padding-bottom:1px;
     </property>
    </widget>
    <widget class="QLineEdit" name="prescriptionDateLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -176,6 +182,9 @@ opacity: 200;</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="patientIdLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -221,6 +230,9 @@ opacity: 200;</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="doctorIdLine">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -264,6 +276,9 @@ padding-bottom:1px;
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>203</number>
     </attribute>
+    <attribute name="verticalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
     <column>
      <property name="text">
       <string>ID</string>
@@ -280,7 +295,7 @@ padding-bottom:1px;
      </property>
     </column>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="tableLabel">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -311,84 +326,10 @@ padding:5px;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="saveButton">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>500</y>
-      <width>80</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton#saveButton{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
-	color:rgba(255, 255, 255, 210);
-	border-radius:5px;
-}
-
-QPushButton#saveButton:hover{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));
-}
-
-QPushButton#saveButton:pressed{
-	padding-left:5px;
-	padding-top:5px;
-	background-color:rgba(150, 123, 111, 255);
-}</string>
-    </property>
-    <property name="text">
-     <string>s a v e</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="editButton">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>500</y>
-      <width>80</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton#editButton{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
-	color:rgba(255, 255, 255, 210);
-	border-radius:5px;
-}
-
-QPushButton#editButton:hover{
-	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));
-}
-
-QPushButton#editButton:pressed{
-	padding-left:5px;
-	padding-top:5px;
-	background-color:rgba(150, 123, 111, 255);
-}</string>
-    </property>
-    <property name="text">
-     <string>e d i t</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="backButton">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>130</x>
       <y>500</y>
       <width>80</width>
       <height>31</height>
@@ -419,10 +360,13 @@ QPushButton#backButton:pressed{
 }</string>
     </property>
     <property name="text">
-     <string>b a c k</string>
+     <string>Back</string>
     </property>
    </widget>
    <widget class="QComboBox" name="statusMenu">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -476,6 +420,43 @@ opacity: 200;</string>
     </property>
     <property name="text">
      <string>Status</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="saveButton">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>500</y>
+      <width>80</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#backButton{
+	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
+	color:rgba(255, 255, 255, 210);
+	border-radius:5px;
+}
+
+QPushButton#backButton:hover{
+	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));
+}
+
+QPushButton#backButton:pressed{
+	padding-left:5px;
+	padding-top:5px;
+	background-color:rgba(150, 123, 111, 255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Save</string>
     </property>
    </widget>
   </widget>

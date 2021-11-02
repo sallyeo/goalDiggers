@@ -88,7 +88,7 @@ class Home(QMainWindow):
             self.table.setColumnWidth(i, column_sizes[i])
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-        self.table.verticalHeader().setVisible(False)
+        # self.table.verticalHeader().setVisible(False)
         self.logoutButton.clicked.connect(self.logout_app)
         self.get_records()
 
@@ -246,7 +246,7 @@ class ViewPrescription(QDialog):
         self.backButton.clicked.connect(self.go_back)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-        self.table.verticalHeader().setVisible(False)
+        # self.table.verticalHeader().setVisible(False)
         self.get_records()
 
     def get_records(self):
@@ -262,10 +262,11 @@ class ViewPrescription(QDialog):
         self.display_records(C.MedicineQuantityController.retrieve_prescription_medicines(prescription.object_id))
 
     def display_records(self, records):
+        self.table.setRowCount(0)
         if records:
             self.table.setRowCount(len(records))
             for count, item in enumerate(records):
-                medicine_name = C.MedicineController.retrieve_by_id(item.object_id).name
+                medicine_name = C.MedicineController.retrieve_by_id(item.medicine_id).name
                 self.table.setItem(count, 0, QTableWidgetItem(str(item.object_id)))
                 self.table.setItem(count, 1, QTableWidgetItem(str(medicine_name)))
                 self.table.setItem(count, 2, QTableWidgetItem(str(item.quantity)))
@@ -289,9 +290,15 @@ class PatientViewPrescription(ViewPrescription):
 class DoctorViewPrescription(ViewPrescription):
     def __init__(self):
         super(DoctorViewPrescription, self).__init__('doctorViewPrescription.ui')
+        self.table.cellClicked.connect(self.edit_prescription)
 
     def go_back(self):
         self.load_page(DoctorViewPatient())
+
+    def edit_prescription(self):
+        row = self.table.currentRow()
+        C.Session.set_context('medicine_quantity', C.MedicineQuantityController.retrieve_by_id(self.table.item(row, 0).text()))
+        self.load_page(DoctorEditMedicine(DoctorViewPrescription()))
 
 
 class PharmacistViewPrescription(ViewPrescription):
@@ -327,11 +334,12 @@ class ViewUser(QDialog):
             self.table.setRowCount(len(records))
             for count, item in enumerate(records):
                 doctor_name = self.user_controller.retrieve_user(item.doctor_id).name
-                pharmacist_name = self.user_controller.retrieve_user(item.pharmacist_id).name
+                pharmacist = self.user_controller.retrieve_user(item.pharmacist_id)
+                pharmacist_name = pharmacist.name if pharmacist else ''
                 self.table.setItem(count, 0, QTableWidgetItem(str(item.object_id)))
                 self.table.setItem(count, 1, QTableWidgetItem(str(item.date_created)))
-                self.table.setItem(count, 3, QTableWidgetItem(str(doctor_name)))
-                self.table.setItem(count, 2, QTableWidgetItem(str(pharmacist_name)))
+                self.table.setItem(count, 2, QTableWidgetItem(str(doctor_name)))
+                self.table.setItem(count, 3, QTableWidgetItem(str(pharmacist_name) or ''))
                 self.table.setItem(count, 4, QTableWidgetItem(str(item.get_status_string())))
 
     def view_prescription(self):
@@ -385,7 +393,7 @@ class DoctorViewPatient(ViewUser):
     def __init__(self, column_sizes=None):
         super(DoctorViewPatient, self).__init__('doctorViewPatient.ui')
         widget.setFixedSize(730, 650)
-        self.table.verticalHeader().setVisible(False)   # remove most left column
+        # self.table.verticalHeader().setVisible(False)   # remove most left column
         if column_sizes is None:
             column_sizes = [50, 100, 100, 100, 100]
         for i in range(len(column_sizes)):
@@ -505,7 +513,6 @@ class DoctorAddPrescription(QDialog):
         widget.setFixedSize(730, 650)
         self.backButton.clicked.connect(self.go_back)
         self.prescribeButton.clicked.connect(self.prescribe)
-        self.deleteButton.clicked.connect(self.delete_row)
         self.addButton.clicked.connect(self.add_medicine)
         self.patientNameLine.setText(str(C.Session.get_context('user').name))
         self.table.cellClicked.connect(self.edit_medicine)
@@ -532,10 +539,9 @@ class DoctorAddPrescription(QDialog):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def prescribe(self):
-        pass
-
-    def delete_row(self):
-        pass
+        cart = C.CartController.retrieve_cart_by_patient(C.Session.get_context('user').object_id)
+        C.CartController.prescribe_medicines(cart.object_id)
+        self.refresh_table()
 
     def add_medicine(self):
         try:
@@ -557,7 +563,7 @@ class DoctorAddPrescription(QDialog):
         medicine_quantity = C.MedicineQuantityController.retrieve_by_id(self.table.item(row, 0).text())
         print(f'{medicine_quantity = }')
         C.Session.set_context('medicine_quantity', medicine_quantity)
-        self.load_page(DoctorEditMedicine())
+        self.load_page(DoctorEditMedicine(DoctorAddPrescription()))
 
     @staticmethod
     def load_page(page):
@@ -566,8 +572,9 @@ class DoctorAddPrescription(QDialog):
 
 
 class DoctorEditMedicine(QDialog):
-    def __init__(self):
+    def __init__(self, from_page):
         super(DoctorEditMedicine, self).__init__()
+        self.back_page = from_page
         loadUi('doctorEditMedicine.ui', self)
         widget.setFixedSize(930, 750)
         self.saveButton.clicked.connect(self.save_medicine)
@@ -608,7 +615,8 @@ class DoctorEditMedicine(QDialog):
         self.go_back()
 
     def go_back(self):
-        self.load_page(DoctorAddPrescription())
+        # self.load_page(DoctorAddPrescription())
+        self.load_page(self.back_page)
 
     @staticmethod
     def load_page(page):

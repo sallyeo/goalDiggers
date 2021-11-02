@@ -197,7 +197,7 @@ class ObjectEntity:
             columns.append(f"{key} = '{value}'")
         joined = ', '.join(columns)
         query = f"UPDATE {table} SET {joined} WHERE id = {object_id}"
-        print(f'{query =}')
+        print(f'save {query =}')
         result = DATABASE.query_db(query)
         print(f'{result = }')
         return result
@@ -206,12 +206,10 @@ class ObjectEntity:
     def create(table, **kwargs):
         columns = ','.join(kwargs.keys())
         data = ','.join(f"'{word}'" for word in kwargs.values())
-        print(f'{columns = }')
-        print(f'{data = }')
         query = f'INSERT INTO {table} ({columns}) VALUES ({data})'
-        print(f'{query = }')
-        result = DATABASE.query_db(query)
-        return result
+        print(f'create {query = }')
+        row_id = DATABASE.create(query)
+        return row_id
 
     @staticmethod
     def delete(table, **kwargs):
@@ -222,7 +220,7 @@ class ObjectEntity:
             conditions.append(joined)
         final = ' AND '.join(conditions)
         query = f'DELETE FROM {table} WHERE {final}'
-        print(f'{query = }')
+        print(f'delete {query = }')
         result = DATABASE.query_db(query)
         return result
 

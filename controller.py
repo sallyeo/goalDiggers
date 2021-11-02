@@ -1,3 +1,4 @@
+import datetime
 from sqlite3 import IntegrityError
 
 import entity as E
@@ -111,12 +112,30 @@ class PrescriptionController:
         return PrescriptionController.e.retrieve_all()
 
     @staticmethod
-    def retrieve_prescription(code):
-        return PrescriptionController.e.retrieve_by_id(code)
+    def retrieve_prescription(object_id):
+        return PrescriptionController.e.retrieve_by_id(object_id)
 
     @staticmethod
     def retrieve_patient_prescriptions(patient_id):
         return PrescriptionController.e.retrieve_by_patient(patient_id)
+
+    @staticmethod
+    def new_prescription():
+        print(f"{datetime.date.today().strftime('%-d-%b-%Y')}, doctor_id = {Session.get_user().object_id}, patient_id = {Session.get_context('user').object_id}")
+        date = datetime.date.today().strftime('%-d-%b-%Y')
+        doctor_id = Session.get_user().object_id
+        patient_id = Session.get_context('user').object_id
+        # PrescriptionController.e.create('Prescription', )
+        # return PrescriptionController.retrieve_prescription()
+        prescription_id = PrescriptionController.e.create(
+            'Prescription',
+            date_created=date,
+            doctor_id=doctor_id,
+            patient_id=patient_id,
+            pharmacist_id='NULL',
+            collected=0,
+        )
+        return PrescriptionController.e.retrieve_by_id(prescription_id)
 
 
 class MedicineController:
@@ -212,4 +231,21 @@ class CartController:
     @staticmethod
     def create_patient_cart(patient_id):
         return CartController.e.create('Cart', patient_id=patient_id)
-    
+
+    @staticmethod
+    def prescribe_medicines(cart_id):
+        medicine_quantities = MedicineQuantityController.retrieve_cart_medicines(cart_id)
+        if not medicine_quantities:
+            return False
+        prescription_id = PrescriptionController.new_prescription().object_id
+        for medicine_quantity in medicine_quantities:
+            medicine_quantity.prescription_id = prescription_id
+            medicine_quantity.cart_id = 'NULL'
+            MedicineQuantityController.save_medicine_quantity(
+                medicine_quantity.object_id,
+                medicine_quantity.prescription_id,
+                medicine_quantity.cart_id,
+                medicine_quantity.medicine_id,
+                medicine_quantity.quantity,
+            )
+        return True

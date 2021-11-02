@@ -164,6 +164,9 @@ padding-bottom:7px;
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>100</number>
      </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
      <column>
       <property name="text">
        <string>ID</string>

@@ -201,6 +201,9 @@ QPushButton#addUserButton:pressed{
      <property name="columnCount">
       <number>6</number>
      </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
      <column>
       <property name="text">
        <string>User ID</string>
