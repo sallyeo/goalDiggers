@@ -187,18 +187,17 @@ class DoctorHome(Home):
     def search(self):
         search_query = self.searchBarLine.text()
         all_search = set()
+        results = []
         if search_query:
             id_search = C.UserController.search_by_id_part(search_query)
             email_search = C.UserController.search_by_email_part(search_query)
             name_search = C.UserController.search_by_name_part(search_query)
             phone_search = C.UserController.search_by_phone_number_part(search_query)
-            print(f'{id_search = }')
-            print(f'{email_search = }')
-            print(f'{name_search = }')
-            print(f'{phone_search = }')
             all_search = {*id_search, *email_search, *name_search, *phone_search}
-            print(f'{all_search = }')
-        self.display_users(list(all_search)) if all_search else self.get_records()
+            for user in all_search:
+                if user.role == 'Patient':
+                    results.append(user)
+        self.display_users(results) if all_search else self.get_records()
 
 
 class PharmacistHome(Home):
@@ -251,6 +250,17 @@ class AdminHome(Home):
 
     def add_role(self):
         self.load_page(AdminAddRole())
+
+    def search(self):
+        search_query = self.searchBarLine.text()
+        all_search = set()
+        if search_query:
+            id_search = C.UserController.search_by_id_part(search_query)
+            email_search = C.UserController.search_by_email_part(search_query)
+            name_search = C.UserController.search_by_name_part(search_query)
+            phone_search = C.UserController.search_by_phone_number_part(search_query)
+            all_search = {*id_search, *email_search, *name_search, *phone_search}
+        self.display_users(list(all_search)) if all_search else self.get_records()
 
 
 class ViewPrescription(QDialog):
