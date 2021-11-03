@@ -136,7 +136,8 @@ class PatientHome(Home):
             self.table.setRowCount(len(records))
             for count, item in enumerate(records):
                 doctor_name = self.user_controller.retrieve_user(item.doctor_id).name
-                pharmacist_name = self.user_controller.retrieve_user(item.pharmacist_id).name
+                pharmacist = self.user_controller.retrieve_user(item.pharmacist_id)
+                pharmacist_name = pharmacist.name if pharmacist else ''
                 self.table.setItem(count, 0, QTableWidgetItem(str(item.object_id)))
                 self.table.setItem(count, 1, QTableWidgetItem(str(item.date_created)))
                 self.table.setItem(count, 2, QTableWidgetItem(str(doctor_name)))
