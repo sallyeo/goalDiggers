@@ -131,6 +131,18 @@ class PatientHome(Home):
         self.display_details()
         self.display_prescriptions(self.prescription_controller.retrieve_patient_prescriptions(session_user.object_id))
 
+    def display_prescriptions(self, records):
+        if records:
+            self.table.setRowCount(len(records))
+            for count, item in enumerate(records):
+                doctor_name = self.user_controller.retrieve_user(item.doctor_id).name
+                pharmacist_name = self.user_controller.retrieve_user(item.pharmacist_id).name
+                self.table.setItem(count, 0, QTableWidgetItem(str(item.object_id)))
+                self.table.setItem(count, 1, QTableWidgetItem(str(item.date_created)))
+                self.table.setItem(count, 2, QTableWidgetItem(str(doctor_name)))
+                self.table.setItem(count, 3, QTableWidgetItem(str(pharmacist_name)))
+                self.table.setItem(count, 4, QTableWidgetItem(str(item.get_status_string())))
+
     def display_details(self):
         session_user = C.Session.get_user()
         self.idLine.setText(str(session_user.object_id))
@@ -150,7 +162,7 @@ class PatientHome(Home):
 
 class DoctorHome(Home):
     def __init__(self):
-        super(DoctorHome, self).__init__('doctorMainWindow.ui')
+        super(DoctorHome, self).__init__('doctorMainWindow.ui', [70, 150, 200, 250, 100])
         self.table.cellClicked.connect(self.view_user)
     
     def get_records(self):
