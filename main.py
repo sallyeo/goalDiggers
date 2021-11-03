@@ -162,12 +162,9 @@ class PatientHome(Home):
     def search(self):
         search_query = self.searchBarLine.text()
         user_prescriptions = []
-        if search_query:
-            all_prescriptions = C.PrescriptionController.search_by_id_part(search_query)
-            print(f'{all_prescriptions = }')
-            for prescription in all_prescriptions:
-                if prescription.patient_id == C.Session.get_user().object_id:
-                    user_prescriptions.append(prescription)
+        prescription = C.PrescriptionController.retrieve_prescription(search_query)
+        if search_query and prescription.patient_id == C.Session.get_user().object_id:
+            user_prescriptions.append(prescription)
         self.display_prescriptions(user_prescriptions) if user_prescriptions else self.get_records()
 
 
@@ -186,18 +183,10 @@ class DoctorHome(Home):
 
     def search(self):
         search_query = self.searchBarLine.text()
-        all_search = set()
-        results = []
+        result = []
         if search_query:
-            id_search = C.UserController.search_by_id_part(search_query)
-            email_search = C.UserController.search_by_email_part(search_query)
-            name_search = C.UserController.search_by_name_part(search_query)
-            phone_search = C.UserController.search_by_phone_number_part(search_query)
-            all_search = {*id_search, *email_search, *name_search, *phone_search}
-            for user in all_search:
-                if user.role == 'Patient':
-                    results.append(user)
-        self.display_users(results) if all_search else self.get_records()
+            result = [C.UserController.retrieve_user(search_query)]
+        self.display_users(result) if result else self.get_records()
 
 
 class PharmacistHome(Home):
@@ -226,7 +215,8 @@ class PharmacistHome(Home):
         search_query = self.searchBarLine.text()
         user_prescriptions = []
         if search_query:
-            user_prescriptions = C.PrescriptionController.search_by_id_part(search_query)
+            user_prescriptions.append(C.PrescriptionController.retrieve_prescription(search_query))
+        print(f'{user_prescriptions = }')
         self.display_prescriptions(user_prescriptions) if user_prescriptions else self.get_records()
 
 
@@ -236,6 +226,7 @@ class AdminHome(Home):
         self.table.cellClicked.connect(self.view_user)
         self.addUserButton.clicked.connect(self.create_user)
         self.addRoleButton.clicked.connect(self.add_role)
+        self.searchRoleButton.clicked.connect(self.search_role)
         
     def get_records(self):
         users = self.user_controller.retrieve_all_users()
@@ -253,14 +244,17 @@ class AdminHome(Home):
 
     def search(self):
         search_query = self.searchBarLine.text()
-        all_search = set()
+        all_search = []
         if search_query:
-            id_search = C.UserController.search_by_id_part(search_query)
-            email_search = C.UserController.search_by_email_part(search_query)
-            name_search = C.UserController.search_by_name_part(search_query)
-            phone_search = C.UserController.search_by_phone_number_part(search_query)
-            all_search = {*id_search, *email_search, *name_search, *phone_search}
+            all_search.append(C.UserController.retrieve_user(search_query))
         self.display_users(list(all_search)) if all_search else self.get_records()
+
+    def search_role(self):
+        search_query = self.searchRoleLine.text()
+        all_search = []
+        if search_query:
+            all_search = C.UserController.search_by_role(search_query)
+        self.display_users(all_search) if all_search else self.get_records()
 
 
 class ViewPrescription(QDialog):

@@ -106,7 +106,7 @@ QPushButton#logoutButton:pressed{
      </attribute>
      <column>
       <property name="text">
-       <string>ID</string>
+       <string>String Code</string>
       </property>
      </column>
      <column>

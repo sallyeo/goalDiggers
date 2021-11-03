@@ -169,7 +169,7 @@ padding-bottom:7px;
      </attribute>
      <column>
       <property name="text">
-       <string>ID</string>
+       <string>String Code</string>
       </property>
      </column>
      <column>

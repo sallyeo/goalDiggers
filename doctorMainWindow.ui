@@ -143,7 +143,7 @@ padding-bottom:7px;
 </string>
      </property>
      <property name="placeholderText">
-      <string>Search patients</string>
+      <string>Get patient by ID</string>
      </property>
     </widget>
     <widget class="QTableWidget" name="table">

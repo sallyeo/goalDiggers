@@ -60,8 +60,8 @@ class UserController:
     @staticmethod
     def retrieve_users_by_role(role):
         role_obj = UserTypeController.retrieve_role(role)
-        if not role:
-            raise ValueError('No such role')
+        if not role_obj:
+            return
         return E.UserEntity().retrieve_all_by_role(role_obj.role)
 
     @staticmethod
@@ -144,6 +144,10 @@ class UserController:
     @staticmethod
     def search_by_phone_number_part(phone_number_part):
         return E.UserEntity().get_many(E.UserEntity().search('User', phone_number=phone_number_part))
+    
+    @staticmethod
+    def search_by_role(role):
+        return E.UserEntity().get_many(E.UserEntity().search('User', role=role))
 
 
 class PrescriptionController:
