@@ -1,22 +1,9 @@
 import sys
 from sqlite3 import IntegrityError
-
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QMessageBox, QTableWidgetItem, QAbstractItemView
 from PyQt5.uic import loadUi
 import controller as C
-
-status_dict = {
-    'Not Collected': 0,
-    'Collected': 1
-}
-
-role_dict = {
-    'Admin': 0,
-    'Patient': 1,
-    'Doctor': 2,
-    'Pharmacist': 3,
-}
 
 
 class LoginView(QDialog):
@@ -25,6 +12,8 @@ class LoginView(QDialog):
         loadUi("loginDialog.ui", self)                          # load the ui file
         self.loginButton.clicked.connect(self.login)            # loginButton
         self.registerButton.clicked.connect(self.go_to_create)  # registerButton
+        self.email.returnPressed.connect(self.login)
+        self.password.returnPressed.connect(self.login)
         # Call to controller
         roles = C.UserTypeController().retrieve_all_roles()
         for role in roles:
@@ -265,7 +254,9 @@ class ViewPrescription(QDialog):
         self.patientIdLine.setText(str(patient_name))
         self.doctorIdLine.setText(str(doctor_name))
         self.prescriptionDateLine.setText(prescription.date_created)
-        self.statusMenu.setCurrentIndex(status_dict[prescription.get_status_string()])
+        index = self.statusMenu.findText(prescription.get_status_string())
+        if index >= 0:
+            self.statusMenu.setCurrentIndex(index)
         self.display_records(C.MedicineQuantityController.retrieve_prescription_medicines(prescription.object_id))
 
     def display_records(self, records):
@@ -397,15 +388,17 @@ class AdminViewUser(ViewUser):
         except IntegrityError as err:
             print(f'{err}')         # ERROR MESSAGE SHOW ON SCREEN
             msg_box = QMessageBox()
-            msg_box.setWindowTitle("Login fail")
-            msg_box.setText(err)
+            msg_box.setWindowTitle("Error")
+            msg_box.setText(str(err))
             msg_box.setStandardButtons(QMessageBox.Ok)
             msg_box.exec_()
 
     def display_details(self):
         context_user = C.Session.get_context('user')
         print(f'{context_user = }')
-        self.userMenu.setCurrentIndex(role_dict[context_user.role])
+        index = self.userMenu.findText(context_user.role)
+        if index >= 0:
+            self.userMenu.setCurrentIndex(index)
         self.idLine.setText(str(context_user.object_id))
         self.nameLine.setText(context_user.name)
         self.emailLine.setText(context_user.email)

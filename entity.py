@@ -1,166 +1,251 @@
 import db_helper
+from dataclasses import dataclass, field
+
 
 DATABASE = db_helper.db_helper()
 
 
 # id | role #
-class UserType:
-    def __init__(self, role):
-        self._role = role
-
-    @property
-    def role(self):
-        return self._role
-
-    @role.setter
-    def role(self, role):
-        self._role = role
-
-    def __str__(self):
-        return f'UserType: {{\n' \
-               f'\t\'role\': \'{self.role}\',\n' \
-               f'}},'
+# class UserType:
+#     def __init__(self, role: str):
+#         self._role = role
+#
+#     @property
+#     def role(self):
+#         return self._role
+#
+#     @role.setter
+#     def role(self, role: str):
+#         self._role = role
+#
+#     def __repr__(self):
+#         return self.role
+#
+#     def __str__(self):
+#         return f'UserType: {{\n' \
+#                f'\t\'role\': \'{self.role}\',\n' \
+#                f'}},'
 
 
 # id | email | name | phone_number | address | role | password #
-class User:
-    def __init__(self, object_id, email, name, phone_number, address, role):
-        self._object_id = object_id
-        self._email = email
-        self._name = name
-        self._phone_number = phone_number
-        self._address = address
-        self._role = role
-
-    @property
-    def object_id(self):
-        return self._object_id
-
-    @object_id.setter
-    def object_id(self, object_id):
-        try:
-            self._object_id = int(object_id)
-        except ValueError:
-            print('object_id must be an int')
-
-    @property
-    def email(self):
-        return self._email
-
-    @email.setter
-    def email(self, email):
-        self._email = email
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, name):
-        self._email = name
-
-    @property
-    def phone_number(self):
-        return self._phone_number
-
-    @phone_number.setter
-    def phone_number(self, phone_number):
-        self._phone_number = phone_number
-
-    @property
-    def address(self):
-        return self._address
-
-    @address.setter
-    def address(self, address):
-        self._address = address
-
-    @property
-    def role(self):
-        return self._role
-
-    @role.setter
-    def role(self, role):
-        self._role = role
-
-    def __str__(self):
-        return f'User: {{\n' \
-               f'\t\'id\': {self._object_id},\n' \
-               f'\t\'email\': \'{self._email}\',\n' \
-               f'\t\'name\': \'{self._name}\',\n' \
-               f'\t\'phone_number\': \'{self._phone_number}\',\n' \
-               f'\t\'address\': \'{self._address}\',\n' \
-               f'\t\'role\': \'{self._role}\',\n' \
-               f'}},'
+# class User:
+#     def __init__(self, object_id: int, email: str, name: str, phone_number: str, address: str, role: str):
+#         self._object_id = object_id
+#         self._email = email
+#         self._name = name
+#         self._phone_number = phone_number
+#         self._address = address
+#         self._role = role
+#
+#     @property
+#     def object_id(self):
+#         return self._object_id
+#
+#     @object_id.setter
+#     def object_id(self, object_id: int):
+#         try:
+#             self._object_id = int(object_id)
+#         except ValueError:
+#             print('object_id must be an int')
+#
+#     @property
+#     def email(self):
+#         return self._email
+#
+#     @email.setter
+#     def email(self, email: str):
+#         self._email = email
+#
+#     @property
+#     def name(self):
+#         return self._name
+#
+#     @name.setter
+#     def name(self, name: str):
+#         self._email = name
+#
+#     @property
+#     def phone_number(self):
+#         return self._phone_number
+#
+#     @phone_number.setter
+#     def phone_number(self, phone_number: str):
+#         self._phone_number = phone_number
+#
+#     @property
+#     def address(self):
+#         return self._address
+#
+#     @address.setter
+#     def address(self, address: str):
+#         self._address = address
+#
+#     @property
+#     def role(self):
+#         return self._role
+#
+#     @role.setter
+#     def role(self, role: str):
+#         self._role = role
+#
+#     def __repr__(self):
+#         return str([self.object_id, self.email, self.name, self.phone_number, self.address])
+#
+#     def __str__(self):
+#         return f'User: {{\n' \
+#                f'\t\'id\': {self._object_id},\n' \
+#                f'\t\'email\': \'{self._email}\',\n' \
+#                f'\t\'name\': \'{self._name}\',\n' \
+#                f'\t\'phone_number\': \'{self._phone_number}\',\n' \
+#                f'\t\'address\': \'{self._address}\',\n' \
+#                f'\t\'role\': \'{self._role}\',\n' \
+#                f'}},'
 
 
 # id | name #
-class Medicine:
-    def __init__(self, object_id, name):
-        self.object_id = object_id
-        self.name = name
-
-    def __str__(self):
-        return f'Medicine: {{\n' \
-               f'\t\'id\': {self.object_id},\n' \
-               f'\t\'name\': \'{self.name}\',\n' \
-               f'}},'
+# class Medicine:
+#     def __init__(self, object_id: int, name: str):
+#         self._object_id = object_id
+#         self._name = name
+#
+#     @property
+#     def object_id(self):
+#         return self._object_id
+#
+#     @object_id.setter
+#     def object_id(self, object_id: int):
+#         try:
+#             self._object_id = int(object_id)
+#         except ValueError:
+#             print('object_id must be an integer !')
+#
+#     @property
+#     def name(self):
+#         return self._name
+#
+#     @name.setter
+#     def name(self, name: int):
+#         self._name = int(name)
+#
+#     def __repr__(self):
+#         return [self.object_id, self.name]
+#
+#     def __str__(self):
+#         return f'Medicine: {{\n' \
+#                f'\t\'id\': {self._object_id},\n' \
+#                f'\t\'name\': \'{self._name}\',\n' \
+#                f'}},'
 
 
 # id | patient_id #
-class Cart:
-    def __init__(self, object_id, patient_id):
-        self.object_id = object_id
-        self.patient_id = patient_id
-
-    def __str__(self):
-        return f'Cart: {{\n' \
-               f'\t\'object_id\': {self.object_id},\n' \
-               f'\t\'patient_id\': {self.patient_id},\n' \
-               f'}},'
+# class Cart:
+#     def __init__(self, object_id, patient_id):
+#         self.object_id = object_id
+#         self.patient_id = patient_id
+#
+#     def __str__(self):
+#         return f'Cart: {{\n' \
+#                f'\t\'object_id\': {self.object_id},\n' \
+#                f'\t\'patient_id\': {self.patient_id},\n' \
+#                f'}},'
 
 
 # id | date_created | doctor_id | patient_id | pharmacist_id | collected #
+# class Prescription:
+#     def __init__(self, object_id, date_created, doctor_id, patient_id, pharmacist_id, collected):
+#         self.object_id = object_id
+#         self.date_created = date_created
+#         self.doctor_id = doctor_id
+#         self.patient_id = patient_id
+#         self.pharmacist_id = pharmacist_id
+#         self.collected = collected
+#
+#     def get_status_string(self):
+#         return 'Collected' if self.collected == 1 else 'Not Collected'
+#
+#     def __str__(self):
+#         return f'Prescription: {{\n' \
+#                f'\t\'id\': {self.object_id},\n' \
+#                f'\t\'date_created\': {self.date_created},\n' \
+#                f'\t\'doctor_id\': {self.doctor_id},\n' \
+#                f'\t\'patient_id\': {self.patient_id},\n' \
+#                f'\t\'pharmacist_id\': {self.pharmacist_id},\n' \
+#                f'\t\'collected\': {self.collected},\n' \
+#                f'}},'
+
+
+# id | prescription_id | cart_id | medicine_id | quantity #
+# class MedicineQuantity:
+#     def __init__(self, object_id, prescription_id, cart_id, medicine_id, quantity):
+#         self.object_id = object_id
+#         self.prescription_id = prescription_id
+#         self.cart_id = cart_id
+#         self.medicine_id = medicine_id
+#         self.quantity = quantity
+#
+#     def __str__(self):
+#         return f'MedicineQuantity: {{\n' \
+#                f'\t\'id\': {self.object_id},\n' \
+#                f'\t\'prescription_id\': \'{self.prescription_id}\',\n' \
+#                f'\t\'cart_id\': \'{self.cart_id}\',\n' \
+#                f'\t\'medicine_id\': \'{self.medicine_id}\',\n' \
+#                f'\t\'quantity\': \'{self.quantity}\',\n' \
+#                f'}},'
+
+
+# id | role #
+@dataclass
+class UserType:
+    role: str
+
+
+# id | email | name | phone_number | address | role | password #
+@dataclass
+class User:
+    object_id: int
+    email: str
+    name: str
+    phone_number: str
+    address: str
+    role: str
+
+
+# id | name #
+@dataclass
+class Medicine:
+    object_id: int
+    name: str
+
+
+# id | patient_id #
+@dataclass
+class Cart:
+    object_id: int
+    patient_id: int
+
+
+# id | date_created | doctor_id | patient_id | pharmacist_id | collected #
+@dataclass
 class Prescription:
-    def __init__(self, object_id, date_created, doctor_id, patient_id, pharmacist_id, collected):
-        self.object_id = object_id
-        self.date_created = date_created
-        self.doctor_id = doctor_id
-        self.patient_id = patient_id
-        self.pharmacist_id = pharmacist_id
-        self.collected = collected
+    object_id: int
+    date_created: str
+    doctor_id: int
+    patient_id: int
+    pharmacist_id: int
+    collected: int
 
     def get_status_string(self):
         return 'Collected' if self.collected == 1 else 'Not Collected'
 
-    def __str__(self):
-        return f'Prescription: {{\n' \
-               f'\t\'id\': {self.object_id},\n' \
-               f'\t\'date_created\': {self.date_created},\n' \
-               f'\t\'doctor_id\': {self.doctor_id},\n' \
-               f'\t\'patient_id\': {self.patient_id},\n' \
-               f'\t\'pharmacist_id\': {self.pharmacist_id},\n' \
-               f'\t\'collected\': {self.collected},\n' \
-               f'}},'
-
 
 # id | prescription_id | cart_id | medicine_id | quantity #
+@dataclass
 class MedicineQuantity:
-    def __init__(self, object_id, prescription_id, cart_id, medicine_id, quantity):
-        self.object_id = object_id
-        self.prescription_id = prescription_id
-        self.cart_id = cart_id
-        self.medicine_id = medicine_id
-        self.quantity = quantity
-
-    def __str__(self):
-        return f'MedicineQuantity: {{\n' \
-               f'\t\'id\': {self.object_id},\n' \
-               f'\t\'prescription_id\': \'{self.prescription_id}\',\n' \
-               f'\t\'cart_id\': \'{self.cart_id}\',\n' \
-               f'\t\'medicine_id\': \'{self.medicine_id}\',\n' \
-               f'\t\'quantity\': \'{self.quantity}\',\n' \
-               f'}},'
+    object_id: int
+    prescription_id: int
+    cart_id: int
+    medicine_id: int
+    quantity: int
 
 
 class ObjectEntity:
@@ -261,11 +346,11 @@ class UserEntity(ObjectEntity):
     def retrieve_by_id(self, object_id):
         return self.get_one(super(UserEntity, self).retrieve_by_conditions('User', id=object_id))
 
-    def retrieve_all_by_email(self, email):
-        return self.get_many(super(UserEntity, self).retrieve_by_conditions('User', email=email))
+    def retrieve_by_email(self, email):
+        return self.get_one(super(UserEntity, self).retrieve_by_conditions('User', email=email))
 
-    def retrieve_all_by_phone_number(self, phone_number):
-        return self.get_many(super(UserEntity, self).retrieve_by_conditions('User', phone_number=phone_number))
+    def retrieve_by_phone_number(self, phone_number):
+        return self.get_one(super(UserEntity, self).retrieve_by_conditions('User', phone_number=phone_number))
 
     def retrieve_all_by_role(self, role):
         return self.get_many(super(UserEntity, self).retrieve_by_conditions('User', role=role))

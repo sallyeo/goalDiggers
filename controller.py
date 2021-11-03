@@ -1,9 +1,7 @@
 import secret
 import datetime
 from sqlite3 import IntegrityError
-import smtplib, ssl
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import smtplib
 from email.message import EmailMessage
 import qrcode
 import imghdr
@@ -92,29 +90,31 @@ class UserController:
     def create_user(email, name, phone_number, address, role, password):
         if not email or not name or not phone_number or not address or not role or not password:
             raise ValueError('Please fill in all fields')
-        if not UserController.check_email_match(email):
+        # If email match
+        if UserController.check_email_match(email):
             raise IntegrityError('Email must be unique.')
-        if not UserController.check_phone_number_match(phone_number):
+        # If phone number match
+        if UserController.check_phone_number_match(phone_number):
             raise IntegrityError('Phone number must be unique')
         E.UserEntity().create('User', email=email, name=name, phone_number=phone_number, address=address, role=role, password=password)
 
     @staticmethod
-    def check_email_match(email, user_id=None):
-        email_check = E.UserEntity().retrieve_all_by_email(email)
+    def check_email_match(email, user_id):
+        email_check = E.UserEntity().retrieve_by_email(email)
         # If email_check list has elements and user_id is valid
-        if email_check and user_id:
-            if len(email_check) > 1 or email_check[0].object_id != user_id:
-                return False
-        return True
+        if email_check:
+            if email_check.object_id != user_id:
+                return True
+        return False
 
     @staticmethod
     def check_phone_number_match(phone_number, user_id=None):
-        phone_number_check = E.UserEntity().retrieve_all_by_email(phone_number)
+        phone_number_check = E.UserEntity().retrieve_by_phone_number(phone_number)
         # If phone_number_check list has elements and user_id is valid
-        if phone_number_check and user_id:
-            if len(phone_number_check) > 1 or phone_number_check[0].object_id != user_id:
-                return False
-        return True
+        if phone_number_check:
+            if phone_number_check.object_id != user_id:
+                return True
+        return False
 
 
 class PrescriptionController:
@@ -293,13 +293,13 @@ class QRController:
 
 
 class SendEmailController:
-    def __init__(self, recipient, image, recipient_name, medicine_quantites, send=True):
+    def __init__(self, recipient, image, recipient_name, medicine_quantities, send=True):
         self.recipient = recipient
         self.image = image
         self.recipient_name = recipient_name
         self.send = send
         medicine_amounts = []
-        for key, value in medicine_quantites.items():
+        for key, value in medicine_quantities.items():
             medicine_amounts.append(f'{value} {key}')
         self.breakdown = '\n - '.join(medicine_amounts)
         print(f'{self.breakdown = }')
