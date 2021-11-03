@@ -11,50 +11,35 @@ class LoginView(QDialog):
         super(LoginView, self).__init__()
         loadUi("loginDialog.ui", self)                          # load the ui file
         self.loginButton.clicked.connect(self.login)            # loginButton
-        self.registerButton.clicked.connect(self.go_to_create)  # registerButton
-        self.email.returnPressed.connect(self.login)
-        self.password.returnPressed.connect(self.login)
-        # Call to controller
-        # roles = C.UserTypeController().retrieve_all_roles()
-        # for role in roles:
-        #     self.userMenu.addItem(role.role)
+        self.registerButton.clicked.connect(self.register)      # registerButton
+        self.email.returnPressed.connect(self.login)            # Return key pressed
+        self.password.returnPressed.connect(self.login)         # Return key pressed
 
     def login(self):
         email = self.email.text()           # get email from user input
         password = self.password.text()     # get password from user input
-        # usertype = self.userMenu.currentText()
 
         # boundary calling controller
         user = C.UserController.login(email, password)
         if user:   # if input valid
             C.Session.set_user(user)
-            print(f'logged in {user}')
+            print(f'logged in as {user}')
             if user.role == "Doctor":
-                doctor_home = DoctorHome()
-                widget.addWidget(doctor_home)
-                widget.setCurrentIndex(widget.currentIndex() + 1)
+                self.go_to(DoctorHome())
             elif user.role == "Patient":
-                patient_home = PatientHome()
-                widget.addWidget(patient_home)
-                widget.setCurrentIndex(widget.currentIndex() + 1)
+                self.go_to(PatientHome())
             elif user.role == "Pharmacist":
-                pharmacist_home = PharmacistHome()
-                widget.addWidget(pharmacist_home)
-                widget.setCurrentIndex(widget.currentIndex() + 1)
+                self.go_to(PharmacistHome())
             elif user.role == 'Admin':
-                admin_home = AdminHome()
-                widget.addWidget(admin_home)
-                widget.setCurrentIndex(widget.currentIndex() + 1)
+                self.go_to(AdminHome())
         else:   # if input invalid
             self.show_message('Login failed', 'Invalid credentials')
-            # msg_box = QMessageBox()
-            # msg_box.setWindowTitle("Login fail")
-            # msg_box.setText("INVALID CREDENTIALS INPUT!")
-            # msg_box.setStandardButtons(QMessageBox.Ok)
-            # msg_box.exec_()
 
-    def go_to_create(self):
-        widget.addWidget(Register())
+    def register(self):
+        self.go_to(Register())
+
+    def go_to(self, page):
+        widget.addWidget(page)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     @staticmethod
@@ -81,7 +66,6 @@ class Home(QMainWindow):
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
         self.searchButton.clicked.connect(self.search)
-        # self.table.verticalHeader().setVisible(False)
         self.logoutButton.clicked.connect(self.logout_app)
         self.get_records()
 
@@ -133,7 +117,6 @@ class Home(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def logout_app(self):
-        # calling LoginView() of boundary class
         C.Session.set_user(None)
         self.load_page(LoginView())
 
@@ -144,7 +127,6 @@ class PatientHome(Home):
         self.table.cellClicked.connect(self.view_prescription)
         
     def get_records(self):
-        print(f'Session user: {C.Session.get_user()}')
         session_user = C.Session.get_user()
         self.display_details()
         self.display_prescriptions(self.prescription_controller.retrieve_patient_prescriptions(session_user.object_id))
@@ -169,11 +151,9 @@ class PatientHome(Home):
 class DoctorHome(Home):
     def __init__(self):
         super(DoctorHome, self).__init__('doctorMainWindow.ui')
-        # self.table.cellClicked.connect(self.view_prescription)
         self.table.cellClicked.connect(self.view_user)
     
     def get_records(self):
-        # boundary calling controller
         users = C.UserController.retrieve_users_by_role('Patient')
         self.display_users(users)
 
@@ -189,7 +169,6 @@ class PharmacistHome(Home):
         self.scanButton.clicked.connect(self.scan_code)
 
     def get_records(self):
-        # boundary calling controller
         users = C.UserController.retrieve_users_by_role('Patient')
         self.display_users(users)
 
@@ -199,7 +178,6 @@ class PharmacistHome(Home):
 
     def scan_code(self):
         code = C.QRController.read()
-        print(f'{code}')
         prescription = C.PrescriptionController.retrieve_prescription(code)
         user = C.UserController.retrieve_user(prescription.patient_id)
         C.Session.set_context('prescription', prescription)
@@ -245,12 +223,10 @@ class ViewPrescription(QDialog):
         self.backButton.clicked.connect(self.go_back)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-        # self.table.verticalHeader().setVisible(False)
         self.get_records()
 
     def get_records(self):
         prescription = C.Session.get_context('prescription')
-        print(prescription)
         doctor_name = self.user_controller.retrieve_user(prescription.doctor_id).name
         patient_name = self.user_controller.retrieve_user(prescription.patient_id).name
         self.PrescriptionIdLine.setText(str(prescription.object_id))
@@ -260,9 +236,11 @@ class ViewPrescription(QDialog):
         index = self.statusMenu.findText(prescription.get_status_string())
         if index >= 0:
             self.statusMenu.setCurrentIndex(index)
-        self.display_records(C.MedicineQuantityController.retrieve_prescription_medicines(prescription.object_id))
+        self.get_and_display_records()
 
-    def display_records(self, records):
+    def get_and_display_records(self):
+        prescription = C.Session.get_context('prescription')
+        records = C.MedicineQuantityController.retrieve_prescription_medicines(prescription.object_id)
         self.table.setRowCount(0)
         if records:
             self.table.setRowCount(len(records))
@@ -279,6 +257,10 @@ class ViewPrescription(QDialog):
         widget.addWidget(page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+    def refresh_table(self):
+        self.table.setRowCount(0)
+        self.get_and_display_records()
+
 
 class PatientViewPrescription(ViewPrescription):
     def __init__(self):
@@ -292,6 +274,10 @@ class DoctorViewPrescription(ViewPrescription):
     def __init__(self):
         super(DoctorViewPrescription, self).__init__('doctorViewPrescription.ui')
         self.table.cellClicked.connect(self.edit_prescription)
+        self.addButton.clicked.connect(self.add_medicine)
+        medicines = C.MedicineController.retrieve_all_medicines()
+        for medicine in medicines:
+            self.medMenu.addItem(medicine.name)
 
     def go_back(self):
         self.load_page(DoctorViewPatient())
@@ -300,6 +286,22 @@ class DoctorViewPrescription(ViewPrescription):
         row = self.table.currentRow()
         C.Session.set_context('medicine_quantity', C.MedicineQuantityController.retrieve_by_id(self.table.item(row, 0).text()))
         self.load_page(DoctorEditMedicine(DoctorViewPrescription()))
+
+    def add_medicine(self):
+        try:
+            selected_medicine = str(self.medMenu.currentText())
+            selected_quantity = int(self.quantityLine.text())
+            # if not selected_quantity:
+            #     return
+            C.MedicineQuantityController.add_to_prescription(
+                selected_quantity,
+                selected_medicine,
+                C.Session.get_context('user').object_id,
+                C.Session.get_context('prescription').object_id,
+            )
+            self.refresh_table()
+        except ValueError as err:
+            print('Quantity must be a integer !')
 
 
 class PharmacistViewPrescription(ViewPrescription):
@@ -315,7 +317,6 @@ class PharmacistViewPrescription(ViewPrescription):
         if prescription:
             prescription.collected = self.statusMenu.currentIndex()
             prescription.pharmacist_id = C.Session.get_user().object_id
-            print(f'{prescription.collected = }')
             C.PrescriptionController.save_prescription(
                 prescription.object_id,
                 prescription.date_created,
@@ -398,7 +399,6 @@ class AdminViewUser(ViewUser):
         password2 = self.password2Line.text()
         try:
             if not password1 and not password2:
-                print(f'Save with no password change')
                 self.user_controller.save_user(user_id, email, name, phone_number, address, role)
                 self.show_message('Success', 'User saved')
                 self.go_back()
@@ -406,22 +406,15 @@ class AdminViewUser(ViewUser):
                 if password1 != password2:
                     self.errorLabel.setText('Passwords provided do not match')
                 else:
-                    print(f'Save with password change')
                     self.user_controller.save_user(user_id, email, name, phone_number, address, role, password1)
                     self.show_message('Success', 'User saved')
                     self.go_back()
         except IntegrityError as err:
             print(f'{err}')         # ERROR MESSAGE SHOW ON SCREEN
             self.show_message('Error', str(err))
-            # msg_box = QMessageBox()
-            # msg_box.setWindowTitle("Error")
-            # msg_box.setText(str(err))
-            # msg_box.setStandardButtons(QMessageBox.Ok)
-            # msg_box.exec_()
 
     def display_details(self):
         context_user = C.Session.get_context('user')
-        print(f'{context_user = }')
         index = self.userMenu.findText(context_user.role)
         if index >= 0:
             self.userMenu.setCurrentIndex(index)
@@ -568,9 +561,7 @@ class DoctorAddPrescription(QDialog):
 
     def get_and_display_records(self):
         cart = C.CartController.retrieve_cart_by_patient(C.Session.get_context('user').object_id)
-        print(f'{cart = }')
         medicine_quantities = C.MedicineQuantityController.retrieve_cart_medicines(cart.object_id)
-        print(f'Doctor add prescription page: {medicine_quantities = }')
         if medicine_quantities:
             self.table.setRowCount(len(medicine_quantities))
             for count, item in enumerate(medicine_quantities):
@@ -588,25 +579,23 @@ class DoctorAddPrescription(QDialog):
         cart = C.CartController.retrieve_cart_by_patient(user.object_id)
         prescription_id = C.CartController.prescribe_medicines(cart.object_id)
         medicine_quantities = C.MedicineQuantityController.retrieve_prescription_medicines(prescription_id)
-        print(f'{medicine_quantities = }')
         med_dict = {}
         for medicine_quantity in medicine_quantities:
             medicine_name = C.MedicineController.retrieve_by_id(medicine_quantity.medicine_id).name
             med_dict[medicine_name] = medicine_quantity.quantity
         qr_image = C.QRController.generate(prescription_id)
-        print(f'{qr_image = }')
-        print(f"simulating email to... {user.email}")
         send_email = self.sendEmailCheckbox.isChecked()
         email = C.SendEmailController(user.email, qr_image, user.name, med_dict, send_email)
         email.send_email()
         self.go_back()
 
     def add_medicine(self):
+        if not self.quantityLine.text():
+            return
         try:
             selected_medicine = str(self.medMenu.currentText())
-            selected_quantity = int(self.quantityMenu.currentText())
-            print(f'Add {selected_quantity} {selected_medicine}')
-            self.medicine_quantity_controller.add_new(selected_quantity, selected_medicine, C.Session.get_context('user').object_id)
+            selected_quantity = int(self.quantityLine.text())
+            self.medicine_quantity_controller.add_to_cart(selected_quantity, selected_medicine, C.Session.get_context('user').object_id)
             self.refresh_table()
         except ValueError as err:
             print('Quantity must be a integer !')
@@ -617,9 +606,7 @@ class DoctorAddPrescription(QDialog):
 
     def edit_medicine(self):
         row = self.table.currentRow()
-        print(self.table.item(row, 0).text())
         medicine_quantity = C.MedicineQuantityController.retrieve_by_id(self.table.item(row, 0).text())
-        print(f'{medicine_quantity = }')
         C.Session.set_context('medicine_quantity', medicine_quantity)
         self.load_page(DoctorEditMedicine(DoctorAddPrescription()))
 
@@ -652,13 +639,12 @@ class DoctorEditMedicine(QDialog):
         self.quantityLine.setText(str(medicine_quantity.quantity))
 
     def save_medicine(self):
+        if not self.quantityLine.text():
+            return
         medicine_quantity = C.Session.get_context('medicine_quantity')
         medicine_id = C.MedicineController.retrieve_by_name(self.medMenu.currentText()).object_id
         medicine_quantity.medicine_id = medicine_id
         medicine_quantity.quantity = int(self.quantityLine.text())
-        print(f'{medicine_quantity.object_id = }')
-        print(f'{medicine_quantity.medicine_id = }')
-        print(f'{medicine_quantity.quantity = }')
         C.MedicineQuantityController.save_medicine_quantity(
             medicine_quantity.object_id,
             medicine_quantity.prescription_id,
@@ -673,7 +659,6 @@ class DoctorEditMedicine(QDialog):
         self.go_back()
 
     def go_back(self):
-        # self.load_page(DoctorAddPrescription())
         self.load_page(self.back_page)
 
     @staticmethod

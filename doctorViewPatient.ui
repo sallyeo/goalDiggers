@@ -361,6 +361,14 @@ QPushButton#addPrescriptionButton:pressed{
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>nameLine</tabstop>
+  <tabstop>emailLine</tabstop>
+  <tabstop>phoneNumberLine</tabstop>
+  <tabstop>table</tabstop>
+  <tabstop>addPrescriptionButton</tabstop>
+  <tabstop>backButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

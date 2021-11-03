@@ -273,6 +273,13 @@ padding-bottom:1px;</string>
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>medMenu</tabstop>
+  <tabstop>quantityLine</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>deleteButton</tabstop>
+  <tabstop>backButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

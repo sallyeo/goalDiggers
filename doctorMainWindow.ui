@@ -264,6 +264,12 @@ border-bottom-right-radius: 50px;</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>logoutButton</tabstop>
+  <tabstop>searchBarLine</tabstop>
+  <tabstop>searchButton</tabstop>
+  <tabstop>table</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

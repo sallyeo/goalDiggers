@@ -525,6 +525,17 @@ QPushButton#searchButton:pressed{
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>logoutButton</tabstop>
+  <tabstop>idLine</tabstop>
+  <tabstop>nameLine</tabstop>
+  <tabstop>emailLine</tabstop>
+  <tabstop>addressLine</tabstop>
+  <tabstop>telLine</tabstop>
+  <tabstop>searchBarLine</tabstop>
+  <tabstop>searchButton</tabstop>
+  <tabstop>table</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

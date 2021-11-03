@@ -424,6 +424,15 @@ padding-bottom:1px;</string>
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>PrescriptionIdLine</tabstop>
+  <tabstop>patientIdLine</tabstop>
+  <tabstop>doctorIdLine</tabstop>
+  <tabstop>prescriptionDateLine</tabstop>
+  <tabstop>statusMenu</tabstop>
+  <tabstop>table</tabstop>
+  <tabstop>backButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
