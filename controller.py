@@ -7,6 +7,7 @@ import qrcode
 import imghdr
 import cv2
 import entity as E
+from hashlib import sha256
 
 
 class Session:
@@ -64,13 +65,14 @@ class UserController:
         return E.UserEntity().retrieve_all_by_role(role_obj.role)
 
     @staticmethod
-    def login(email, password):
-        if email == "" or password == "":
+    def login(email, raw_password):
+        if email == "" or raw_password == "":
             return False
-        return E.UserEntity().validate_login(email, password)
+        encrypted = UserController.encrypt_password(raw_password)
+        return E.UserEntity().validate_login(email, encrypted)
 
     @staticmethod
-    def save_user(user_id, email, name, phone_number, address, role):
+    def save_user(user_id, email, name, phone_number, address, role, password=None):
         user_id = int(user_id)
         if UserController.check_email_match(email, user_id):
             raise IntegrityError(f'Email must be unique.')
@@ -85,6 +87,13 @@ class UserController:
             address=address,
             role=role
         )
+        if password is not None:
+            encrypted = UserController.encrypt_password(password)
+            E.UserEntity().save(
+                'User',
+                user_id,
+                password=encrypted
+            )
 
     @staticmethod
     def create_user(email, name, phone_number, address, role, password):
@@ -115,6 +124,10 @@ class UserController:
             if phone_number_check.object_id != user_id:
                 return True
         return False
+
+    @staticmethod
+    def encrypt_password(password):
+        return sha256(password.encode('ascii')).hexdigest()
 
 
 class PrescriptionController:

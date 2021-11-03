@@ -99,7 +99,7 @@ border-radius: 3px;
 opacity: 200;</string>
     </property>
     <property name="text">
-     <string>Tel No.</string>
+     <string>Phone No.</string>
     </property>
    </widget>
    <widget class="QLabel" name="addressLabel">
@@ -224,7 +224,7 @@ padding-bottom:1px;
      <string/>
     </property>
     <property name="placeholderText">
-     <string>Tel No.</string>
+     <string>Phone Number</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="addressLine">
@@ -289,7 +289,7 @@ padding-bottom:1px;
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>340</y>
+      <y>440</y>
       <width>80</width>
       <height>31</height>
      </rect>
@@ -326,7 +326,7 @@ QPushButton#saveButton:pressed{
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>340</y>
+      <y>440</y>
       <width>80</width>
       <height>31</height>
      </rect>
@@ -424,6 +424,99 @@ border-bottom-right-radius: 50px;</string>
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="password1Label">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>330</y>
+      <width>81</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));
+padding: 5px;
+border-radius: 3px;
+opacity: 200;</string>
+    </property>
+    <property name="text">
+     <string>Password</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="password1Line">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>330</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgba(0, 0, 0, 0);
+border:none;
+border-bottom:2px solid rgba(46, 82, 101, 200);
+color:rgba(0, 0, 0, 240);
+padding-bottom:1px;
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>Password</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="password2Line">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>370</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgba(0, 0, 0, 0);
+border:none;
+border-bottom:2px solid rgba(46, 82, 101, 200);
+color:rgba(0, 0, 0, 240);
+padding-bottom:1px;
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>Confirm password</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="errorLabel">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>410</y>
+      <width>401</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: red</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>whiteBackground</zorder>
    <zorder>pageTitle</zorder>
    <zorder>userTypeIdLabel</zorder>
@@ -440,8 +533,24 @@ border-bottom-right-radius: 50px;</string>
    <zorder>backButton</zorder>
    <zorder>userTypeIdLabel_2</zorder>
    <zorder>userMenu</zorder>
+   <zorder>password1Label</zorder>
+   <zorder>password1Line</zorder>
+   <zorder>password2Line</zorder>
+   <zorder>errorLabel</zorder>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>userMenu</tabstop>
+  <tabstop>idLine</tabstop>
+  <tabstop>nameLine</tabstop>
+  <tabstop>emailLine</tabstop>
+  <tabstop>addressLine</tabstop>
+  <tabstop>telLine</tabstop>
+  <tabstop>password1Line</tabstop>
+  <tabstop>password2Line</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>backButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

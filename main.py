@@ -15,9 +15,9 @@ class LoginView(QDialog):
         self.email.returnPressed.connect(self.login)
         self.password.returnPressed.connect(self.login)
         # Call to controller
-        roles = C.UserTypeController().retrieve_all_roles()
-        for role in roles:
-            self.userMenu.addItem(role.role)
+        # roles = C.UserTypeController().retrieve_all_roles()
+        # for role in roles:
+        #     self.userMenu.addItem(role.role)
 
     def login(self):
         email = self.email.text()           # get email from user input
@@ -28,11 +28,6 @@ class LoginView(QDialog):
         user = C.UserController.login(email, password)
         if user:   # if input valid
             C.Session.set_user(user)
-            # msg_box = QMessageBox()
-            # msg_box.setWindowTitle("Login success")
-            # msg_box.setText("WELCOME TO GD PRESCRIPTION")
-            # msg_box.setStandardButtons(QMessageBox.Ok)
-            # msg_box.exec_()
             print(f'logged in {user}')
             if user.role == "Doctor":
                 doctor_home = DoctorHome()
@@ -51,16 +46,24 @@ class LoginView(QDialog):
                 widget.addWidget(admin_home)
                 widget.setCurrentIndex(widget.currentIndex() + 1)
         else:   # if input invalid
-            msg_box = QMessageBox()
-            msg_box.setWindowTitle("Login fail")
-            msg_box.setText("INVALID CREDENTIALS INPUT!")
-            msg_box.setStandardButtons(QMessageBox.Ok)
-            msg_box.exec_()
+            self.show_message('Login failed', 'Invalid credentials')
+            # msg_box = QMessageBox()
+            # msg_box.setWindowTitle("Login fail")
+            # msg_box.setText("INVALID CREDENTIALS INPUT!")
+            # msg_box.setStandardButtons(QMessageBox.Ok)
+            # msg_box.exec_()
 
     def go_to_create(self):
-        registerAcc = Register()
-        widget.addWidget(registerAcc)
+        widget.addWidget(Register())
         widget.setCurrentIndex(widget.currentIndex()+1)
+
+    @staticmethod
+    def show_message(title, text):
+        msg_box = QMessageBox()
+        msg_box.setWindowTitle(title)
+        msg_box.setText(text)
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec_()
 
 
 class Home(QMainWindow):
@@ -361,6 +364,14 @@ class ViewUser(QDialog):
         row = self.table.currentRow()
         C.Session.set_context('prescription', C.PrescriptionController.retrieve_prescription(self.table.item(row, 0).text()))
 
+    @staticmethod
+    def show_message(title, text):
+        msg_box = QMessageBox()
+        msg_box.setWindowTitle(title)
+        msg_box.setText(str(text))
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec_()
+
 
 class AdminViewUser(ViewUser):
     def __init__(self):
@@ -383,15 +394,30 @@ class AdminViewUser(ViewUser):
         email = self.emailLine.text()
         address = self.addressLine.text()
         phone_number = self.telLine.text()
+        password1 = self.password1Line.text()
+        password2 = self.password2Line.text()
         try:
-            self.user_controller.save_user(user_id, email, name, phone_number, address, role)
+            if not password1 and not password2:
+                print(f'Save with no password change')
+                self.user_controller.save_user(user_id, email, name, phone_number, address, role)
+                self.show_message('Success', 'User saved')
+                self.go_back()
+            else:
+                if password1 != password2:
+                    self.errorLabel.setText('Passwords provided do not match')
+                else:
+                    print(f'Save with password change')
+                    self.user_controller.save_user(user_id, email, name, phone_number, address, role, password1)
+                    self.show_message('Success', 'User saved')
+                    self.go_back()
         except IntegrityError as err:
             print(f'{err}')         # ERROR MESSAGE SHOW ON SCREEN
-            msg_box = QMessageBox()
-            msg_box.setWindowTitle("Error")
-            msg_box.setText(str(err))
-            msg_box.setStandardButtons(QMessageBox.Ok)
-            msg_box.exec_()
+            self.show_message('Error', str(err))
+            # msg_box = QMessageBox()
+            # msg_box.setWindowTitle("Error")
+            # msg_box.setText(str(err))
+            # msg_box.setStandardButtons(QMessageBox.Ok)
+            # msg_box.exec_()
 
     def display_details(self):
         context_user = C.Session.get_context('user')
@@ -505,18 +531,19 @@ class AdminCreateUser(QDialog):
             return
         try:
             self.user_controller.create_user(email, name, phone_number, address, role, password1)
-            self.success('User created')
+            self.show_message('Success', 'User created')
+            self.go_back()
         except ValueError as err:
             print(err)
             self.errorLabel.setText(str(err))
 
-    def success(self, message):
+    @staticmethod
+    def show_message(title, text):
         msg_box = QMessageBox()
-        msg_box.setWindowTitle('Success !')
-        msg_box.setText(message)
+        msg_box.setWindowTitle(title)
+        msg_box.setText(text)
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec_()
-        self.go_back()
 
 
 class DoctorAddPrescription(QDialog):

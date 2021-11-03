@@ -308,34 +308,6 @@ QPushButton#registerButton:pressed{
      <string>R e g i s t e r</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="userMenu">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>40</y>
-      <width>100</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:rgba(255,255,255,255);
-border:none;
-color:rgba(0, 0, 0, 240);
-padding-bottom:1px;</string>
-    </property>
-    <property name="inputMethodHints">
-     <set>Qt::ImhNone</set>
-    </property>
-    <property name="editable">
-     <bool>false</bool>
-    </property>
-    <property name="currentText">
-     <string/>
-    </property>
-   </widget>
   </widget>
  </widget>
  <resources>

@@ -80,7 +80,7 @@ border-radius: 3px;
 opacity: 200;</string>
     </property>
     <property name="text">
-     <string>Tel No.</string>
+     <string>Phone No.</string>
     </property>
    </widget>
    <widget class="QLabel" name="addressLabel">
@@ -176,7 +176,7 @@ padding-bottom:1px;
      <string/>
     </property>
     <property name="placeholderText">
-     <string>Tel No.</string>
+     <string>Phone Number</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="addressLine">

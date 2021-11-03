@@ -1,5 +1,6 @@
 import db_helper
 from dataclasses import dataclass, field
+from hashlib import sha256
 
 
 DATABASE = db_helper.db_helper()
@@ -377,6 +378,14 @@ class UserEntity(ObjectEntity):
             r = result[0]
             return User(r[0], r[1], r[2], r[3], r[4], r[5])
         return result
+
+    # def hash_all_passwords(self):
+    #     all_users = self.retrieve_by_conditions('User')
+    #     for user in all_users:
+    #         object_id = user[0]
+    #         encrypted = sha256(user[6].encode('ascii')).hexdigest()
+    #         print(f'{object_id = }, {encrypted}')
+    #         self.save('User', object_id, password=encrypted)
 
 
 class CartEntity(ObjectEntity):
