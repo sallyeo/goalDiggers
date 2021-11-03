@@ -79,6 +79,7 @@ class Home(QMainWindow):
         pass
 
     def display_prescriptions(self, records):
+        self.table.setRowCount(0)
         if records:
             self.table.setRowCount(len(records))
             for count, item in enumerate(records):
@@ -91,6 +92,7 @@ class Home(QMainWindow):
                 self.table.setItem(count, 4, QTableWidgetItem(str(item.get_status_string())))
 
     def display_users(self, users):
+        self.table.setRowCount(0)
         if users:
             self.table.setRowCount(len(users))
             for count, user in enumerate(users):
@@ -132,6 +134,7 @@ class PatientHome(Home):
         self.display_prescriptions(self.prescription_controller.retrieve_patient_prescriptions(session_user.object_id))
 
     def display_prescriptions(self, records):
+        self.table.setRowCount(0)
         if records:
             self.table.setRowCount(len(records))
             for count, item in enumerate(records):
@@ -157,8 +160,15 @@ class PatientHome(Home):
         self.load_page(PatientViewPrescription())
 
     def search(self):
-        # search_query = self.searchBarLine.text()
-        pass
+        search_query = self.searchBarLine.text()
+        user_prescriptions = []
+        if search_query:
+            all_prescriptions = C.PrescriptionController.search_by_id_part(search_query)
+            print(f'{all_prescriptions = }')
+            for prescription in all_prescriptions:
+                if prescription.patient_id == C.Session.get_user().object_id:
+                    user_prescriptions.append(prescription)
+        self.display_prescriptions(user_prescriptions) if user_prescriptions else self.get_records()
 
 
 class DoctorHome(Home):
@@ -174,16 +184,32 @@ class DoctorHome(Home):
         super(DoctorHome, self).view_user()
         self.load_page(DoctorViewPatient())
 
+    def search(self):
+        search_query = self.searchBarLine.text()
+        all_search = set()
+        if search_query:
+            id_search = C.UserController.search_by_id_part(search_query)
+            email_search = C.UserController.search_by_email_part(search_query)
+            name_search = C.UserController.search_by_name_part(search_query)
+            phone_search = C.UserController.search_by_phone_number_part(search_query)
+            print(f'{id_search = }')
+            print(f'{email_search = }')
+            print(f'{name_search = }')
+            print(f'{phone_search = }')
+            all_search = {*id_search, *email_search, *name_search, *phone_search}
+            print(f'{all_search = }')
+        self.display_users(list(all_search)) if all_search else self.get_records()
+
 
 class PharmacistHome(Home):
     def __init__(self):
-        super(PharmacistHome, self).__init__('pharmacistMainWindow.ui')
+        super(PharmacistHome, self).__init__('pharmacistMainWindow.ui', [70, 150, 200, 250, 100])
         self.table.cellClicked.connect(self.view_user)
         self.scanButton.clicked.connect(self.scan_code)
 
     def get_records(self):
-        users = C.UserController.retrieve_users_by_role('Patient')
-        self.display_users(users)
+        prescriptions = C.PrescriptionController.retrieve_all_prescriptions()
+        self.display_prescriptions(prescriptions)
 
     def view_user(self):
         super(PharmacistHome, self).view_user()
@@ -196,6 +222,13 @@ class PharmacistHome(Home):
         C.Session.set_context('prescription', prescription)
         C.Session.set_context('user', user)
         self.load_page(PharmacistViewPrescription())
+
+    def search(self):
+        search_query = self.searchBarLine.text()
+        user_prescriptions = []
+        if search_query:
+            user_prescriptions = C.PrescriptionController.search_by_id_part(search_query)
+        self.display_prescriptions(user_prescriptions) if user_prescriptions else self.get_records()
 
 
 class AdminHome(Home):
@@ -252,6 +285,7 @@ class ViewPrescription(QDialog):
         self.get_and_display_records()
 
     def get_and_display_records(self):
+        self.table.setRowCount(0)
         prescription = C.Session.get_context('prescription')
         records = C.MedicineQuantityController.retrieve_prescription_medicines(prescription.object_id)
         self.table.setRowCount(0)
@@ -362,6 +396,7 @@ class ViewUser(QDialog):
 
     def display_prescriptions(self, records):
         print(f'{records = }')
+        self.table.setRowCount(0)
         if records:
             self.table.setRowCount(len(records))
             for count, item in enumerate(records):
@@ -573,6 +608,7 @@ class DoctorAddPrescription(QDialog):
         self.get_and_display_records()
 
     def get_and_display_records(self):
+        self.table.setRowCount(0)
         cart = C.CartController.retrieve_cart_by_patient(C.Session.get_context('user').object_id)
         medicine_quantities = C.MedicineQuantityController.retrieve_cart_medicines(cart.object_id)
         if medicine_quantities:

@@ -108,7 +108,7 @@ class UserController:
         E.UserEntity().create('User', email=email, name=name, phone_number=phone_number, address=address, role=role, password=password)
 
     @staticmethod
-    def check_email_match(email, user_id):
+    def check_email_match(email, user_id=None):
         email_check = E.UserEntity().retrieve_by_email(email)
         # If email_check list has elements and user_id is valid
         if email_check:
@@ -128,6 +128,22 @@ class UserController:
     @staticmethod
     def encrypt_password(password):
         return sha256(password.encode('ascii')).hexdigest()
+
+    @staticmethod
+    def search_by_id_part(object_id_part):
+        return E.UserEntity().get_many(E.UserEntity().search('User', id=object_id_part))
+    
+    @staticmethod
+    def search_by_email_part(email_part):
+        return E.UserEntity().get_many(E.UserEntity().search('User', email=email_part))
+
+    @staticmethod
+    def search_by_name_part(name_part):
+        return E.UserEntity().get_many(E.UserEntity().search('User', name=name_part))
+
+    @staticmethod
+    def search_by_phone_number_part(phone_number_part):
+        return E.UserEntity().get_many(E.UserEntity().search('User', phone_number=phone_number_part))
 
 
 class PrescriptionController:
@@ -172,6 +188,10 @@ class PrescriptionController:
             pharmacist_id=pharmacist_id,
             collected=collected,
         )
+
+    @staticmethod
+    def search_by_id_part(object_id_part):
+        return PrescriptionController.e.get_many(PrescriptionController.e.search('Prescription', id=object_id_part))
 
 
 class MedicineController:

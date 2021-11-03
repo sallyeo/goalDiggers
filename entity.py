@@ -210,6 +210,11 @@ class User:
     address: str
     role: str
 
+    def __hash__(self):
+        return hash(self.object_id)
+
+    def __eq__(self, other):
+        return self.object_id == other.object_id
 
 # id | name #
 @dataclass
@@ -237,6 +242,9 @@ class Prescription:
 
     def get_status_string(self):
         return 'Collected' if self.collected == 1 else 'Not Collected'
+
+    def __eq__(self, other):
+        return self.object_id == other.object_id
 
 
 # id | prescription_id | cart_id | medicine_id | quantity #
@@ -317,9 +325,11 @@ class ObjectEntity:
             condition = [key, f"'%{value}%'"]
             joined = ' LIKE '.join(condition)
             conditions.append(joined)
-        final = ' OR '.join[conditions]
+        final = ' OR '.join(conditions)
         query = f'SELECT * FROM {table} WHERE {final}'
-        print(f'{query}')
+        print(f'search {query}')
+        result = DATABASE.query_db(query)
+        return result
 
 
 class UserTypeEntity(ObjectEntity):

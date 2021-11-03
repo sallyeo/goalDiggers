@@ -111,22 +111,22 @@ QPushButton#logoutButton:pressed{
      </column>
      <column>
       <property name="text">
-       <string>Name</string>
+       <string>Date</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Email</string>
+       <string>Doctor</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Address</string>
+       <string>Pharmacist</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Phone Number</string>
+       <string>Status</string>
       </property>
      </column>
     </widget>
