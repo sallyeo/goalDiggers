@@ -1,4 +1,5 @@
-import sys, res
+import sys
+import res        # Res for images
 from sqlite3 import IntegrityError
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QMessageBox, QTableWidgetItem, QAbstractItemView
@@ -66,6 +67,7 @@ class Home(QMainWindow):
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
         self.searchButton.clicked.connect(self.search)
+        self.searchBarLine.returnPressed.connect(self.search)
         self.logoutButton.clicked.connect(self.logout_app)
         self.get_records()
 
@@ -163,7 +165,7 @@ class PatientHome(Home):
         search_query = self.searchBarLine.text()
         user_prescriptions = []
         prescription = C.PrescriptionController.retrieve_prescription(search_query)
-        if search_query and prescription.patient_id == C.Session.get_user().object_id:
+        if prescription and prescription.patient_id == C.Session.get_user().object_id:
             user_prescriptions.append(prescription)
         self.display_prescriptions(user_prescriptions) if user_prescriptions else self.get_records()
 
@@ -185,14 +187,15 @@ class DoctorHome(Home):
         search_query = self.searchBarLine.text()
         result = []
         if search_query:
-            result = [C.UserController.retrieve_user(search_query)]
+            user = C.UserController.retrieve_user(search_query)
+            result = [user] if user.role == 'Patient' else []
         self.display_users(result) if result else self.get_records()
 
 
 class PharmacistHome(Home):
     def __init__(self):
         super(PharmacistHome, self).__init__('pharmacistMainWindow.ui', [70, 150, 200, 250, 100])
-        self.table.cellClicked.connect(self.view_user)
+        self.table.cellClicked.connect(self.view_prescription)
         self.scanButton.clicked.connect(self.scan_code)
 
     def get_records(self):
@@ -211,6 +214,10 @@ class PharmacistHome(Home):
         C.Session.set_context('user', user)
         self.load_page(PharmacistViewPrescription())
 
+    def view_prescription(self):
+        super(PharmacistHome, self).view_prescription()
+        self.load_page(PharmacistViewPrescription())
+
     def search(self):
         search_query = self.searchBarLine.text()
         user_prescriptions = []
@@ -227,7 +234,8 @@ class AdminHome(Home):
         self.addUserButton.clicked.connect(self.create_user)
         self.addRoleButton.clicked.connect(self.add_role)
         self.searchRoleButton.clicked.connect(self.search_role)
-        
+        self.searchRoleLine.returnPressed.connect(self.search_role)
+
     def get_records(self):
         users = self.user_controller.retrieve_all_users()
         self.display_users(users)
@@ -362,7 +370,7 @@ class PharmacistViewPrescription(ViewPrescription):
         self.saveButton.clicked.connect(self.save_prescription)
 
     def go_back(self):
-        self.load_page(PharmacistViewPatient())
+        self.load_page(PharmacistHome())
 
     def save_prescription(self):
         prescription = C.Session.get_context('prescription')
@@ -450,6 +458,9 @@ class AdminViewUser(ViewUser):
         phone_number = self.telLine.text()
         password1 = self.password1Line.text()
         password2 = self.password2Line.text()
+        if not (user_id and role and name and email and address and phone_number):
+            self.errorLabel.setText('Please fill all fields. (Password change is optional)')
+            return
         try:
             if not password1 and not password2:
                 self.user_controller.save_user(user_id, email, name, phone_number, address, role)
