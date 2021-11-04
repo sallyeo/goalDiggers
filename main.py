@@ -1,4 +1,4 @@
-import sys
+import sys, res
 from sqlite3 import IntegrityError
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QMessageBox, QTableWidgetItem, QAbstractItemView
