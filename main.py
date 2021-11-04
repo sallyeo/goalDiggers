@@ -96,6 +96,7 @@ class Home(QMainWindow):
     def display_users(self, users):
         self.table.setRowCount(0)
         if users:
+            print(f'{users = }')
             self.table.setRowCount(len(users))
             for count, user in enumerate(users):
                 self.table.setItem(count, 0, QTableWidgetItem(str(user.object_id)))
@@ -254,8 +255,10 @@ class AdminHome(Home):
         search_query = self.searchBarLine.text()
         all_search = []
         if search_query:
-            all_search.append(C.UserController.retrieve_user(search_query))
-        self.display_users(list(all_search)) if all_search else self.get_records()
+            user = C.UserController.retrieve_user(search_query)
+            if user:
+                all_search.append(user)
+        self.display_users(all_search) if all_search else self.get_records()
 
     def search_role(self):
         search_query = self.searchRoleLine.text()
