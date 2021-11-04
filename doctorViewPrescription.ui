@@ -286,12 +286,12 @@ padding-bottom:1px;
     </column>
     <column>
      <property name="text">
-      <string>Medicine</string>
+      <string>Quantity</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Quantity</string>
+      <string>Medicine</string>
      </property>
     </column>
    </widget>
