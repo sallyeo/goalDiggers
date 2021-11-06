@@ -189,7 +189,8 @@ class DoctorHome(Home):
         result = []
         if search_query:
             user = C.UserController.retrieve_user(search_query)
-            result = [user] if user.role == 'Patient' else []
+            if user:
+                result = [user] if user.role == 'Patient' else []
         self.display_users(result) if result else self.get_records()
 
 
@@ -223,7 +224,9 @@ class PharmacistHome(Home):
         search_query = self.searchBarLine.text()
         user_prescriptions = []
         if search_query:
-            user_prescriptions.append(C.PrescriptionController.retrieve_prescription(search_query))
+            prescription = C.PrescriptionController.retrieve_prescription(search_query)
+            if prescription:
+                user_prescriptions.append(prescription)
         print(f'{user_prescriptions = }')
         self.display_prescriptions(user_prescriptions) if user_prescriptions else self.get_records()
 
@@ -359,7 +362,6 @@ class DoctorViewPrescription(ViewPrescription):
             C.MedicineQuantityController.add_to_prescription(
                 selected_quantity,
                 selected_medicine,
-                C.Session.get_context('user').object_id,
                 C.Session.get_context('prescription').object_id,
             )
             self.refresh_table()

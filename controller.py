@@ -250,7 +250,7 @@ class MedicineQuantityController:
             MedicineQuantityController.e.create('MedicineQuantity', cart_id=cart_id, medicine_id=medicine_id, quantity=quantity)
 
     @staticmethod
-    def add_to_prescription(quantity, medicine_name, patient_id, prescription_id):
+    def add_to_prescription(quantity, medicine_name, prescription_id):
         try:
             quantity = int(quantity)
         except ValueError as err:
@@ -258,13 +258,15 @@ class MedicineQuantityController:
         medicine_id = MedicineController.retrieve_by_name(medicine_name).object_id
         if PrescriptionController.retrieve_prescription(prescription_id):
             prescription_medicines = MedicineQuantityController.e.retrieve_by_prescription(prescription_id)
-            for medicine_quantity in prescription_medicines:
-                print(f'looping prescription medicines: {medicine_quantity}, {medicine_id = }')
-                if medicine_quantity.medicine_id == medicine_id:
-                    medicine_quantity.quantity += quantity
-                    MedicineQuantityController.e.save_object(medicine_quantity)
-                    break
-            else:
+            matched = False
+            if prescription_medicines:
+                for medicine_quantity in prescription_medicines:
+                    print(f'looping prescription medicines: {medicine_quantity}, {medicine_id = }')
+                    if medicine_quantity.medicine_id == medicine_id:
+                        medicine_quantity.quantity += quantity
+                        MedicineQuantityController.e.save_object(medicine_quantity)
+                        break
+            if not matched:
                 MedicineQuantityController.e.create(
                     'MedicineQuantity',
                     prescription_id=prescription_id,

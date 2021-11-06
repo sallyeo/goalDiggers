@@ -343,7 +343,6 @@ class UserTypeEntity(ObjectEntity):
         if len(result) > 0:
             r = result[0]
             return UserType(r[0])
-        return None
 
     def get_many(self, result):
         user_types = []
@@ -373,7 +372,6 @@ class UserEntity(ObjectEntity):
         if len(result) > 0:
             r = result[0]
             return User(r[0], r[1], r[2], r[3], r[4], r[5])
-        return None
 
     def get_many(self, result):
         users = []
@@ -412,7 +410,6 @@ class CartEntity(ObjectEntity):
         if len(result) > 0:
             r = result[0]
             return Cart(r[0], r[1])
-        return None
 
     def get_many(self, result):
         users = []
@@ -436,7 +433,6 @@ class PrescriptionEntity(ObjectEntity):
         if len(result) > 0:
             r = result[0]
             return Prescription(r[0], r[1], r[2], r[3], r[4], r[5])
-        return None
 
     def get_many(self, result):
         prescriptions = []
@@ -460,7 +456,6 @@ class MedicineEntity(ObjectEntity):
         if len(result) > 0:
             r = result[0]
             return Medicine(r[0], r[1])
-        return None
 
     def get_many(self, result):
         medicines = []
@@ -488,15 +483,11 @@ class MedicineQuantityEntity(ObjectEntity):
         return medicines
 
     def get_one(self, result):
-        if not result:
-            return None
         if len(result) > 0:
             r = result[0]
             return MedicineQuantity(r[0], r[1], r[2], r[3], r[4])
 
     def get_many(self, result):
-        if not result:
-            return None
         medicine_quantities = []
         for r in result:
             medicine_quantity = MedicineQuantity(r[0], r[1], r[2], r[3], r[4])
