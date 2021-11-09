@@ -598,6 +598,9 @@ class AdminCreateUser(QDialog):
         except ValueError as err:
             print(err)
             self.errorLabel.setText(str(err))
+        except IntegrityError as err:
+            print(err)
+            self.errorLabel.setText(str(err))
 
     @staticmethod
     def show_message(title, text):

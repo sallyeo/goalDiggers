@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:sqlite:C:\Users\gil\PycharmProjects\goalDiggers\prescription_app_sqlite.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="prescription_app_sqlite [2]" uuid="14da6b66-1375-455a-968d-f4fd6fbe2e2a">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/prescription_app_sqlite.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
