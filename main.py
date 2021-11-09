@@ -766,6 +766,9 @@ class AdminAddRole(QDialog):
         except ValueError as err:
             print(err)
             self.errorLabel.setText(str(err))
+        except IntegrityError as err:
+            print(err)
+            self.errorLabel.setText(str(err))
 
     def go_back(self):
         self.load_page(AdminHome())

@@ -45,7 +45,10 @@ class UserTypeController:
         role = role.strip()
         if role == '':
             raise ValueError('Role can not be blank.')
-        return E.UserTypeEntity().create('UserType', role=role)
+        existing_user = E.UserTypeEntity().retrieve_by_id(role)
+        if not existing_user:
+            return E.UserTypeEntity().create('UserType', role=role)
+        raise IntegrityError(f'Role \'{role}\' already exists')
 
 
 class UserController:
