@@ -761,6 +761,7 @@ class AdminAddRole(QDialog):
         print(f'{new_role = }')
         try:
             C.UserTypeController.add_role(new_role)
+            self.show_message('Success', f'New role \'{new_role}\' added')
             self.go_back()
         except ValueError as err:
             print(err)
@@ -773,6 +774,14 @@ class AdminAddRole(QDialog):
     def load_page(page):
         widget.addWidget(page)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    @staticmethod
+    def show_message(title, text):
+        msg_box = QMessageBox()
+        msg_box.setWindowTitle(title)
+        msg_box.setText(text)
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec_()
 
 
 class Register(QDialog):
