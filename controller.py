@@ -265,6 +265,7 @@ class MedicineQuantityController:
                     if medicine_quantity.medicine_id == medicine_id:
                         medicine_quantity.quantity += quantity
                         MedicineQuantityController.e.save_object(medicine_quantity)
+                        matched = True
                         break
             if not matched:
                 MedicineQuantityController.e.create(
