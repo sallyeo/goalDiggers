@@ -389,13 +389,13 @@ class SendEmailController:
         self.send = send
         medicine_amounts = []
         for key, value in medicine_quantities.items():
-            medicine_amounts.append(f'{value} {key}')
-        self.breakdown = '\n - '.join(medicine_amounts)
+            medicine_amounts.append(f' - {value} {key}')
+        self.breakdown = '\n'.join(medicine_amounts)
         print(f'{self.breakdown = }')
 
     def send_email(self):
         message = EmailMessage()
-        message['Subject'] = 'GoalDiggers Email Test'
+        message['Subject'] = 'Your new prescription'
         message['From'] = secret.email
         message['To'] = self.recipient
         body = f'Good day {self.recipient_name},\n\n' \
