@@ -1,4 +1,4 @@
-import secret
+import secret       # secret.py file containing email & password
 import datetime
 from sqlite3 import IntegrityError
 import smtplib
@@ -8,6 +8,7 @@ import imghdr
 import cv2
 import entity as E
 from hashlib import sha256
+import re
 
 
 class Session:
@@ -78,9 +79,13 @@ class UserController:
     def save_user(user_id, email, name, phone_number, address, role, password=None):
         user_id = int(user_id)
         if UserController.check_email_match(email, user_id):
-            raise IntegrityError(f'Email must be unique.')
+            raise IntegrityError('Email must be unique.')
         if UserController.check_phone_number_match(phone_number, user_id):
-            raise IntegrityError(f'Phone number must be unique')
+            raise IntegrityError(f'Phone number must be unique.')
+        if not UserController.validate_email(email):
+            raise ValueError('Not a valid email.')
+        if not UserController.validate_phone_number(phone_number):
+            raise ValueError('Not a valid Singapore mobile number.')
         E.UserEntity().save(
             'User',
             user_id,
@@ -108,6 +113,10 @@ class UserController:
         # If phone number match
         if UserController.check_phone_number_match(phone_number):
             raise IntegrityError('Phone number must be unique')
+        if not UserController.validate_email(email):
+            raise ValueError('Not a valid email.')
+        if not UserController.validate_phone_number(phone_number):
+            raise ValueError('Not a valid Singapore mobile number.')
         E.UserEntity().create('User', email=email, name=name, phone_number=phone_number, address=address, role=role, password=password)
 
     @staticmethod
@@ -151,6 +160,16 @@ class UserController:
     @staticmethod
     def search_by_role(role):
         return E.UserEntity().get_many(E.UserEntity().search('User', role=role))
+
+    @staticmethod
+    def validate_email(email):
+        pattern = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
+        return pattern.match(email)
+
+    @staticmethod
+    def validate_phone_number(phone_number):
+        pattern = re.compile(r"(^[89][0-9]{7}$)")
+        return pattern.match(phone_number)
 
 
 class PrescriptionController:
@@ -362,8 +381,9 @@ class QRController:
 
 
 class SendEmailController:
-    def __init__(self, recipient, image, recipient_name, medicine_quantities, send=True):
+    def __init__(self, recipient, prescription_id, image, recipient_name, medicine_quantities, send=True):
         self.recipient = recipient
+        self.prescription_id = prescription_id
         self.image = image
         self.recipient_name = recipient_name
         self.send = send
@@ -381,6 +401,7 @@ class SendEmailController:
         body = f'Good day {self.recipient_name},\n\n' \
                f'This is the breakdown of your prescription today:\n' \
                f'{self.breakdown}\n\n' \
+               f'Your prescription string code is: \'{self.prescription_id}\'\n' \
                f'Please show the QR Code attached to the pharmacist for your prescription to be dispensed.\n\n' \
                f'Thank you'
         message.set_content(body)
@@ -388,7 +409,7 @@ class SendEmailController:
         with open(self.image, 'rb') as f:
             file_data = f.read()
             file_type = imghdr.what(f.name)
-            file_name = f.name
+            file_name = f.name.split('/')[1]
 
         message.add_attachment(file_data, maintype='image', subtype=file_type, filename=file_name)
 

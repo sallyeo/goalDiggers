@@ -478,9 +478,13 @@ class AdminViewUser(ViewUser):
                     self.user_controller.save_user(user_id, email, name, phone_number, address, role, password1)
                     self.show_message('Success', 'User saved')
                     self.go_back()
+        except ValueError as err:
+            print(err)
+            self.errorLabel.setText(str(err))
         except IntegrityError as err:
-            print(f'{err}')         # ERROR MESSAGE SHOW ON SCREEN
-            self.show_message('Error', str(err))
+            print(err)         # ERROR MESSAGE SHOW ON SCREEN
+            # self.show_message('Error', str(err))
+            self.errorLabel.setText(str(err))
 
     def display_details(self):
         context_user = C.Session.get_context('user')
@@ -663,7 +667,7 @@ class DoctorAddPrescription(QDialog):
             med_dict[medicine_name] = medicine_quantity.quantity
         qr_image = C.QRController.generate(prescription_id)
         send_email = self.sendEmailCheckbox.isChecked()
-        email = C.SendEmailController(user.email, qr_image, user.name, med_dict, send_email)
+        email = C.SendEmailController(user.email, prescription_id, qr_image, user.name, med_dict, send_email)
         email.send_email()
         self.go_back()
 
@@ -809,6 +813,9 @@ class Register(QDialog):
             C.UserController.create_user(email, name, phone_number, address, role, password1)
             self.go_back()
         except ValueError as err:
+            print(err)
+            self.errorLabel.setText(str(err))
+        except IntegrityError as err:
             print(err)
             self.errorLabel.setText(str(err))
 
