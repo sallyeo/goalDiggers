@@ -33,47 +33,55 @@ class Session:
 
 
 class UserTypeController:
+    e = E.UserTypeEntity()
+
     @staticmethod
     def retrieve_all_roles():
-        return E.UserTypeEntity().retrieve_all()
+        return UserTypeController.e.retrieve_all()
     
     @staticmethod
     def retrieve_role(role):
-        return E.UserTypeEntity().retrieve_by_id(role)
+        if role:
+            return UserTypeController.e.retrieve_by_id(role)
+        return None
 
     @staticmethod
     def add_role(role):
         role = role.strip()
         if role == '':
             raise ValueError('Role can not be blank.')
-        existing_user = E.UserTypeEntity().retrieve_by_id(role)
+        existing_user = UserTypeController.e.retrieve_by_id(role)
         if not existing_user:
-            return E.UserTypeEntity().create('UserType', role=role)
+            return UserTypeController.e.create('UserType', role=role)
         raise IntegrityError(f'Role \'{role}\' already exists')
 
 
 class UserController:
+    e = E.UserEntity()
+
     @staticmethod
     def retrieve_all_users():
-        return E.UserEntity().retrieve_all()
+        return UserController.e.retrieve_all()
         
     @staticmethod
     def retrieve_user(user_id):
-        return E.UserEntity().retrieve_by_id(user_id)
+        if user_id:
+            return UserController.e.retrieve_by_id(user_id)
+        return None
 
     @staticmethod
     def retrieve_users_by_role(role):
         role_obj = UserTypeController.retrieve_role(role)
         if not role_obj:
             return
-        return E.UserEntity().retrieve_all_by_role(role_obj.role)
+        return UserController.e.retrieve_all_by_role(role_obj.role)
 
     @staticmethod
     def login(email, raw_password):
         if email == "" or raw_password == "":
             return False
         encrypted = UserController.encrypt_password(raw_password)
-        return E.UserEntity().validate_login(email, encrypted)
+        return UserController.e.validate_login(email, encrypted)
 
     @staticmethod
     def save_user(user_id, email, name, phone_number, address, role, password=None):
@@ -86,7 +94,7 @@ class UserController:
             raise ValueError('Not a valid email.')
         if not UserController.validate_phone_number(phone_number):
             raise ValueError('Not a valid Singapore mobile number.')
-        E.UserEntity().save(
+        UserController.e.save(
             'User',
             user_id,
             email=email,
@@ -117,11 +125,11 @@ class UserController:
             raise ValueError('Not a valid email.')
         if not UserController.validate_phone_number(phone_number):
             raise ValueError('Not a valid Singapore mobile number.')
-        E.UserEntity().create('User', email=email, name=name, phone_number=phone_number, address=address, role=role, password=password)
+        UserController.e.create('User', email=email, name=name, phone_number=phone_number, address=address, role=role, password=password)
 
     @staticmethod
     def check_email_match(email, user_id=None):
-        email_check = E.UserEntity().retrieve_by_email(email)
+        email_check = UserController.e.retrieve_by_email(email)
         # If email_check list has elements and user_id is valid
         if email_check:
             if email_check.object_id != user_id:
@@ -130,7 +138,7 @@ class UserController:
 
     @staticmethod
     def check_phone_number_match(phone_number, user_id=None):
-        phone_number_check = E.UserEntity().retrieve_by_phone_number(phone_number)
+        phone_number_check = UserController.e.retrieve_by_phone_number(phone_number)
         # If phone_number_check list has elements and user_id is valid
         if phone_number_check:
             if phone_number_check.object_id != user_id:
@@ -142,24 +150,10 @@ class UserController:
         return sha256(password.encode('ascii')).hexdigest()
 
     @staticmethod
-    def search_by_id_part(object_id_part):
-        return E.UserEntity().get_many(E.UserEntity().search('User', id=object_id_part))
-    
-    @staticmethod
-    def search_by_email_part(email_part):
-        return E.UserEntity().get_many(E.UserEntity().search('User', email=email_part))
-
-    @staticmethod
-    def search_by_name_part(name_part):
-        return E.UserEntity().get_many(E.UserEntity().search('User', name=name_part))
-
-    @staticmethod
-    def search_by_phone_number_part(phone_number_part):
-        return E.UserEntity().get_many(E.UserEntity().search('User', phone_number=phone_number_part))
-    
-    @staticmethod
     def search_by_role(role):
-        return E.UserEntity().get_many(E.UserEntity().search('User', role=role))
+        if role:
+            return UserController.e.get_many(E.UserEntity().search('User', role=role))
+        return []
 
     @staticmethod
     def validate_email(email):
@@ -181,11 +175,15 @@ class PrescriptionController:
 
     @staticmethod
     def retrieve_prescription(object_id):
-        return PrescriptionController.e.retrieve_by_id(object_id)
+        if object_id:
+            return PrescriptionController.e.retrieve_by_id(object_id)
+        return None
 
     @staticmethod
     def retrieve_patient_prescriptions(patient_id):
-        return PrescriptionController.e.retrieve_by_patient(patient_id)
+        if patient_id:
+            return PrescriptionController.e.retrieve_by_patient(patient_id)
+        return []
 
     @staticmethod
     def new_prescription():
@@ -215,21 +213,21 @@ class PrescriptionController:
             collected=collected,
         )
 
-    @staticmethod
-    def search_by_id_part(object_id_part):
-        return PrescriptionController.e.get_many(PrescriptionController.e.search('Prescription', id=object_id_part))
-
 
 class MedicineController:
     e = E.MedicineEntity()
 
     @staticmethod
     def retrieve_by_id(medicine_id):
-        return MedicineController.e.retrieve_by_id(medicine_id)
+        if medicine_id:
+            return MedicineController.e.retrieve_by_id(medicine_id)
+        return None
 
     @staticmethod
     def retrieve_by_name(medicine_name):
-        return MedicineController.e.retrieve_by_name(medicine_name)
+        if medicine_name:
+            return MedicineController.e.retrieve_by_name(medicine_name)
+        return None
 
     @staticmethod
     def retrieve_all_medicines():
@@ -241,15 +239,21 @@ class MedicineQuantityController:
 
     @staticmethod
     def retrieve_by_id(object_id):
-        return MedicineQuantityController.e.retrieve_by_id(object_id)
+        if object_id:
+            return MedicineQuantityController.e.retrieve_by_id(object_id)
+        return None
 
     @staticmethod
     def retrieve_prescription_medicines(prescription_id):
-        return MedicineQuantityController.e.retrieve_by_prescription(prescription_id)
+        if prescription_id:
+            return MedicineQuantityController.e.retrieve_by_prescription(prescription_id)
+        return []
 
     @staticmethod
     def retrieve_cart_medicines(cart_id):
-        return MedicineQuantityController.e.retrieve_by_cart(cart_id)
+        if cart_id:
+            return MedicineQuantityController.e.retrieve_by_cart(cart_id)
+        return None
 
     @staticmethod
     def add_to_cart(quantity, medicine_name, patient_id):
@@ -323,9 +327,11 @@ class CartController:
 
     @staticmethod
     def retrieve_cart_by_patient(object_id):
-        user = UserController.retrieve_user(object_id)
-        if user.role != 'Patient':
-            raise ValueError('User is not a patient.')
+        if user := UserController.retrieve_user(object_id):
+            if user.role != 'Patient':
+                raise ValueError('User is not a patient.')
+        else:
+            raise ValueError('User does not exist.')
         cart = CartController.e.retrieve_by_patient(object_id)
         if not cart:
             CartController.e.create('Cart', patient_id=object_id)
