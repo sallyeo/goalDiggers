@@ -21,8 +21,7 @@ class LoginView(QDialog):
         password = self.password.text()     # get password from user input
 
         # boundary calling controller
-        user = C.UserController.login(email, password)
-        if user:   # if input valid
+        if user := C.UserController.login(email, password):      # if input valid
             C.Session.set_user(user)
             print(f'logged in as {user}')
             if user.role == "Doctor":
@@ -33,7 +32,7 @@ class LoginView(QDialog):
                 self.go_to(PharmacistHome())
             elif user.role == 'Admin':
                 self.go_to(AdminHome())
-        else:   # if input invalid
+        else:       # if input invalid
             self.show_message('Login failed', 'Invalid credentials')
 
     def register(self):
@@ -185,11 +184,10 @@ class DoctorHome(Home):
         self.load_page(DoctorViewPatient())
 
     def search(self):
-        search_query = self.searchBarLine.text()
         result = []
-        if search_query:
-            user = C.UserController.retrieve_user(search_query)
-            if user:
+        if search_query := self.searchBarLine.text():
+            # if user:
+            if user := C.UserController.retrieve_user(search_query):
                 result = [user] if user.role == 'Patient' else []
         self.display_users(result) if result else self.get_records()
 
@@ -221,11 +219,9 @@ class PharmacistHome(Home):
         self.load_page(PharmacistViewPrescription())
 
     def search(self):
-        search_query = self.searchBarLine.text()
         user_prescriptions = []
-        if search_query:
-            prescription = C.PrescriptionController.retrieve_prescription(search_query)
-            if prescription:
+        if search_query := self.searchBarLine.text():
+            if prescription := C.PrescriptionController.retrieve_prescription(search_query):
                 user_prescriptions.append(prescription)
         print(f'{user_prescriptions = }')
         self.display_prescriptions(user_prescriptions) if user_prescriptions else self.get_records()
@@ -255,18 +251,15 @@ class AdminHome(Home):
         self.load_page(AdminAddRole())
 
     def search(self):
-        search_query = self.searchBarLine.text()
         all_search = []
-        if search_query:
-            user = C.UserController.retrieve_user(search_query)
-            if user:
+        if search_query := self.searchBarLine.text():
+            if user := C.UserController.retrieve_user(search_query):
                 all_search.append(user)
         self.display_users(all_search) if all_search else self.get_records()
 
     def search_role(self):
-        search_query = self.searchRoleLine.text()
         all_search = []
-        if search_query:
+        if search_query := self.searchRoleLine.text():
             all_search = C.UserController.search_by_role(search_query)
         self.display_users(all_search) if all_search else self.get_records()
 
@@ -357,16 +350,15 @@ class DoctorViewPrescription(ViewPrescription):
         try:
             selected_medicine = str(self.medMenu.currentText())
             selected_quantity = int(self.quantityLine.text())
-            # if not selected_quantity:
-            #     return
             C.MedicineQuantityController.add_to_prescription(
                 selected_quantity,
                 selected_medicine,
                 C.Session.get_context('prescription').object_id,
             )
+            self.quantityErrorLabel.setText('')
             self.refresh_table()
         except ValueError as err:
-            print('Quantity must be a integer !')
+            self.quantityErrorLabel.setText(str(err))
 
 
 class PharmacistViewPrescription(ViewPrescription):
@@ -378,8 +370,7 @@ class PharmacistViewPrescription(ViewPrescription):
         self.load_page(PharmacistHome())
 
     def save_prescription(self):
-        prescription = C.Session.get_context('prescription')
-        if prescription:
+        if prescription := C.Session.get_context('prescription'):
             prescription.collected = self.statusMenu.currentIndex()
             prescription.pharmacist_id = C.Session.get_user().object_id
             C.PrescriptionController.save_prescription(
@@ -643,14 +634,16 @@ class DoctorAddPrescription(QDialog):
     def get_and_display_records(self):
         self.table.setRowCount(0)
         cart = C.CartController.retrieve_cart_by_patient(C.Session.get_context('user').object_id)
-        medicine_quantities = C.MedicineQuantityController.retrieve_cart_medicines(cart.object_id)
-        if medicine_quantities:
+        if medicine_quantities := C.MedicineQuantityController.retrieve_cart_medicines(cart.object_id):
+            self.prescribeButton.setEnabled(True)
             self.table.setRowCount(len(medicine_quantities))
             for count, item in enumerate(medicine_quantities):
                 medicine_name = C.MedicineController.retrieve_by_id(item.medicine_id).name
                 self.table.setItem(count, 0, QTableWidgetItem(str(item.object_id)))
                 self.table.setItem(count, 1, QTableWidgetItem(str(item.quantity)))
                 self.table.setItem(count, 2, QTableWidgetItem(str(medicine_name)))
+        else:
+            self.prescribeButton.setEnabled(False)
 
     def go_back(self):
         widget.addWidget(DoctorViewPatient())
@@ -660,16 +653,16 @@ class DoctorAddPrescription(QDialog):
         user = C.Session.get_context('user')
         cart = C.CartController.retrieve_cart_by_patient(user.object_id)
         prescription_id = C.CartController.prescribe_medicines(cart.object_id)
-        medicine_quantities = C.MedicineQuantityController.retrieve_prescription_medicines(prescription_id)
-        med_dict = {}
-        for medicine_quantity in medicine_quantities:
-            medicine_name = C.MedicineController.retrieve_by_id(medicine_quantity.medicine_id).name
-            med_dict[medicine_name] = medicine_quantity.quantity
-        qr_image = C.QRController.generate(prescription_id)
-        send_email = self.sendEmailCheckbox.isChecked()
-        email = C.SendEmailController(user.email, prescription_id, qr_image, user.name, med_dict, send_email)
-        email.send_email()
-        self.go_back()
+        if medicine_quantities := C.MedicineQuantityController.retrieve_prescription_medicines(prescription_id):
+            med_dict = {}
+            for medicine_quantity in medicine_quantities:
+                medicine_name = C.MedicineController.retrieve_by_id(medicine_quantity.medicine_id).name
+                med_dict[medicine_name] = medicine_quantity.quantity
+            qr_image = C.QRController.generate(prescription_id)
+            send_email = self.sendEmailCheckbox.isChecked()
+            email = C.SendEmailController(user.email, prescription_id, qr_image, user.name, med_dict, send_email)
+            email.send_email()
+            self.go_back()
 
     def add_medicine(self):
         if not self.quantityLine.text():
@@ -678,9 +671,10 @@ class DoctorAddPrescription(QDialog):
             selected_medicine = str(self.medMenu.currentText())
             selected_quantity = int(self.quantityLine.text())
             self.medicine_quantity_controller.add_to_cart(selected_quantity, selected_medicine, C.Session.get_context('user').object_id)
+            self.quantityErrorLabel.setText('')
             self.refresh_table()
         except ValueError as err:
-            print('Quantity must be a integer !')
+            self.quantityErrorLabel.setText(str(err))
 
     def refresh_table(self):
         self.table.setRowCount(0)

@@ -262,7 +262,7 @@ QPushButton#addRoleButton:hover{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));
 }
 
-QPushButton#addUserType:pressed{
+QPushButton#addRoleButton:pressed{
 	padding-left:5px;
 	padding-top:5px;
 	background-color:rgba(150, 123, 111, 255);
@@ -328,7 +328,7 @@ QPushButton#searchRoleButton:hover{
 	background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));
 }
 
-QPushButton#searchButton:pressed{
+QPushButton#searchRoleButton:pressed{
 	padding-left:5px;
 	padding-top:5px;
 	background-color:rgba(150, 123, 111, 255);

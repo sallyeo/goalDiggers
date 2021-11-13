@@ -19,7 +19,7 @@ from entity import (
 )
 
 
-class TestUserTypeController(unittest.TestCase):
+class TestUserTypeController(TestCase):
     def test_retrieve_all_roles(self):
         self.assertIsNotNone(UserTypeController.retrieve_all_roles())
 
@@ -39,7 +39,7 @@ class TestUserTypeController(unittest.TestCase):
         pass
 
 
-class TestUserController(unittest.TestCase):
+class TestUserController(TestCase):
     def test_retrieve_all_users(self):
         self.assertIsNotNone(UserController.retrieve_all_users())
 

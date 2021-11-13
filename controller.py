@@ -257,10 +257,8 @@ class MedicineQuantityController:
 
     @staticmethod
     def add_to_cart(quantity, medicine_name, patient_id):
-        try:
-            quantity = int(quantity)
-        except ValueError as err:
-            print('Quantity must be an integer !')
+        if quantity < 1:
+            raise ValueError('Quantity must be more than 0.')
         medicine_id = MedicineController.retrieve_by_name(medicine_name).object_id
         cart_id = CartController.retrieve_cart_by_patient(patient_id).object_id
         cart_medicines = MedicineQuantityController.e.retrieve_by_cart(cart_id)
@@ -277,10 +275,8 @@ class MedicineQuantityController:
 
     @staticmethod
     def add_to_prescription(quantity, medicine_name, prescription_id):
-        try:
-            quantity = int(quantity)
-        except ValueError as err:
-            print('Quantity must be an integer !')
+        if quantity < 1:
+            raise ValueError('Quantity must be more than 0.')
         medicine_id = MedicineController.retrieve_by_name(medicine_name).object_id
         if PrescriptionController.retrieve_prescription(prescription_id):
             prescription_medicines = MedicineQuantityController.e.retrieve_by_prescription(prescription_id)
