@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>931</width>
-    <height>750</height>
+    <width>820</width>
+    <height>740</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,14 +19,14 @@
      <rect>
       <x>40</x>
       <y>30</y>
-      <width>860</width>
-      <height>751</height>
+      <width>740</width>
+      <height>750</height>
      </rect>
     </property>
     <widget class="QLabel" name="pageTitle">
      <property name="geometry">
       <rect>
-       <x>350</x>
+       <x>310</x>
        <y>20</y>
        <width>161</width>
        <height>40</height>
@@ -35,7 +35,6 @@
      <property name="font">
       <font>
        <pointsize>25</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -49,7 +48,7 @@
     <widget class="QPushButton" name="logoutButton">
      <property name="geometry">
       <rect>
-       <x>740</x>
+       <x>630</x>
        <y>70</y>
        <width>80</width>
        <height>20</height>
@@ -58,7 +57,6 @@
      <property name="font">
       <font>
        <pointsize>16</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -88,7 +86,7 @@ QPushButton#logoutButton:pressed{
       <rect>
        <x>30</x>
        <y>350</y>
-       <width>800</width>
+       <width>680</width>
        <height>270</height>
       </rect>
      </property>
@@ -171,7 +169,7 @@ opacity: 200;</string>
     <widget class="QLabel" name="telLabel">
      <property name="geometry">
       <rect>
-       <x>440</x>
+       <x>400</x>
        <y>160</y>
        <width>81</width>
        <height>30</height>
@@ -190,7 +188,7 @@ opacity: 200;</string>
     <widget class="QLabel" name="addressLabel">
      <property name="geometry">
       <rect>
-       <x>440</x>
+       <x>400</x>
        <y>120</y>
        <width>81</width>
        <height>30</height>
@@ -233,7 +231,7 @@ opacity: 200;</string>
       <rect>
        <x>130</x>
        <y>120</y>
-       <width>300</width>
+       <width>210</width>
        <height>30</height>
       </rect>
      </property>
@@ -262,7 +260,7 @@ padding-bottom:1px;
       <rect>
        <x>130</x>
        <y>160</y>
-       <width>300</width>
+       <width>210</width>
        <height>30</height>
       </rect>
      </property>
@@ -292,9 +290,9 @@ padding-bottom:1px;
      </property>
      <property name="geometry">
       <rect>
-       <x>540</x>
+       <x>500</x>
        <y>160</y>
-       <width>300</width>
+       <width>210</width>
        <height>30</height>
       </rect>
      </property>
@@ -324,9 +322,9 @@ padding-bottom:1px;
      </property>
      <property name="geometry">
       <rect>
-       <x>540</x>
+       <x>500</x>
        <y>120</y>
-       <width>300</width>
+       <width>210</width>
        <height>30</height>
       </rect>
      </property>
@@ -358,7 +356,7 @@ padding-bottom:1px;
       <rect>
        <x>130</x>
        <y>200</y>
-       <width>300</width>
+       <width>210</width>
        <height>30</height>
       </rect>
      </property>
@@ -387,13 +385,12 @@ padding-bottom:1px;
       <rect>
        <x>30</x>
        <y>310</y>
-       <width>801</width>
-       <height>31</height>
+       <width>680</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -418,8 +415,8 @@ padding:5px;</string>
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>860</width>
-       <height>651</height>
+       <width>740</width>
+       <height>650</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -469,7 +466,6 @@ padding-bottom:7px;
      <property name="font">
       <font>
        <pointsize>16</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -518,8 +514,8 @@ QPushButton#searchButton:pressed{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>931</width>
-     <height>24</height>
+     <width>820</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>

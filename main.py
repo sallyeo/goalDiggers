@@ -58,7 +58,7 @@ class Home(QMainWindow):
     def __init__(self, window, column_sizes=None):
         super(Home, self).__init__()
         if column_sizes is None:
-            column_sizes = [50, 100, 100, 150, 100, 100]
+            column_sizes = [50, 130, 210, 140, 90, 90]
         loadUi(window, self)
         widget.setFixedSize(930, 750)
         for i in range(len(column_sizes)):
@@ -127,7 +127,8 @@ class Home(QMainWindow):
 
 class PatientHome(Home):
     def __init__(self):
-        super(PatientHome, self).__init__('patientMainWindow.ui', [100, 100, 200, 200, 180])
+        super(PatientHome, self).__init__('patientMainWindow.ui', [110, 120, 165, 165, 120])
+        widget.setFixedSize(820, 740)
         self.table.cellClicked.connect(self.view_prescription)
         
     def get_records(self):
@@ -172,7 +173,8 @@ class PatientHome(Home):
 
 class DoctorHome(Home):
     def __init__(self):
-        super(DoctorHome, self).__init__('doctorMainWindow.ui', [70, 150, 200, 250, 100])
+        super(DoctorHome, self).__init__('doctorMainWindow.ui', [50, 150, 200, 250, 100])
+        widget.setFixedSize(890, 750)
         self.table.cellClicked.connect(self.view_user)
     
     def get_records(self):
@@ -194,7 +196,8 @@ class DoctorHome(Home):
 
 class PharmacistHome(Home):
     def __init__(self):
-        super(PharmacistHome, self).__init__('pharmacistMainWindow.ui', [70, 150, 200, 250, 100])
+        super(PharmacistHome, self).__init__('pharmacistMainWindow.ui', [110, 120, 165, 165, 120])
+        widget.setFixedSize(820, 740)
         self.table.cellClicked.connect(self.view_prescription)
         self.scanButton.clicked.connect(self.scan_code)
 
@@ -230,6 +233,7 @@ class PharmacistHome(Home):
 class AdminHome(Home):
     def __init__(self):
         super(AdminHome, self).__init__('adminMainWindow.ui')
+        widget.setFixedSize(850, 720)
         self.table.cellClicked.connect(self.view_user)
         self.addUserButton.clicked.connect(self.create_user)
         self.addRoleButton.clicked.connect(self.add_role)
@@ -270,7 +274,7 @@ class ViewPrescription(QDialog):
     def __init__(self, window, widget_size=None, column_sizes=None):
         super(ViewPrescription, self).__init__()
         if widget_size is None:
-            widget_size = [730, 650]
+            widget_size = [730, 600]
         if column_sizes is None:
             column_sizes = [100, 100, 500]
         loadUi(window, self)
@@ -323,6 +327,8 @@ class ViewPrescription(QDialog):
 class PatientViewPrescription(ViewPrescription):
     def __init__(self):
         super(PatientViewPrescription, self).__init__('patientViewPrescription.ui')
+        widget.setFixedSize(720, 600)
+        self.table.setColumnHidden(0, True)
 
     def go_back(self):
         self.load_page(PatientHome())
@@ -331,6 +337,7 @@ class PatientViewPrescription(ViewPrescription):
 class DoctorViewPrescription(ViewPrescription):
     def __init__(self):
         super(DoctorViewPrescription, self).__init__('doctorViewPrescription.ui')
+        widget.setFixedSize(720, 700)
         self.table.cellClicked.connect(self.edit_prescription)
         self.table.setColumnHidden(0, True)
         self.addButton.clicked.connect(self.add_medicine)
@@ -364,6 +371,8 @@ class DoctorViewPrescription(ViewPrescription):
 class PharmacistViewPrescription(ViewPrescription):
     def __init__(self):
         super(PharmacistViewPrescription, self).__init__('pharmacistViewPrescription.ui')
+        widget.setFixedSize(720, 600)
+        self.table.setColumnHidden(0, True)
         self.saveButton.clicked.connect(self.save_prescription)
 
     def go_back(self):
@@ -434,6 +443,7 @@ class ViewUser(QDialog):
 class AdminViewUser(ViewUser):
     def __init__(self):
         super(AdminViewUser, self).__init__('adminEditUser.ui')
+        widget.setFixedSize(660, 690)
         self.saveButton.clicked.connect(self.save_user)
         roles = C.UserTypeController().retrieve_all_roles()
         for role in roles:
@@ -492,10 +502,10 @@ class AdminViewUser(ViewUser):
 class DoctorViewPatient(ViewUser):
     def __init__(self, column_sizes=None):
         super(DoctorViewPatient, self).__init__('doctorViewPatient.ui')
-        widget.setFixedSize(730, 650)
+        widget.setFixedSize(670, 590)
         # self.table.verticalHeader().setVisible(False)   # remove most left column
         if column_sizes is None:
-            column_sizes = [50, 100, 100, 100, 100]
+            column_sizes = [50, 100, 150, 150, 100]
         for i in range(len(column_sizes)):
             self.table.setColumnWidth(i, column_sizes[i])
         self.backButton.clicked.connect(self.go_back)
@@ -562,6 +572,7 @@ class AdminCreateUser(QDialog):
     def __init__(self):
         super(AdminCreateUser, self).__init__()
         loadUi('adminCreateUser.ui', self)
+        widget.setFixedSize(660, 690)
         self.createButton.clicked.connect(self.create_user)
         self.backButton.clicked.connect(self.go_back)
         roles = C.UserTypeController().retrieve_all_roles()
@@ -617,7 +628,7 @@ class DoctorAddPrescription(QDialog):
         if column_sizes is None:
             column_sizes = [0, 100, 500]
         loadUi('doctorAddPrescription.ui', self)
-        widget.setFixedSize(730, 650)
+        widget.setFixedSize(720, 615)
         self.backButton.clicked.connect(self.go_back)
         self.prescribeButton.clicked.connect(self.prescribe)
         self.addButton.clicked.connect(self.add_medicine)
@@ -697,7 +708,7 @@ class DoctorEditMedicine(QDialog):
         super(DoctorEditMedicine, self).__init__()
         self.back_page = from_page
         loadUi('doctorEditMedicine.ui', self)
-        widget.setFixedSize(930, 750)
+        widget.setFixedSize(720, 700)
         self.saveButton.clicked.connect(self.save_medicine)
         self.deleteButton.clicked.connect(self.delete)
         self.backButton.clicked.connect(self.go_back)
@@ -748,6 +759,7 @@ class AdminAddRole(QDialog):
     def __init__(self):
         super(AdminAddRole, self).__init__()
         loadUi('adminAddRole.ui', self)
+        widget.setFixedSize(660, 690)
         roles = C.UserTypeController.retrieve_all_roles()
         for role in roles:
             self.currentRolesMenu.addItem(role.role)

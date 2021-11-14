@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>930</width>
+    <width>890</width>
     <height>750</height>
    </rect>
   </property>
@@ -19,14 +19,14 @@
      <rect>
       <x>40</x>
       <y>30</y>
-      <width>860</width>
+      <width>811</width>
       <height>650</height>
      </rect>
     </property>
     <widget class="QLabel" name="pageTitle">
      <property name="geometry">
       <rect>
-       <x>370</x>
+       <x>340</x>
        <y>20</y>
        <width>155</width>
        <height>40</height>
@@ -35,7 +35,6 @@
      <property name="font">
       <font>
        <pointsize>25</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -49,8 +48,8 @@
     <widget class="QPushButton" name="logoutButton">
      <property name="geometry">
       <rect>
-       <x>740</x>
-       <y>70</y>
+       <x>700</x>
+       <y>80</y>
        <width>80</width>
        <height>20</height>
       </rect>
@@ -58,7 +57,6 @@
      <property name="font">
       <font>
        <pointsize>16</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -95,7 +93,6 @@ QPushButton#logoutButton:pressed{
      <property name="font">
       <font>
        <pointsize>16</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -151,7 +148,7 @@ padding-bottom:7px;
       <rect>
        <x>30</x>
        <y>210</y>
-       <width>800</width>
+       <width>750</width>
        <height>380</height>
       </rect>
      </property>
@@ -198,13 +195,12 @@ padding-bottom:7px;
       <rect>
        <x>30</x>
        <y>170</y>
-       <width>801</width>
+       <width>750</width>
        <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -236,7 +232,7 @@ padding:5px;</string>
      <rect>
       <x>40</x>
       <y>30</y>
-      <width>860</width>
+      <width>811</width>
       <height>650</height>
      </rect>
     </property>
@@ -257,8 +253,8 @@ border-bottom-right-radius: 50px;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>930</width>
-     <height>24</height>
+     <width>890</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
