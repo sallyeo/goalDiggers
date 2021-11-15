@@ -35,9 +35,6 @@ class TestUserTypeController(TestCase):
         self.assertTrue(patient_user_type, UserType)
         self.assertFalse(none_user_type)
 
-    def test_add_role(self):
-        pass
-
 
 class TestUserController(TestCase):
     def test_retrieve_all_users(self):
@@ -68,7 +65,7 @@ class TestUserController(TestCase):
         self.assertTrue(UserController.check_email_match('admin@csit314.com'))
         self.assertFalse(UserController.check_email_match('johncena@wwe.com'))
 
-    def test_phone_number_check(self):
+    def test_check_phone_number_match(self):
         self.assertTrue(UserController.check_phone_number_match('93380000'))
         self.assertFalse(UserController.check_phone_number_match('00000000'))
 
@@ -147,7 +144,6 @@ class TestCartController(TestCase):
 
     def test_retrieve_cart_by_patient(self):
         self.assertIsInstance(CartController.retrieve_cart_by_patient(4), Cart)
-        # self.assertIsNone(CartController.retrieve_cart_by_patient(-1))
         with self.assertRaises(ValueError):
             CartController.retrieve_cart_by_patient(-1)
 
