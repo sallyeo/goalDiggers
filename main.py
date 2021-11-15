@@ -116,13 +116,15 @@ class Home(QMainWindow):
         C.Session.set_context('user', user)
 
     @staticmethod
-    def load_page(page):
+    def load_page(page, size=None):
         widget.addWidget(page)
+        if size is not None:
+            widget.setFixedSize(600, 530)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def logout_app(self):
         C.Session.set_user(None)
-        self.load_page(LoginView())
+        self.load_page(LoginView(), True)
 
 
 class PatientHome(Home):
