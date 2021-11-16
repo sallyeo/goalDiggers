@@ -734,14 +734,17 @@ class DoctorEditMedicine(QDialog):
         medicine_id = C.MedicineController.retrieve_by_name(self.medMenu.currentText()).object_id
         medicine_quantity.medicine_id = medicine_id
         medicine_quantity.quantity = int(self.quantityLine.text())
-        C.MedicineQuantityController.save_medicine_quantity(
-            medicine_quantity.object_id,
-            medicine_quantity.prescription_id,
-            medicine_quantity.cart_id,
-            medicine_quantity.medicine_id,
-            medicine_quantity.quantity,
-        )
-        self.go_back()
+        try:
+            C.MedicineQuantityController.save_medicine_quantity(
+                medicine_quantity.object_id,
+                medicine_quantity.prescription_id,
+                medicine_quantity.cart_id,
+                medicine_quantity.medicine_id,
+                medicine_quantity.quantity,
+            )
+            self.go_back()
+        except ValueError as err:
+            self.errorLabel.setText(str(err))
 
     def delete(self):
         C.MedicineQuantityController.delete(C.Session.get_context('medicine_quantity').object_id)

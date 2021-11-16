@@ -301,6 +301,8 @@ class MedicineQuantityController:
 
     @staticmethod
     def save_medicine_quantity(object_id, prescription_id, cart_id, medicine_id, quantity):
+        if quantity <= 0:
+            raise ValueError('Quantity must be > 0')
         object_id = int(object_id)
         medicine_quantity = MedicineQuantityController.e.retrieve_by_id(object_id)
         medicine_quantity.prescription_id = prescription_id
